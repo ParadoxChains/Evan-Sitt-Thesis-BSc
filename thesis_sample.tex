@@ -1,0 +1,105 @@
+\documentclass[a4paper,12pt]{report}
+
+\usepackage[latin2]{inputenc} % vagy latin2 helyett utf8
+\usepackage[T1]{fontenc}      % karakterkódolás
+\usepackage[english]{babel}   % angol beállítások
+\frenchspacing                % helyközök
+%\usepackage{times}           % betûtípus
+\usepackage{lmodern}          %   vagy inkább ez
+
+\usepackage[margin=2.5cm,left=3.5cm,includeheadfoot]{geometry}
+                              % margók
+\usepackage{graphicx}         % képekhez
+\usepackage{setspace}         % sorköz
+\onehalfspacing               % másfeles
+
+
+
+
+\begin{document}
+
+% ------------------------------------------------------------------------------
+% Címlap
+
+\input{titlepage.tex}
+
+% ------------------------------------------------------------------------------
+% Témabejelentõ
+
+\vspace*{\fill}
+\begin{center}
+This page should be the original Thesis Topic Declaration.
+\end{center}
+\vfill
+\thispagestyle{empty}
+\newpage
+\setcounter{page}{1}
+
+% ------------------------------------------------------------------------------
+% Tartalomjegyzék
+
+\tableofcontents
+
+% ------------------------------------------------------------------------------
+
+
+\chapter{Introduction}
+
+The Introduction should summarize the motivation of the topic for the thesis and short summary and plain description of the project.
+
+
+% ------------------------------------------------------------------------------
+
+\chapter{Background}
+Digital synthesis
+% ------------------------------------------------------------------------------
+
+\chapter{User Documentation}
+
+% The User Documentation (or User's Manual) should contain
+% \begin{itemize}
+% \item the short description of the solved problem,
+% \item the short summary of the used methods and tools,
+% \item every required information about the usage of the software.
+% \end{itemize}
+
+\begin{itemize}
+    \item Installation
+    \item Initialization
+    \item Workflow Integration
+    \item Module Details
+    \item Testing details
+\end{itemize}
+
+% ------------------------------------------------------------------------------
+
+
+\chapter{Developer Documentation}
+
+% The Developer Documentation (or Developer's Manual) should contain
+% \begin{itemize}
+% \item the detailed specification of the problem,
+% \item the detailed description of the used methods, the definitions of the used notions,
+% \item the description of the logical and physical structure of the software (data structures, databases, modules etc.),
+% \item the testing plan and the results of the tests.
+% \end{itemize}
+
+\begin{itemize}
+    \item Short Background of Task
+    \item Implementation of Task
+    \item Discussion of implementation
+    \item Results - Latency, Under/Overruns, Distortion/Clipping
+\end{itemize}
+
+
+% ------------------------------------------------------------------------------
+
+\chapter{Appendix}
+
+% ------------------------------------------------------------------------------
+
+\begin{thebibliography}{9}
+\bibitem{v} Somebody, something.
+\end{thebibliography}
+
+\end{document}
