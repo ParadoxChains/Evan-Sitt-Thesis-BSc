@@ -122,8 +122,23 @@ In the Digital Signal Processing Chain, the order of the processes within the ch
 
 Digital Signal Processing effects can be categorized into three primary archetypes: Frequency-Based, Time-Based, and Amplitude-Based. Digital signal processing effects within each archetype deal primarily with that domain of the digital signal; however, there are frequently overlapping. For example, a simple reverberation effect is a Time-Based effect. However, more sophisticated reverberation effects will incorporate Frequency-Based effects to create a "shimmering" capability for the reverberation. A Multiband Compressor is also a common Amplitude-Based effect that will incorporate Frequency-Based filters to selectively modulate the amplitude from different parts of the frequency spectrum.
 
+\subsection{Filters}
 % - Filters
+There are multiple types of Frequency Domain filters that can be implemented. Each of these filters operates within the Frequency Domain, best visualized with the instantaneous point in the digital audio signal represented within the Frequency vs. Amplitude domains. In the Frequency Domain, modulation takes place to the amplitude of various frequencies along the frequency response spectrum. 
 
+The various Frequency Domain filter types include the Low, High, and Band Passes, the Low and High Shelves, and the Peaking filter. Each of these types has a different characteristic of how they affect the incoming audio signal. The details will be discussed in the following parts. However, it is good to note that despite the multitude of variations that exist, these are all additive or subtractive combinations of the basic Pass filters.
+
+Additionally, there are a variety of designs for audio filters. These designs, while initially made for analog systems, work exceptionally well for Digital Signal Processing as well. Each of these designs has differences in their properties that affect the character of the resulting audio signal filter. The most important properties are the Frequency-Domain Ripple factor, the Roll-Off, and finally, the Resonance.
+
+The Frequency-Domain Ripple factor describes the amount of periodic variation in insertion loss with the frequency of a filter, an unavoidable side-effect of certain mathematical functions such as the notable Chebyshev polynomials which commonly used in polynomial interpolation. Some filter designs will utilize mathematical functions that can minimize or completely eliminate the Frequency-Domain Ripple as these ripples in frequencies causes undesirable audio artifacts in the resulting filtered audio signal.
+
+The Roll-Off property of an audio filter design refers to the steepness of the transfer function with frequency, or in other words, the rate at which the amplitude changes with respect to frequency.  Differing audio filter designs will have different capabilities for Roll-Off, with some mathematical functions such as the Elliptic functions being capable of accomplishing much steeper Roll-Off in contrast to other mathematical functions that can only support gentle slow Roll-Off. While a Roll-Off with a steeper value can be desirable for precise audio signal filters, a Roll-Off with a gentler value can be desirable for the more natural-sounding resulting audio signal.
+
+The most common audio filter designs used are the Butterworth filter, the Chebyshev filter, and the Elliptic filter. Each of these audio filter designs has its own advantages and trade-offs for each property. For example, the Butterworth filter design, also known as the maximally flat magnitude filter, holds the sole advantage over the other design types in that the Butterworth filter design has no Frequency Domain Ripple in the frequency response graph before the Roll-Off, however, the Butterworth filter design can only support slow and gentle Roll-Off with low Resonance values. By drastic contrast, the Elliptic filter design can support the steepest Roll-Off and the highest Resonance values. However, the Frequency Domain Ripple for Elliptic filters can easily produce undesirable artifacts.
+
+Typically a synthesizer will be designed around whichever filter design best fits the sound design goal and hardware limitations. More sophisticated and capable synthesizers may utilize complex Audio Filters, which combine multiple filter designs to produce a hybrid design that can mitigate the disadvantages of each individual design. Within this project, the Butterworth filter design is used exclusively for all Audio Filter types for its ease of implementation, lack of audio artifacts, and efficiency.
+
+\subsubsection{Low Pass Filter}
 %   - Low Pass
 %   - High Pass
 %   - Band Pass
