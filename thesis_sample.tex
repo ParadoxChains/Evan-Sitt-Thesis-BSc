@@ -16,6 +16,7 @@
 \usepackage{listings}
 \usepackage{courier}
 \usepackage{pdfpages}
+\usepackage{amsmath}
 
 
 
@@ -75,7 +76,7 @@ Within a Digital Synthesis system, the power of a signal is represented using \t
 \subsection{Frequency Domain}
 The other commonly used representation of sound is the Frequency Domain representation. Here the frequency is the domain, while amplitude remains as the range. In contrast to the Time Domain, there are no time values within the Frequency Domain. As such, the view of the Frequency Domain graph represents the frequency spectrum and amplitude values at an instantaneous point in time.
 
-Frequency refers to the rate at which a sound repeats a single cycle of its periodic function. This is measured in hertz, which represents $cycles/seconds$. Human hearing is capable of perceiving sound with frequencies between 20Hz and 20kHz. While the actual range of any one person's audible range will vary depending on their age, health, and a number of other factors, the majority of sound reproduction systems will operate within the full range between 20Hz and 20kHz. 
+Frequency refers to the rate at which a sound repeats a single cycle of its periodic function. The frequency is measured in hertz, which represents $cycles/seconds$. Human hearing is capable of perceiving sound with frequencies between 20Hz and 20kHz. While the actual range of any one person's audible range will vary depending on their age, health, and several other factors, the majority of sound reproduction systems will operate within the full range between 20Hz and 20kHz. 
 
 \subsection{Frequency Spectrum}
 The graphical representation of the Frequency Domain of a sound is usually referred to as the $Frequency\ Spectrum$ or the $Spectral\ Graph$. These graphical representations will typically represent frequencies between 20Hz and 20kHz, with amplitudes from 0dB to -$\infty$dB. The varying values of the Frequency Spectrum of any waveform control the timbre, or sonic characteristics, of the resulting sound.
@@ -106,7 +107,7 @@ The Phase Accumulator holds the digital number, which represents the current pha
 %   - Phase Register
 \section{Phase to Amplitude Converter}
 %   - Phase to Amplitude Converter
-After the Phase Accumulator step, the phase value is then passed to the Phase to Amplitude Converter. The goal of the Phase to Amplitude Converter is to change the phase value to a digital amplitude value, which can then be further processed. This can be accomplished via two different methods: a Phase/Wavetable lookup, or a Waveform Function.
+After the Phase Accumulator step, the phase value is then passed to the Phase to Amplitude Converter. The goal of the Phase to Amplitude Converter is to change the phase value to a digital amplitude value, which can then be further processed. This goal can be accomplished via two different methods: a Phase/Wavetable lookup, or a Waveform Function.
 
 \subsection{Phase/Wavetable Lookup}
 %     - Phase/Wavetable Lookup
@@ -135,7 +136,7 @@ Another method is to use additive and subtractive synthesis to replicate sounds 
 
 \section{LFO}
 % - LFO
-After the Additive and Subtractive synthesis processes generate a signal for the desired waveform, this is then passed on to the Low-Frequency Oscillator Controlled Modulation processes. Usually referred to as LFO's, these are modulation processes where the value being modulated is modified by a value produced by an oscillator. This oscillator typically generates values using a basic sine wave. However, any waveform can be used, resulting in particularly interesting sound characteristics.
+After the Additive and Subtractive synthesis processes generate a signal for the desired waveform, this is then passed on to the Low-Frequency Oscillator Controlled Modulation processes. Usually referred to as LFO's, these are modulation processes where a value produced by an oscillator modifies the value being modulated. This oscillator typically generates values using a basic sine wave. However, any waveform can be used, resulting in particularly interesting sound characteristics.
 
 Of particular interest are the two most commonly used LFO's: the amplitude LFO and the frequency LFO. Both will modulate their respective parameters using the value from the low-frequency oscillator. An amplitude LFO will reproduce the effect of a tremolo, while the frequency LFO will, on the other hand, reproduce the effect of a vibrato. LFO's can be further controlled by processing the signal from the control oscillators in the same manner as a standard oscillator, although in general, this processing is typically limited to just an Envelope.
 
@@ -161,7 +162,7 @@ Digital Signal Processing effects can be categorized into three primary archetyp
 % - Filters
 Multiple types of Frequency Domain filters can be implemented. Each of these filters operates within the Frequency Domain, best visualized with the instantaneous point in the digital audio signal represented within the Frequency vs. Amplitude domains. In the Frequency Domain, modulation takes place to the amplitude of various frequencies along the frequency response spectrum. 
 
-The various Frequency Domain filter types include the Low, High, and Band Passes, the Low and High Shelves, and the Peaking filter. Each of these types has a different characteristic of how they affect the incoming audio signal. This, in turn, changes the timbre, or characteristic quality, of the sound produced. The details will be discussed in the following parts. However, it is good to note that despite the multitude of variations that exist, these are all additive or subtractive combinations of the basic Pass filters.
+The various Frequency Domain filter types include the Low, High, and Band Passes, the Low and High Shelves, and the Peaking filter. Each of these types has a different characteristic of how they affect the incoming audio signal. These types, in turn, changes the timbre, or characteristic quality, of the sound produced. The details will be discussed in the following parts. However, it is good to note that despite the multitude of variations that exist, these are all additive or subtractive combinations of the basic Pass filters.
 
 Additionally, there are a variety of designs for audio filters. These designs, while initially made for analog systems, work exceptionally well for Digital Signal Processing as well. Each of these designs has differences in their properties that affect the character of the resulting audio signal filter. The most important properties are the Frequency-Domain Ripple factor, the Roll-Off, and finally, the Resonance.
 
@@ -212,7 +213,7 @@ MIDI event messages consist of 8-bit byte-words transmitted in series at a rate 
 
 Each MIDI event message contains an instruction for which the receiving device may choose to act upon. The two main categories of MIDI event messages are Channel event messages and System event messages. A device can choose to act upon or ignore any or all MIDI event messages received.
 
-Channel event messages contain instructions that usually are relevant to the audio to be produced. A \texttt{noteOn} message will indicate to the device that a note has started. Similarly, the \texttt{noteOff} message indicates that the note has ended. On a keyboard, these two MIDI event messages would correspond to the pressing of a key and the release of the key. Channel event messages can also convey pitch information in the form of MIDI notation. MIDI notation assigns the integers from 0 to 127 to all possible notes within the music. This corresponds to the range from $C1$ up to $G9$ according to the Helmholtz pitch notation standard, covering a range of frequencies from 8.175798916 Hz to 12,543.85395 Hz. This range of possible notes and frequencies extends well beyond the range of the majority of acoustic instruments. Another important piece of information that Channel event messages can convey is the \texttt{velocity} value of a note. The \texttt{velocity} value corresponds to how forcefully a note was played, corresponding to the $piano$ and $forte$ notation instructions on traditional sheet music. This typically will control the loudness of the sound generated, but may also control other parameters such as resonance and vibrato. For digital synths, the \texttt{velocity} value of a note can be used to control different modulations. The Channel event messages can also contain tempo and time signature instructions. These correspond to their musical notation equivalents and combine with the beat value of a note to determine the time value of the note. The beat value is conveyed in the Channel event messages via the \texttt{duration} value. Each \texttt{duration} unit within MIDI notation corresponds to $1/24^t^h$ of a beat value. There is also a large variety of other Channel event messages; however, the essential Channel event message types have been discussed.
+Channel event messages contain instructions that usually are relevant to the audio to be produced. A \texttt{noteOn} message will indicate to the device that a note has started. Similarly, the \texttt{noteOff} message indicates that the note has ended. On a keyboard, these two MIDI event messages would correspond to the pressing of a key and the release of the key. Channel event messages can also convey pitch information in the form of MIDI notation. MIDI notation assigns the integers from 0 to 127 to all possible notes within the music. This range of integers corresponds to the range from $C1$ up to $G9$ according to the Helmholtz pitch notation standard, covering a range of frequencies from 8.175798916 Hz to 12,543.85395 Hz. This range of possible notes and frequencies extends well beyond the range of the majority of acoustic instruments. Another important piece of information that Channel event messages can convey is the \texttt{velocity} value of a note. The \texttt{velocity} value corresponds to how forcefully a note was played, corresponding to the $piano$ and $forte$ notation instructions on traditional sheet music. The \texttt{velocity} value typically will control the loudness of the sound generated, but may also control other parameters such as resonance and vibrato. For digital synths, the \texttt{velocity} value of a note can be used to control different modulations. The Channel event messages can also contain tempo and time signature instructions. These correspond to their musical notation equivalents and combine with the beat value of a note to determine the time value of the note. The beat value is conveyed in the Channel event messages via the \texttt{duration} value. Each \texttt{duration} unit within MIDI notation corresponds to $1/24^{th}$ of a beat value. There is also a large variety of other Channel event messages; however, the essential Channel event message types have been discussed.
 
 System event messages are used to promote the flexibility and longevity of the MIDI communication standard by allowing manufacturers to create proprietary event messages. These System event messages allow for devices to communicate instructions typically corresponding to other software or hardware control parameters. For hardware and analog systems, a converter will translate the MIDI System event message to control voltage values. There are no universal standards for System event messages. However, with modern MIDI software and hardware systems, there are commonly used standards established by widely used software.
 
@@ -258,14 +259,14 @@ Afterward, the user should open the $Plugin\ Manager$ via the $Options$ by going
 
 \includegraphics[width=1.0]{ModuleRegistration.needed}
 
-After ensuring that the $Verify\ plugins$ radio button is turned on, the next step is to use the $Find\ Plugins$ button to scan the preregistered VST plugin folders for the new VST3 plugin. This will then show the new plugin, named $Paradox\ Chains\ Synthesiser$, within the plugin list on the right panel. By selecting the star button next to the plugin name, the plugin will be added to the favorites to ensure ease of finding the plugin in the future. This completes the registration of the VST3 plugin within the FL Studio 20 Digital Audio Workstation.
+After ensuring that the $Verify\ plugins$ radio button is turned on, the next step is to use the $Find\ Plugins$ button to scan the preregistered VST plugin folders for the new VST3 plugin. The window will then show the new plugin, named $Paradox\ Chains\ Synthesiser$, within the plugin list on the right panel. By selecting the star button next to the plugin name, the plugin will be added to the favorites to ensure ease of finding the plugin in the future. This last step completes the registration of the VST3 plugin within the FL Studio 20 Digital Audio Workstation.
 
 \includegraphics[width=1.0]{AddPluginList.needed}
 
 \section{Initialization and Workflow Integration}
 While the previous steps stated in the $Installation$ section \ref{Reference.needed} will only need to be completed once, the steps in this section and the following $Workflow\ Integration$ section \ref{reference.needed} will be the steps necessary to be taken for every new project established.
 
-To add an instance of the VST3 plugin to a project, simply go to the $Add$ dropdown menu in the top left, and then select the $Paradox\ Chains\ Synthesiser$ option. This will automatically add an instance of the VST3 plugin to the $Channel\ rack$. The $Channel\ rack$ can be accessed via $'View\ >\ Channel\ rack'$ or via the $F6$ shortcut key. By clicking on the VST3 plugin within the $Channel\ rack$, the user can access the graphical user interface of the synthesizer.
+To add an instance of the VST3 plugin to a project, simply go to the $Add$ dropdown menu in the top left, and then select the $Paradox\ Chains\ Synthesiser$ option. This action will automatically add an instance of the VST3 plugin to the $Channel\ rack$. The $Channel\ rack$ can be accessed via $'View\ >\ Channel\ rack'$ or via the $F6$ shortcut key. By clicking on the VST3 plugin within the $Channel\ rack$, the user can access the graphical user interface of the synthesizer.
 
 \includegraphics[width=1.0]{SynthesiserMainGUI.needed}
 
@@ -283,7 +284,7 @@ Right-clicking on any of the detailed MIDI parameters will bring up advanced use
 
 \includegraphics[width=1.0]{ExtraOptions.needed}
 
-The final step to integrating the $Paradox\ Chains\ Synthesiser$ into a workflow is to route the digital audio output to the mixer. By opening up the VST3 plugin's graphical user interface, there is an option to click on the Settings button to bring up the detailed settings window. There are a multitude of options such as modifying the MIDI input and output ports, however the relevant option is to change the Track Assignment in the top right corner of the window. By changing this value, the VST3 plugin will be assigned to the corresponding mixer track for further processing and routing to the final output.
+The final step to integrating the $Paradox\ Chains\ Synthesiser$ into a workflow is to route the digital audio output to the mixer. By opening up the VST3 plugin's graphical user interface, there is an option to click on the Settings button to bring up the detailed settings window. There is a multitude of options, such as modifying the MIDI input and output ports; however, the relevant option is to change the Track Assignment in the top right corner of the window. By changing this value, the VST3 plugin will be assigned to the corresponding mixer track for further processing and routing to the final output.
 
 \section{Module Details}
 
@@ -309,6 +310,14 @@ The final step to integrating the $Paradox\ Chains\ Synthesiser$ into a workflow
 % \item the testing plan and the results of the tests.
 % \end{itemize}
 
+\section{Prerequisites}
+Before developing the code, the developer must have access to a few necessary tools.
+\begin{itemize}
+\item The Project Source Code, available from Github.
+\item The JUCE C++ Application Framework
+\item A development environment of your choice. JUCE natively supports Visual Studio, XCode, and Linux Make.
+\item A Digital Audio Workstation of your choice. It must support VST3 plugins.
+\end{itemize}
 \subsection{Building the Software from Source Code}
 The stable source code of this application can be downloaded from the \texttt{master} branch of the public repository found at Github: \href{https://github.com/ParadoxChains/C3JI5D-Evan-Sitt-BSc-Thesis}{https://github.com/ParadoxChains/C3JI5D-Evan-Sitt-BSc-Thesis}. The source code includes all of the $C++$ header and CPP files that are necessary for the application. However, the repository does not include the JUCE framework that is required for building the project.
 
@@ -320,7 +329,7 @@ The JUCE framework is required for the project as it provides the base framework
 % maybe more details on JUCE setup?
 
 \subsection{VST3 Standard}
-The JUCE framework's main strength is the robust support for working with the VST3 SDK. This stands for the Virtual Studio Technology audio plugin interface developed by Steinberg Media Technologies. 
+The JUCE framework's main strength is the robust support for working with the VST3 SDK. This acronym stands for the Virtual Studio Technology audio plugin interface developed by Steinberg Media Technologies. 
 
 \includegraphics[width=1.0]{VST3Logo.needed}
 
@@ -334,6 +343,137 @@ Many modern VST3 plugins are a hybrid of the Generator and Effect types. These V
 
 The VST standard specifies a standard for communication between Digital Audio Workstations and the VST Plugins. The standard includes communication of MIDI input and output, audio signal input and output, and parameter value input and output. The VST Plugin will specify to the Digital Audio Workstation which inputs are available. Based upon the inputs received from the Digital Audio Workstation, the VST Plugin will process this information and then send various output messages back to the Digital Audio Workstation. These output messages can go directly to the Digital Audio Workstation or can be directly passed on to other VST Plugins, creating a signal chain. As such, \emph{chaining} is a useful technique for connecting VSTs to form deeply layered and sophisticated sounds.
 
+\section{Process Flow}
+The central object which handles the flow of data is the \texttt{AudioProcessor} found within the \texttt{PluginProcessor} header and CPP files. The \texttt{AudioProcessor} is responsible for directing MIDI input and Audio output throughout the different objects. Additionally, the \texttt{AudioProcessor} is responsible for handling the MIDI buffer and Audio buffers. The \texttt{AudioProcessor} will contain instances of the other classes and assists them in interacting with each other.
+
+The front-end of the \texttt{AudioProcessor} that will be used by the End-User is handled by the \texttt{AudioProcessorEditor}. This \texttt{AudioProcessorEditor} object contains each of the individual graphical user interface objects and controls the overall appearance of the VST3 plugin. These individual graphical user interface objects are \texttt{processor} objects that each will contain the individual graphical user interface elements to assist the End-User in changing the state values of the VST3 plugin, such as sliders and rotary dials.
+
+The \texttt{AudioProcessor} also contains an array of \texttt{SynthesiserVoice}. Each of these objects is a Synthesiser object that will perform the computation of values that will be handed back to the \texttt{AudioProcessor}  for sending out to the audio buffer. The \texttt{AudioProcessor} is responsible for handling the MIDI buffer and sending those sets of instructions to the Synthesiser objects for processing.
+
+\section{Development Flow}
+While development can follow the flow of the process, it is not intuitive to develop in this manner. To develop the \texttt{AudioProcessor} first would require a complete understanding of which control and state values would be required for each synthesizer component.
+
+First, the developer must develop the functions for handling the MIDI buffer first and the corresponding synthesizer functions. The audio buffer functions must also be developed afterward to handle the output correctly.
+
+Then at this point, the synthesizer components can be created. After this, developing the \texttt{AudioProcessor} to manage the control and state values is much more straightforward. From here, it is advised to develop the graphical user interface for the new synthesizer component, which will connect to the \texttt{AudioProcessor}, and then finally adding it to the \texttt{AudioProcessorEditor}.
+
+Special care must be taken to ensure that all functions are thread-safe, as the JUCE framework makes full use of VST3's multithreading support for performance, especially when handling high polyphony counts.
+
+The following section will walk through the development flow as described and provide detailed instructions on each portion.
+
+\section{Initializing the Synthesiser}
+The first step is to set up the \texttt{Synthesiser} controlled by the \texttt{AudioProcessor}. It is sufficient to declare the \texttt{Synthesiser} within the private members and allow it to use its default constructor. 
+Within the constructor of the \texttt{AudioProcessor}, we then create a loop that will add new instances of the \texttt{SynthesiserVoice} class and new instances of the \texttt{SynthesiserSound} class to the \texttt{Synthesiser}. The following is the code snippet that performs this action.
+\begin{lstlisting}
+mySynth.clearVoices();
+    
+for (int i = 0; i < 5; i++)
+{
+    mySynth.addVoice(new SynthVoice());
+}
+mySynth.clearSounds();
+mySynth.addSound(new SynthSound());
+\end{lstlisting}
+The \texttt{clearVoices} and \texttt{clearSounds} methods ensure that we are starting with a fresh \texttt{Synthesiser}.
+
+\section{Handling the MIDI and Audio Buffers}
+There are two parts to the handling of MIDI input and audio output. The \texttt{AudioProcessor} must implement a \texttt{processBlock} function. This function is called by the framework at every tick of the program, and is passed the references to the \texttt{AudioSampleBuffer} and the \texttt{MidiBuffer}. The following is the declaration required for this function:
+\begin{lstlisting}
+void JuceSynthFrameworkAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
+\end{lstlisting}
+Within the \texttt{processBlock} function, the developer may choose to implement any sort of system-wide functionality that must occur in real-time. One of these functionalities is the retrieval of control and state values from the \texttt{AudioProcessorValueTreeState}, which will be discussed in detail in a later section \ref{ref.needed}.
+
+The first step is to ensure that a call is made to the \texttt{renderNextBlock} method of each \texttt{SynthesiserVoice} that was added to the \texttt{Synthesiser}. These calls are done within a loop that iterates through each \texttt{SynthesiserVoice}. The function call is as follows: 
+\begin{lstlisting}
+mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+\end{lstlisting}
+Within the \texttt{renderNextBlock} function call, the audio buffer and MIDI buffer are both passed in by reference, followed by the index of the starting sample and the index of the last sample.
+
+Within the \texttt{SynthesiserVoice} derived class we must implement an override on the \texttt{renderNextBlock} method. The function declaration is as follows:
+\begin{lstlisting}
+void renderNextBlock(AudioBuffer <float>& outputBuffer, int startSample, int numSamples) override
+\end{lstlisting}
+This method must accomplish the task of rendering and adding the audio output sample values to the provided \texttt{AudioBuffer}. The code within this consists of two nested loops, one which iterates through each sample of the \texttt{AudioBuffer}, and the other which iterates through each audio channel that needs a sample. Within the loops we call an \texttt{AudioBuffer} method, \texttt{addSample}, to add the new sample to the \texttt{AudioBuffer}. The code snippet is as follows:
+\begin{lstlisting}
+for (int sample = 0; sample < numSamples; ++sample)
+{
+    for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
+    {
+        outputBuffer.addSample(channel, startSample, giveSample());
+    }
+    ++startSample;
+}
+\end{lstlisting}
+The first argument is the channel index, the second argument is the sample index, and the last argument is the value to be written. To keep the code readable and maintainable, the value to be written is provided by the function \texttt{giveSample}. This function will be described in further detail in the subsection \ref{ref.needed}.
+
+\section{The Digital Synthesis Components}
+The next parts for the developer to build are the individual Digital Synthesis components. The usage and purpose of each component have been discussed in the $Module Details$ section \ref{ref.needed}, and this section will focus on the implementation and technical details.
+
+\subsection{Waveform Oscillators}
+Designing an oscillator consists of two primary parts: designing the $Phase Accumulator$ as described in \ref{ref.needed} and designing the $Phase-to-Amplitude Converter$ as described in \ref{ref.needed}.
+
+The $Phase Accumulator$ is accomplished by declaring a \texttt{phase} variable for the \texttt{oscillator} class. This value will be used by each of the $Phase-to-Amplitude Converter$ functions. Since each $Phase-to-Amplitude Converter$ function uses the same \texttt{phase} value, it is ensured that the transition between different waveforms can be done with no phasing issues and with relative smoothness.
+
+The \texttt{resetPhase} methods allow for the \texttt{oscillator} to reset the phase to $0$ or to set it to a specified value. The \texttt{iteratePhase} method is responsible for iterating the value of \texttt{phase} by the formula: \begin{math}
+\cfrac{\texttt{waveTableSize}}{(\cfrac{\texttt{sampleRate}}{\texttt{frequency}})}
+\end{math}
+
+The \texttt{waveTableSize} and \texttt{sampleRate} are constants set by the constructor of the \texttt{oscillator}. The \texttt{waveTableSize} represents the how many precalculated values are stored for a single waveform cycle within a Waveform Lookup Table as described in section \ref{ref.needed}. The \texttt{sampleRate} represents the number of samples to be rendered per second for the audio output. The \texttt{frequency} is a value that will be provided to the oscillator when it is called by the \texttt{SynthesiserVoice} class. By iterating the \texttt{phase} value by the calculated value from the \texttt{waveTableSize}, \texttt{sampleRate}, \texttt{frequency}, the \texttt{phase} can not only accurately represent the phase but also represent the wavetable lookup index.
+
+With the $Phase Accumulator$ completed, the next step is to create the $Phase-to-Amplitude Converter$. In this project, both $Waveform Lookup Tables$ and $Waveform Functions$ are used. Each of the $Phase-to-Amplitude Converter$ functions follow the same conventions in regards to input and output. Each of the functions takes \texttt{frequency} as an argument, which acts as the $Tuning Word$, and returns a \texttt{double} representing the resulting amplitude from the conversion. These will be explained in the following paragraphs.
+
+The \texttt{sine} function operates using a $Waveform Lookup Table$ in order to bypass incurring the repeated computation cost of sine calculations. A precalculated wavetable, \texttt{double sineWaveTable[ ]} is stored within the CPP file. This array contains a predetermined number of precalculated values representing values of one cycle of the primitive sine function with an amplitude of $1$. The size of the wavetable is 4800 values. This number, $4800$, is calculated by dividing the highest possible sampling rate for $PCM WAV$ encoding, $98,000Hz$, by the lowest audible frequency, $20Hz$. While a lower number of precalculated values may be sufficient, some systems use a wavetable with as few precalculated values like 128, having a higher wavetable size ensures for much higher accuracy with less reliance on interpolative accuracy. Additionally, the extra overhead incurred by the memory allocated for a larger array of \texttt{double} values is negligible by the standard of modern computing hardware and is typically not a limiting factor.
+
+The \texttt{sine} function first checks the \texttt{phase} value to ensure that it is within the bounds of the wavetable size. If the \texttt{phase} value is not within these bounds, then modulus mathematics is applied to the \texttt{phase} value to shift it to a value within those bounds. This \texttt{phase} value, as calculated by the \texttt{iteratePhase} method, serves as the access index of the wavetable. As this access index typically will not fall on an integer value, but rather some real number index, the value can not be simply accessed from the wavetable. Instead, the $floor$ of the \texttt{phase} value is calculated and four values are accessed. These values are the value at the floored index, the value immediately following that position, and the two values immediately preceding that position. With these four values, a $4-Point Polynomial Interpolation$ algorithm is used to calculate the final value. The following is the code for the $4-Point Polynomial Interpolation$ algorithm.
+\begin{lstlisting}
+decimalPlaces = phase - floor(phase);
+a = sineWaveTable[(long)phase - 1];
+b = sineWaveTable[(long)phase];
+c = sineWaveTable[(long)phase + 1];
+d = sineWaveTable[(long)phase + 2];
+x = 0.5f * (c - a);
+y = a - 2.5f * b + 2.0f * c - 0.5f * d;
+z = 0.5f * (d - a) + 1.5f * (b - c);
+outputValue = double(((z * decimalPlaces + y) * decimalPlaces + x) * decimalPlaces + b);
+\end{lstlisting}
+The final \texttt{outputValue} is then returned from the function, which will be used for further Digital Signal Processing.
+
+Since the calculation of values for the Saw, Square, and Triangle waveforms involve only elementary addition, subtraction, multiplication, and division, the cost of repeated calculations is far cheaper than repeated sine calculations. For this reason, the $Phase-to-Amplitude Converter$ functions for these waveforms are implemented as $Waveform Functions$.
+
+The \texttt{square} function contains a conditional block which will set the \texttt{outputValue} to either $-1.0$ or $1.0$ depending on the current \texttt{phase} value. It will also perform modulus mathematics to ensure that the \texttt{phase} value is within the value range. Below is the core code block of the \texttt{square} function:
+\begin{lstlisting}
+if (phase < 0.5 * waveTableSize)
+    outputValue = -1.0;
+else if (phase >= 0.5 * waveTableSize)
+    outputValue = 1.0;
+if (phase >= waveTableSize)
+    phase -= waveTableSize;
+\end{lstlisting}
+
+
+\subsection{AudioProcessorValueTreeState}
+One of the first crucial steps is to build the \texttt{AudioProcessorValueTreeState}, a JUCE framework tree object designed to facilitate the storage of state values of the VST3 plugin and the access and communication of this information between the Digital Audio Workstation and the VST3 plugin.
+
+The \texttt{AudioProcessorValueTreeState} is declared within the header file, and is initialized in the constructor list of the \texttt{AudioProcessor}. The following code block is an example of initializing the filter parameters:
+
+\begin{lstlisting}
+tree(*this, nullptr, "PARAMETERS",
+        {   
+            //Filter Parameters
+            std::make_unique<AudioParameterChoice>("filterType",
+                                             TRANS("Filter Type"),
+                                       StringArray("Low Pass","High Pass","Band Pass"),
+                                                  0),
+            std::make_unique<AudioParameterFloat>("filterCutoff", "FilterCutoff", NormalisableRange<float>(20.0f, 10000.0f), 400.0f),
+            std::make_unique<AudioParameterFloat>("filterRes", "FilterRes", NormalisableRange<float>(1.0f, 5.0f), 1.0f),
+        })
+\end{lstlisting}
+
+This block will initialize the specified MIDI control value and state values that the VST3 plugin will need to make accessible to the Digital Audio Workstation. Any state value that will only be used and modified internally does not need to be added to the \texttt{AudioProcessorValueTreeState} object.
+
+In each initialization call, a call is made to a \texttt{std::make\_unique<>()} object constructor. This template class constructor will be given a JUCE framework type corresponding to the VST3 standard type. For example, a frequency range for the Low Pass Filter is of type \texttt{AudioParameterFloat}, while a dropdown menu selection for selecting between filter types is of type \texttt{AudioParameterChoice}. The JUCE framework later converts these types to their respective VST3 SDK equivalents.
+
+The \texttt{AudioProcessorTreeValueState} is connected the other classes in order to provide access to the VST3 plugin state. Most notably, the \texttt{processor} objects which contain the graphical user interface elements are initialized with references to state values stored within the tree object.
 \begin{itemize}
     \item Short Background of Task
     \item Implementation of Task
