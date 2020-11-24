@@ -406,13 +406,34 @@ for (int sample = 0; sample < numSamples; ++sample)
 \end{lstlisting}
 The first argument is the channel index, the second argument is the sample index, and the last argument is the value to be written. To keep the code readable and maintainable, the value to be written is provided by the function \texttt{giveSample}. This function will be described in further detail in the subsection \ref{ref.needed}.
 
+In addition to the \texttt{renderNextBlock} method, additional methods are required in order to process the relevant MIDI event messages passed in from the MIDI buffer. The \texttt{startNote} and \texttt{stopNote} methods of the \texttt{SynthesiserVoice} class must be overridden by the developer. The \texttt{startNote} method is called whenever the $noteOn$ MIDI event is encountered within the MIDI buffer while the \texttt{stopNote} method is called whenever the $noteOff MIDI event is encountered in the MIDI buffer.	
+
+The \texttt{startNote} method must perform any function required whenever a new note is started. The \texttt{trigger} value of the \texttt{envelope} component, described in section \ref{ref.needed}, is set to the value of $1$ to indicate the start of the $Attack$ phase. The position of the pitch wheel, a general MIDI hardware component, is then passed to the function \textt{setPitchBend} to set the \texttt{pitchBend} value which will be used as described in section \ref{ref.needed}. The \texttt{midiNoteNumber} is then converted to the corresponding frequency value in Hz and stored as the \texttt{frequency} value which will be used by the \texttt{oscillator} components, as described in section \ref{ref.needed}. Finally, the \texttt{velocity} value from the MIDI event instruction is stored into the \texttt{level} value. The following is the code snippet for the \texttt{startNote} method:
+
+\begin{lstlisting}
+noteNumber = midiNoteNumber;
+envelope01.trigger = 1;
+setPitchBend(currentPitchWheelPosition);
+frequency = noteHz(noteNumber, pitchBendCents());
+level = velocity;
+\end{lstlisting}
+
+The \texttt{stopNote} method must perform all functions required whenever the current note is ended. The \texttt{trigger} value of the \texttt{envelope} component is set to $0$ to indicate the start of the $Release$ phase. The \texttt{allowTailOff} value is set to \texttt{true} to indicate to the $JUCE$ framework that the release tail should be allowed to persist in the audio output buffer. Finally, after the \texttt{velocity} value is equivalent to $0$, then the \texttt{clearCurrentNote} method is called which ensures that the current note is cleared from the instructions received from the MIDI buffer. The following code snippet is the instructions involved within the \texttt{stopNote} method:
+
+\begin{lstlisting}
+envelope01.trigger = 0;
+allowTailOff = true;
+if (velocity == 0)
+    clearCurrentNote();
+\end{lstlisting}
+
 \section{The Digital Synthesis Components}
 The next parts for the developer to build are the individual Digital Synthesis components. The usage and purpose of each component have been discussed in the $Module Details$ section \ref{ref.needed}, and this section will focus on the implementation and technical details.
 
 \subsection{Waveform Oscillators}
-Designing an oscillator consists of two primary parts: designing the $Phase Accumulator$ as described in \ref{ref.needed} and designing the $Phase-to-Amplitude Converter$ as described in \ref{ref.needed}.
+Designing an oscillator consists of two primary parts: designing the $Phase\ Accumulator$ as described in \ref{ref.needed} and designing the $Phase-to-Amplitude\ Converter$ as described in \ref{ref.needed}.
 
-The $Phase Accumulator$ is accomplished by declaring a \texttt{phase} variable for the \texttt{oscillator} class. This value will be used by each of the $Phase-to-Amplitude Converter$ functions. Since each $Phase-to-Amplitude Converter$ function uses the same \texttt{phase} value, it is ensured that the transition between different waveforms can be done with no phasing issues and with relative smoothness.
+The $Phase\ Accumulator$ is accomplished by declaring a \texttt{phase} variable for the \texttt{oscillator} class. This value will be used by each of the $Phase-to-Amplitude\ Converter$ functions. Since each $Phase-to-Amplitude\ Converter$ function uses the same \texttt{phase} value, it is ensured that the transition between different waveforms can be done with no phasing issues and with relative smoothness.
 
 The \texttt{resetPhase} methods allow for the \texttt{oscillator} to reset the phase to $0$ or to set it to a specified value. The \texttt{iteratePhase} method is responsible for iterating the value of \texttt{phase} by the formula: \begin{math}
 \cfrac{\texttt{waveTableSize}}{(\cfrac{\texttt{sampleRate}}{\texttt{frequency}})}
@@ -420,9 +441,9 @@ The \texttt{resetPhase} methods allow for the \texttt{oscillator} to reset the p
 
 The \texttt{waveTableSize} and \texttt{sampleRate} are constants set by the constructor of the \texttt{oscillator}. The \texttt{waveTableSize} represents the how many precalculated values are stored for a single waveform cycle within a Waveform Lookup Table as described in section \ref{ref.needed}. The \texttt{sampleRate} represents the number of samples to be rendered per second for the audio output. The \texttt{frequency} is a value that will be provided to the oscillator when it is called by the \texttt{SynthesiserVoice} class. By iterating the \texttt{phase} value by the calculated value from the \texttt{waveTableSize}, \texttt{sampleRate}, \texttt{frequency}, the \texttt{phase} can not only accurately represent the phase but also represent the wavetable lookup index.
 
-With the $Phase Accumulator$ completed, the next step is to create the $Phase-to-Amplitude Converter$. In this project, both $Waveform Lookup Tables$ and $Waveform Functions$ are used. Each of the $Phase-to-Amplitude Converter$ functions follow the same conventions in regards to input and output. Each of the functions takes \texttt{frequency} as an argument, which acts as the $Tuning Word$, and returns a \texttt{double} representing the resulting amplitude from the conversion. These will be explained in the following paragraphs.
+With the $Phase\ Accumulator$ completed, the next step is to create the $Phase-to-Amplitude\ Converter$. In this project, both $Waveform\ Lookup\ Tables$ and $Waveform\ Functions$ are used. Each of the $Phase-to-Amplitude\ Converter$ functions follow the same conventions in regards to input and output. Each of the functions takes \texttt{frequency} as an argument, which acts as the $Tuning\ Word$, and returns a \texttt{double} representing the resulting amplitude from the conversion. These will be explained in the following paragraphs.
 
-The \texttt{sine} function operates using a $Waveform Lookup Table$ in order to bypass incurring the repeated computation cost of sine calculations. A precalculated wavetable, \texttt{double sineWaveTable[ ]} is stored within the CPP file. This array contains a predetermined number of precalculated values representing values of one cycle of the primitive sine function with an amplitude of $1$. The size of the wavetable is 4800 values. This number, $4800$, is calculated by dividing the highest possible sampling rate for $PCM WAV$ encoding, $98,000Hz$, by the lowest audible frequency, $20Hz$. While a lower number of precalculated values may be sufficient, some systems use a wavetable with as few precalculated values like 128, having a higher wavetable size ensures for much higher accuracy with less reliance on interpolative accuracy. Additionally, the extra overhead incurred by the memory allocated for a larger array of \texttt{double} values is negligible by the standard of modern computing hardware and is typically not a limiting factor.
+The \texttt{sine} function operates using a $Waveform\ Lookup\ Table$ in order to bypass incurring the repeated computation cost of sine calculations. A precalculated wavetable, \texttt{double sineWaveTable[ ]} is stored within the CPP file. This array contains a predetermined number of precalculated values representing values of one cycle of the primitive sine function with an amplitude of $1$. The size of the wavetable is 4800 values. This number, $4800$, is calculated by dividing the highest possible sampling rate for $PCM WAV$ encoding, $98,000Hz$, by the lowest audible frequency, $20Hz$. While a lower number of precalculated values may be sufficient, some systems use a wavetable with as few precalculated values like 128, having a larger wavetable size ensures for much higher accuracy with less reliance on interpolative accuracy. Additionally, the extra overhead incurred by the memory allocated for a larger array of \texttt{double} values is negligible by the standard of modern computing hardware and is typically not a limiting factor.
 
 The \texttt{sine} function first checks the \texttt{phase} value to ensure that it is within the bounds of the wavetable size. If the \texttt{phase} value is not within these bounds, then modulus mathematics is applied to the \texttt{phase} value to shift it to a value within those bounds. This \texttt{phase} value, as calculated by the \texttt{iteratePhase} method, serves as the access index of the wavetable. As this access index typically will not fall on an integer value, but rather some real number index, the value can not be simply accessed from the wavetable. Instead, the $floor$ of the \texttt{phase} value is calculated and four values are accessed. These values are the value at the floored index, the value immediately following that position, and the two values immediately preceding that position. With these four values, a $4-Point Polynomial Interpolation$ algorithm is used to calculate the final value. The following is the code for the $4-Point Polynomial Interpolation$ algorithm.
 \begin{lstlisting}
@@ -438,7 +459,7 @@ outputValue = double(((z * decimalPlaces + y) * decimalPlaces + x) * decimalPlac
 \end{lstlisting}
 The final \texttt{outputValue} is then returned from the function, which will be used for further Digital Signal Processing.
 
-Since the calculation of values for the Saw, Square, and Triangle waveforms involve only elementary addition, subtraction, multiplication, and division, the cost of repeated calculations is far cheaper than repeated sine calculations. For this reason, the $Phase-to-Amplitude Converter$ functions for these waveforms are implemented as $Waveform Functions$.
+Since the calculation of values for the Saw, Square, and Triangle waveforms involve only elementary addition, subtraction, multiplication, and division, the cost of repeated calculations is far cheaper than repeated sine calculations. For this reason, the $Phase-to-Amplitude\ Converter$ functions for these waveforms are implemented as $Waveform Functions$.
 
 The \texttt{square} function contains a conditional block which will set the \texttt{outputValue} to either $-1.0$ or $1.0$ depending on the current \texttt{phase} value. It will also perform modulus mathematics to ensure that the \texttt{phase} value is within the value range. Below is the core code block of the \texttt{square} function:
 \begin{lstlisting}
@@ -450,6 +471,39 @@ if (phase >= waveTableSize)
     phase -= waveTableSize;
 \end{lstlisting}
 
+The \texttt{triangle} function involves a conditional block controlling the linear transformation of the \texttt{phase} value to the \texttt{outputValue}.  As with the previous functions, modulus mathematics is also performed on the \texttt{phase} value to ensure it remains within the valid range. The following is the main logic block of the \texttt{triangle} function:
+\begin{lstlisting}
+if (phase <= 0.5 * waveTableSize)
+    outputValue = ((phase - (0.25 * waveTableSize)) * 4)/waveTableSize;
+else
+    outputValue = (((waveTableSize - phase) - (0.25 * waveTableSize)) * 4)/waveTableSize;
+\end{lstlisting}
+
+Lastly, the \texttt{saw} function is the simplest of the $Waveform\ Functions$, involving a linear transformation of the \texttt{phase} value to the \texttt{outputValue}. The modulus arithmetic is present within this function in the same manner as the previous $Waveform\ Functions$. The logic block of the \texttt{saw} function is accomplished by this single line:
+\begin{lstlisting}
+outputValue = phase/waveTableSize;
+\end{lstlisting}
+
+The \texttt{outputValue} returned from the $Phase-to-Amplitude\ Converter$ functions is sent from the \texttt{oscillator} class to the other Digital Signal Processing components. For each of the components, they all follow a similar input/output format. Each of the components take a \texttt{sample} value as a parameter, and return a \texttt{double} as their output. The \texttt{sample} value represents the output sample value from the previous component, and the returned \texttt{double} value corresponds to the processed output of the signal. Within this VST3 Plugin, the signal is routed from the \texttt{oscillator} component to the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$.
+
+\subsection{Low-Frequency Oscillator Controlled Amplitude Modulator}
+The $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ acts similarly to an amplitude envelope on the signal. The main difference is that the amplitude modulation is not based on ADSR phases, as described previously in section \ref{ref.needed}, but based on the output values of an oscillator. Typically the output values of the oscillator are used as multipliers on the sample values from the input signal. In order to avoid silence at the nodes of the oscillator, the modulated signal is mixed back in with the dry signal to create the final output signal.
+
+The main logic block of the code is as follows:
+\begin{lstlisting}
+sampleMix = sample * (1 - lfoMixLevel01);
+lfoMix = sample * lfo01.sine(lfoFrequency01) * lfoMixLevel01;
+newSample = sampleMix + lfoMix;
+\end{lstlisting}
+
+The parameters that the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ uses are \texttt{lfoSwitch}, \texttt{lfoFreq}, and \texttt{lfoBlend}. These three parameters are passed in by the \texttt{AudioProcessorValueTreeState}, which will be discussed in section \ref{ref.needed}. The \texttt{lfoSwitch} parameter controls whether or not the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ will be bypassed or not. The \texttt{lfoFreq} parameter is assigned to the \texttt{lfoFrequency01} variable and controls the frequency of the Low-Frequency Oscillator. And finally, the \texttt{lfoBlend} parameter is assigned to the \texttt{lfoMixLevel01} variable which controls the final mix.
+
+\subsection{Amplitude Modulation Envelope}
+The \texttt{envelope} component modifies the amplitude of the signal value by the parameters set for the \texttt{envelope} component. The implemented type of $Envelope$ component is the 4-step $ADSR Envelope$ as described in section \ref{ref.needed}. 
+
+Within the \texttt{envelope} class, the most important values are the \texttt{attack}, \texttt{decay}, \texttt{sustain}, \texttt{release}, and \texttt{trigger} variables. The \texttt{attack}, \texttt{decay}, and \texttt{release} correspond to the rates of their respective phases. The \texttt{sustain} value represents the sustained amplitude during the $Sustain$ phase. And lastly the \texttt{trigger} variable corresponds to the $noteOn$ and $noteOff$ MIDI event messages and is set by the \texttt{startNote} and \textt{stopNote} methods as described in section \ref{ref.needed}.
+
+The \texttt{envelope} component tracks its internal state via four switch variables. These variables are \texttt{attackphase}, \texttt{decayphase}, \texttt{holdphase}, and \texttt{releasephase}. These four switch variables correspond to their respective $ADSR$ envelope phases. The envelope uses these switch variables to determine which state it operates in to process the input signal sample value. 
 
 \subsection{AudioProcessorValueTreeState}
 One of the first crucial steps is to build the \texttt{AudioProcessorValueTreeState}, a JUCE framework tree object designed to facilitate the storage of state values of the VST3 plugin and the access and communication of this information between the Digital Audio Workstation and the VST3 plugin.
@@ -481,7 +535,38 @@ The \texttt{AudioProcessorTreeValueState} is connected the other classes in orde
     \item Results - Latency, Under/Overruns, Distortion/Clipping
 \end{itemize}
 
+\section{Testing}
+The unit testing for the project is implemented using \texttt{GoogleTest}, Google's in house C++ testing framework. The public Github repository, including the full documentation, for \texttt{GoogleTest} can be found at \href{https://github.com/google/googletest}{https://github.com/google/googletest}.
 
+The unit tests written are focused on the waveform synthesis module of the application as this module is at the centerpiece of the direct digital synthesis and any issues in the synthesis module would create increasingly distorted artifacts in the final output.
+
+The unit tests written for the application utilize the \emph{Text Fixtures} feature of \texttt{GoogleTest}, which allows for tests to be grouped into a test fixture to utilize the same resource without incurring the cost of rebuilding and tearing down for each test. 
+
+\subsection{Phase Tests}
+The first set of unit tests are focused on testing the phase accumulation of each waveform function generator. The phase should be consistent and match expected outputs with the given frequency input. Additionally, the phase should never exceed 360 degrees and should return to 0 degrees after a full cycle at the given frequency. The phase values are obtained by calling the \texttt{getPhase()} function.
+
+The C++ class \texttt{OscillatorPhaseTest} constructs the \texttt{oscillator} required to run the tests. The phase tests are part of the \texttt{OscillatorPhaseTest} test fixture which utilizes the class.
+
+The \texttt{TestResetPhase} and \texttt{TestResetPhaseSpecificValue} functions test the \texttt{resetPhase()} method. These tests ensure that the oscillator can properly reset the phase value back to 0 degrees or to a specific degree value.
+
+The \texttt{TestResetPhaseAfterSynthesis} test operates by running the \texttt{sine()} function for a whole cycle, then checking if the phase has reset as required back to 0. The frequency used for the test is 480hz with 1000 function calls made, which would complete a single cycle.
+
+The next set of phase tests check to ensure that the phase value stays within expected values each and every time a synthesis function is called. The \texttt{SineSynthesisPhaseTest} calls the \texttt{sine()} function 99 times. In each iteration, an \texttt{EXPECT\_FLOAT\_EQ()} is called to check the value of the phase returned by \texttt{getPhase()} against the expected value. Should the test fail at any iteration, the iteration is reported back in the test failure message. The \texttt{SineSynthesisPhaseResetTest} is similar, however it runs the \texttt{sine()} function for 100 times. After the 100th iteration, it runs \texttt{EXPECT\_FLOAT\_EQ()} to check if the value of the phase reset back to 0 degrees as expected.
+
+These tests are also made for each of the different waveform function generators, i.e. \emph{Square}, \emph{Saw}, and \emph{Triangle}. The respective tests are called \texttt{SquareSynthesisPhaseTest} & \texttt{SquareSynthesisPhaseResetTest}, \texttt{SawSynthesisPhaseTest} & \texttt{SawSynthesisPhaseResetTest}, and \texttt{TriangleSynthesisPhaseTest} & \texttt{TriangleSynthesisPhaseResetTest}. One additional test exists for the \emph{Saw} waveform generator, the \texttt{SawSynthesisPhaseFlipTest}. As the \emph{Saw} waveform generator modifies the phase value between $[-360,360]$ degrees, this test checks if the phase value flips at the expected iteration.
+
+\subsection{Value Tests}
+Value unit tests are crucial to ensure that each waveform function generator will create the waveform as expected. The best way to test for this is to check the generated values at specific phase values with known output values. Additionally, the generated values should never exceed the range of $[-1.0,1.0]$.
+
+The C++ class \texttt{OscillatorValueTest} constructs the \texttt{oscillator} required to run the tests. The phase tests are part of the \texttt{OscillatorValueTest} test fixture which utilizes the class.
+
+The \texttt{SineSynthesisValueTest} test operates by setting the phase to 0, 90, 180, 270, and 360 degrees, and checking the value generated at each phase value by the \texttt{sine()} function to the expected values from the respective phase values. Any value not matching the expected values is reported in the test failures along with the phase which it failed at.
+
+The functions are similar for the \emph{Saw}, \emph{Square}, \emph{Triangle} waveform generators, and are tested via the \texttt{SawSynthesisValueTest}, \texttt{SquareSynthesisValueTest}, and \texttt{TriangleSynthesisValueTest} tests respectively.
+
+The \texttt{SineSynthesisValueRangeTest} performs 100 iterations of the \texttt{sine()} function. At each iteration, the value generated is checked to ensure that it is within the range of $[-1.0,1.0]$. If any iteration fails the check, the iteration is reported back in the test failure.
+
+Each of the other waveform function generators also have their respective value range tests. These are \texttt{SquareSynthesisValueRangeTest}, \texttt{SawSynthesisValueRangeTest}, and \texttt{TriangleSynthesisValueRangeTest}.
 % ------------------------------------------------------------------------------
 
 \chapter{Appendix}
