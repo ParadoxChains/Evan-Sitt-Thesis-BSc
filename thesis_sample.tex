@@ -49,11 +49,9 @@
 
 \chapter{Introduction}
 
-The Introduction should summarize the motivation of the topic for the thesis and summary and understandable description of the project.
-
-
-% ------------------------------------------------------------------------------
-
+The application is a digital synthesizer built within the JUCE framework. It can be used as a VST3 plugin or as a standalone application. This digital synthesizer can be used with live MIDI input and produces audio output. The digital synthesizer can support additive and subtractive synthesis with the basic waveforms. The post processing effects included are LFO, Envelope, and Filters.
+This digital synthesizer application allows for flexible customization of the synthesizer sound with flexible usage and integration into an exisitng workflow.
+\includegraphics[width=1.0]{OverallScreenshot.needed}
 \chapter{Background}
 \section{Audio Basics}
 % - Audio Basics
@@ -65,7 +63,7 @@ We start with the basic building block of sound, the waveform. A Waveform is an 
 \subsection{Decibel}
 A decibel is a relative unit of measurement representing the ratio of the value of a power quantity to another. For example, if $x$ represents the ratio of the power quantity of one system to another system, then the decibels can be calculated via $10 log_10 x$. Since the decibel is a relative unit, it is always essential to establish what the reference measure of power is. 
 
-In colloquial usage, when one refers to the loudness of a jet-plane engine as +80dB, this is gin reference to the lower threshold of sound pressure that is perceivable to the human hearing system. In the case that a waveform is referencing the lower threshold of human hearing, then the range is typically visualized with "0" of the range as 0dB and the values above the horizontal axis going up in decibel value and values below the horizontal axis going down in decibel value. A negative value is representative of the vibration of a membrane, such as an eardrum, in reaction to negative sound pressure. 
+In colloquial usage, when one refers to the loudness of a jet-plane engine as +80dB, this is in reference to the lower threshold of sound pressure that is perceivable to the human hearing system. In the case that a waveform is referencing the lower threshold of human hearing, then the range is typically visualized with "0" of the range as 0dB and the values above the horizontal axis going up in decibel value and values below the horizontal axis going down in decibel value. A negative value is representative of the vibration of a membrane, such as an eardrum, in reaction to negative sound pressure. 
 
 \subsection{Decibels in Digital Synthesis and Audio Engineering}
 In contrast to the colloquial usage of decibels, within audio engineering, the decibel value used is called the Decibels Relative to Overload.  In this variant, 0dB is assigned to the maximal power level that can be output by a system before clipping occurs. Clipping is the term to describe the type of distortion that occurs when a signal overshoots the maximal output. For example, a speaker representing a sound pressure of 0dB will be outputting the signal at its maximum power, and representing the sound pressure at half power would be -6dB. In hardware, safeguards are implemented at certain decibel levels to curb a signal before it clips.
@@ -194,12 +192,8 @@ This functionality of the Band Pass filter is commonly used to eliminate noise a
 
 By combining a variety of the three types of pass filters, an Equalizer is created, which can drastically alter the character of a waveform and is a staple of Digital Sound Processing platforms, including consumer-level products.
 
-% - Time-Based Delays
-%   - Delay Chain
-%   - Flanger
 
 \section{The MIDI Standard}
-% - MIDI
 MIDI is an acronym for \emph{Musical Instrument Digital Interface}. Originating in 1983 from a panel of music industry representatives, it is a technical standard that describes a universal digital communications protocol for connecting any type of audio-related hardware and software. Analog hardware relies on converters that translate MIDI messages into analog control voltages. 
 
 A single MIDI link is capable of carrying up to sixteen channels of MIDI information. The routing of each channel can be completely independent of each other, allowing for flexible routing to and from different devices. Modern hardware and software will extend this functionality by using ports, with the current standard being 255 ports supported. Each port will support a full set of sixteen MIDI channels, making for a total of 4,080 available MIDI channels useable by the device.
@@ -222,26 +216,9 @@ Each MIDI link between devices is capable of carrying up to sixteen channels of 
 
 The application of this thesis project supports one MIDI link of sixteen channels, with all MIDI channels being handled at the same time. System event messages are ignored, as the application is not device or platform-specific, nor does it use proprietary interfaces. However, most MIDI event messages are handled by the application.
 
-%   - Handling the buffer
-\section{Waveform Audio File Format}
-% - PCM Wav
-%   - Handling the buffer
-
-\section{Digital Audio Workstations}
-% - Digital Audio Workstations
-
-% 7 - 10 pages Background
-% May 1st Deadline, 45 days left.
-% ------------------------------------------------------------------------------
 
 \chapter{User Documentation}
 In this chapter, the application will be explained from an End-User perspective with explanations on how to use each part of the application within their workflow to achieve the desired sound. This section will rely heavily on technical and musical terminology discussed in the previous chapter \ref{ref:needed}, and as so, will focus primarily on describing in detail the operation and effects of the application.
-% The User Documentation (or User's Manual) should contain
-% \begin{itemize}
-% \item the short description of the solved problem,
-% \item the summary of the used methods and tools,
-% \item every required information about the usage of the software.
-% \end{itemize}
 
 \section{Installation}
 The installation of the software is relatively straightforward and simple. This section will walk the End-User through the Build, Installation, and Setup process on different platforms. For those who prefer to download the precompiled binaries for the VSTi plugin, please read the following subsection. However, for those who prefer to build the application from the source code, please refer to section \ref{ref:needed}.
@@ -287,17 +264,28 @@ Right-clicking on any of the detailed MIDI parameters will bring up advanced use
 The final step to integrating the $Paradox\ Chains\ Synthesiser$ into a workflow is to route the digital audio output to the mixer. By opening up the VST3 plugin's graphical user interface, there is an option to click on the Settings button to bring up the detailed settings window. There is a multitude of options, such as modifying the MIDI input and output ports; however, the relevant option is to change the Track Assignment in the top right corner of the window. By changing this value, the VST3 plugin will be assigned to the corresponding mixer track for further processing and routing to the final output.
 
 \section{Module Details}
-
-
-\begin{itemize}
-    \item Installation
-    \item Initialization
-    \item Workflow Integration
-    \item Module Details
-    \item Testing details
-\end{itemize}
-
-% ------------------------------------------------------------------------------
+%-------here
+\subsection{Main Oscillator}
+The $Main\ Oscillator$ module controls the primary oscillator. This oscillator is the one which will play at full volume. The dropdown menu allows for the user to control which waveform should be generated by the primary oscillator.
+\includegraphics[width=1.0]{MainOscScreenshot.needed}
+\subsection{Additive Oscillator}
+The $Additive\ Oscillator$ module controls the secondary oscillator. This oscillator will generate a waveform which will be combined with the primary waveform via additive synthesis. The dropdown menu allows for the user to control which waveform should be generated by the secondary oscillator. The slider controls the mix amount of the secondary waveform to be used for additive synthesis.
+\includegraphics[width=1.0]{AddOscScreenshot.needed}
+\subsection{Subtractive Oscillator}
+The $Subtractive\ Oscillator$ module controls the tertiary oscillator. This oscillator will generate a waveform which will be combined with the primary waveform via subtractive synthesis. The dropdown menu allows for the user to control which waveform should be generated by the tertiary oscillator. The slider controls the mix amount of the tertiary waveform to be used for subtractive synthesis.
+\includegraphics[width=1.0]{SubOscScreenshot.needed}
+\subsection{Low Frequency Oscillator}
+The $Low\ Frequency\ Oscillator$ module controls the oscillator which generates the waveform controlling the amplitude modulation. The dropdown menu allows for the user to control whether or not the LFO amplitude modulation should be turned $On$ or $Off$. The left radial dial controls the frequency of the waveform generated by the oscillator. The right radial dial controls the amplitude of the waveform generated by the oscillator.
+\includegraphics[width=1.0]{LFOScreenshot.needed}
+\subsection{Filter}
+The $Filter$ module controls the filter module which performs post processing filtering on the resulting signal from the three oscillators. The dropdown menu allows for the user to control which filter type is applied. The options available are $Low\ Pass$, $High\ Pass$, and $Band\ Pass$, each corresponding to their respective filter types. The left radial dial controls the cutoff frequency of the applied filter. The right radial dial controls the resonance of the applied filter.
+\includegraphics[width=1.0]{FilterScreenshot.needed}
+\subsection{Envelope}
+The $Envelope$ module controls the envelope controlled amplitude modulation. This is applied to the generated signal from the combined output of the three oscillators. The four sliders are labeled with $A$, $D$, $S$, and $R$, corresponding to the $Attack$, $Decay$, $Sustain$, and $Release$ values of the envelope.
+\includegraphics[width=1.0]{EnvelopeScreenshot.needed}
+\subsection{Main}
+The $Main$ module controls the Master volume of the application along with pitch bend. The slider labeled with $Master$ controls the master volume, which is the final post processing step in the signal chain. The two sliders below the $PB Up/Down$ label control the pitch bend up and pitch bend down respectively.
+\includegraphics[width=1.0]{MainControlScreenshot.needed}
 
 
 \chapter{Developer Documentation}
@@ -406,9 +394,9 @@ for (int sample = 0; sample < numSamples; ++sample)
 \end{lstlisting}
 The first argument is the channel index, the second argument is the sample index, and the last argument is the value to be written. To keep the code readable and maintainable, the value to be written is provided by the function \texttt{giveSample}. This function will be described in further detail in the subsection \ref{ref.needed}.
 
-In addition to the \texttt{renderNextBlock} method, additional methods are required in order to process the relevant MIDI event messages passed in from the MIDI buffer. The \texttt{startNote} and \texttt{stopNote} methods of the \texttt{SynthesiserVoice} class must be overridden by the developer. The \texttt{startNote} method is called whenever the $noteOn$ MIDI event is encountered within the MIDI buffer while the \texttt{stopNote} method is called whenever the $noteOff MIDI event is encountered in the MIDI buffer.	
+In addition to the \texttt{renderNextBlock} method, additional methods are required in order to process the relevant MIDI event messages passed in from the MIDI buffer. The \texttt{startNote} and \texttt{stopNote} methods of the \texttt{SynthesiserVoice} class must be overridden by the developer. The \texttt{startNote} method is called whenever the $noteOn$ MIDI event is encountered within the MIDI buffer while the \texttt{stopNote} method is called whenever the $noteOff$ MIDI event is encountered in the MIDI buffer.	
 
-The \texttt{startNote} method must perform any function required whenever a new note is started. The \texttt{trigger} value of the \texttt{envelope} component, described in section \ref{ref.needed}, is set to the value of $1$ to indicate the start of the $Attack$ phase. The position of the pitch wheel, a general MIDI hardware component, is then passed to the function \textt{setPitchBend} to set the \texttt{pitchBend} value which will be used as described in section \ref{ref.needed}. The \texttt{midiNoteNumber} is then converted to the corresponding frequency value in Hz and stored as the \texttt{frequency} value which will be used by the \texttt{oscillator} components, as described in section \ref{ref.needed}. Finally, the \texttt{velocity} value from the MIDI event instruction is stored into the \texttt{level} value. The following is the code snippet for the \texttt{startNote} method:
+The \texttt{startNote} method must perform any function required whenever a new note is started. The \texttt{trigger} value of the \texttt{envelope} component, described in section \ref{ref.needed}, is set to the value of $1$ to indicate the start of the $Attack$ phase. The position of the pitch wheel, a general MIDI hardware component, is then passed to the function \texttt{setPitchBend} to set the \texttt{pitchBend} value which will be used as described in section \ref{ref.needed}. The \texttt{midiNoteNumber} is then converted to the corresponding frequency value in Hz and stored as the \texttt{frequency} value which will be used by the \texttt{oscillator} components, as described in section \ref{ref.needed}. Finally, the \texttt{velocity} value from the MIDI event instruction is stored into the \texttt{level} value. The following is the code snippet for the \texttt{startNote} method:
 
 \begin{lstlisting}
 noteNumber = midiNoteNumber;
@@ -501,7 +489,7 @@ The parameters that the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modul
 \subsection{Amplitude Modulation Envelope}
 The \texttt{envelope} component modifies the amplitude of the signal value by the parameters set for the \texttt{envelope} component. The implemented type of $Envelope$ component is the 4-step $ADSR Envelope$ as described in section \ref{ref.needed}. 
 
-Within the \texttt{envelope} class, the most important values are the \texttt{attack}, \texttt{decay}, \texttt{sustain}, \texttt{release}, and \texttt{trigger} variables. The \texttt{attack}, \texttt{decay}, and \texttt{release} correspond to the rates of their respective phases. The \texttt{sustain} value represents the sustained amplitude during the $Sustain$ phase. And lastly the \texttt{trigger} variable corresponds to the $noteOn$ and $noteOff$ MIDI event messages and is set by the \texttt{startNote} and \textt{stopNote} methods as described in section \ref{ref.needed}.
+Within the \texttt{envelope} class, the most important values are the \texttt{attack}, \texttt{decay}, \texttt{sustain}, \texttt{release}, and \texttt{trigger} variables. The \texttt{attack}, \texttt{decay}, and \texttt{release} correspond to the rates of their respective phases. The \texttt{sustain} value represents the sustained amplitude during the $Sustain$ phase. And lastly the \texttt{trigger} variable corresponds to the $noteOn$ and $noteOff$ MIDI event messages and is set by the \texttt{startNote} and \texttt{stopNote} methods as described in section \ref{ref.needed}.
 
 The \texttt{envelope} component tracks its internal state via four switch variables. These variables are \texttt{attackphase}, \texttt{decayphase}, \texttt{holdphase}, and \texttt{releasephase}. These four switch variables correspond to their respective $ADSR$ envelope phases. The envelope uses these switch variables to determine which state it operates in to process the input signal sample value. 
 
@@ -528,12 +516,6 @@ This block will initialize the specified MIDI control value and state values tha
 In each initialization call, a call is made to a \texttt{std::make\_unique<>()} object constructor. This template class constructor will be given a JUCE framework type corresponding to the VST3 standard type. For example, a frequency range for the Low Pass Filter is of type \texttt{AudioParameterFloat}, while a dropdown menu selection for selecting between filter types is of type \texttt{AudioParameterChoice}. The JUCE framework later converts these types to their respective VST3 SDK equivalents.
 
 The \texttt{AudioProcessorTreeValueState} is connected the other classes in order to provide access to the VST3 plugin state. Most notably, the \texttt{processor} objects which contain the graphical user interface elements are initialized with references to state values stored within the tree object.
-\begin{itemize}
-    \item Short Background of Task
-    \item Implementation of Task
-    \item Discussion of implementation
-    \item Results - Latency, Under/Overruns, Distortion/Clipping
-\end{itemize}
 
 \section{Testing}
 The unit testing for the project is implemented using \texttt{GoogleTest}, Google's in house C++ testing framework. The public Github repository, including the full documentation, for \texttt{GoogleTest} can be found at \href{https://github.com/google/googletest}{https://github.com/google/googletest}.
@@ -553,7 +535,7 @@ The \texttt{TestResetPhaseAfterSynthesis} test operates by running the \texttt{s
 
 The next set of phase tests check to ensure that the phase value stays within expected values each and every time a synthesis function is called. The \texttt{SineSynthesisPhaseTest} calls the \texttt{sine()} function 99 times. In each iteration, an \texttt{EXPECT\_FLOAT\_EQ()} is called to check the value of the phase returned by \texttt{getPhase()} against the expected value. Should the test fail at any iteration, the iteration is reported back in the test failure message. The \texttt{SineSynthesisPhaseResetTest} is similar, however it runs the \texttt{sine()} function for 100 times. After the 100th iteration, it runs \texttt{EXPECT\_FLOAT\_EQ()} to check if the value of the phase reset back to 0 degrees as expected.
 
-These tests are also made for each of the different waveform function generators, i.e. \emph{Square}, \emph{Saw}, and \emph{Triangle}. The respective tests are called \texttt{SquareSynthesisPhaseTest} & \texttt{SquareSynthesisPhaseResetTest}, \texttt{SawSynthesisPhaseTest} & \texttt{SawSynthesisPhaseResetTest}, and \texttt{TriangleSynthesisPhaseTest} & \texttt{TriangleSynthesisPhaseResetTest}. One additional test exists for the \emph{Saw} waveform generator, the \texttt{SawSynthesisPhaseFlipTest}. As the \emph{Saw} waveform generator modifies the phase value between $[-360,360]$ degrees, this test checks if the phase value flips at the expected iteration.
+These tests are also made for each of the different waveform function generators, i.e. \emph{Square}, \emph{Saw}, and \emph{Triangle}. The respective tests are called \texttt{SquareSynthesisPhaseTest} \& \texttt{SquareSynthesisPhaseResetTest}, \texttt{SawSynthesisPhaseTest} \& \texttt{SawSynthesisPhaseResetTest}, and \texttt{TriangleSynthesisPhaseTest} \& \texttt{TriangleSynthesisPhaseResetTest}. One additional test exists for the \emph{Saw} waveform generator, the \texttt{SawSynthesisPhaseFlipTest}. As the \emph{Saw} waveform generator modifies the phase value between $[-360,360]$ degrees, this test checks if the phase value flips at the expected iteration.
 
 \subsection{Value Tests}
 Value unit tests are crucial to ensure that each waveform function generator will create the waveform as expected. The best way to test for this is to check the generated values at specific phase values with known output values. Additionally, the generated values should never exceed the range of $[-1.0,1.0]$.
@@ -568,6 +550,9 @@ The \texttt{SineSynthesisValueRangeTest} performs 100 iterations of the \texttt{
 
 Each of the other waveform function generators also have their respective value range tests. These are \texttt{SquareSynthesisValueRangeTest}, \texttt{SawSynthesisValueRangeTest}, and \texttt{TriangleSynthesisValueRangeTest}.
 % ------------------------------------------------------------------------------
+
+\section{Results}
+The project was successful and performs not only to my original spec, but even surpassed it as I was able to include more features than originally intended. The current application is capable of working with live MIDI input to produce synthesized sounds with the basic Sine, Square, Triangle, and Saw waveforms. Additionally, I was able to add Envelope, Filters, LFO, and Delay functionality to the synthesizer, allowing for far more customization of the synth and a much more professional sounding result. 
 
 \chapter{Appendix}
 
