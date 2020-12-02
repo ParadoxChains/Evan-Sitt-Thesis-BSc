@@ -51,7 +51,7 @@
 
 The application is a digital synthesizer built within the JUCE framework. It can be used as a VST3 plugin or as a standalone application. This digital synthesizer can be used with live MIDI input and produces audio output. The digital synthesizer can support additive and subtractive synthesis with the basic waveforms. The post processing effects included are LFO, Envelope, and Filters.
 This digital synthesizer application allows for flexible customization of the synthesizer sound with flexible usage and integration into an exisitng workflow.
-\includegraphics[width=1.0]{OverallScreenshot.needed}
+\includegraphics[width=32em]{OverallScreenshot.png}
 \chapter{Background}
 \section{Audio Basics}
 % - Audio Basics
@@ -201,7 +201,7 @@ A single MIDI link is capable of carrying up to sixteen channels of MIDI informa
 Each MIDI channel is responsible for transmitting MIDI event messages. These event messages typically contain data that specify instructions for music such as a note's notation, pitch, velocity, panning, pitch bend, and tempo. However, in many cases, devices will send and receive proprietary MIDI event messages that can contain instructions for anything, ranging from automating and triggering other devices to controlling performance lights and pyrotechnics. One notable example is the use of MIDI to connect the music playing to a crowd to a fireworks display in a manner that synchronizes well and is automated.
 
 \subsection{MIDI Event Messages}
-\includegraphics[width=1.0]{MIDIInstructionsTable.needed}
+\includegraphics[width=32em]{MIDIInstructionsTable.needed}
 
 MIDI event messages consist of 8-bit byte-words transmitted in series at a rate of 31.25 kilobits per second, a rate chosen for being an exact divisor of 1 MHz. Each byte-word starts with a bit indicating if the word is a status byte or a data byte. The next seven bits encode the relevant information or instruction. On top of the 8 bits forming the byte-word, a start bit and a stop bit are used to frame the byte-word, summing up to a total of ten bits per byte-word in transmission.
 
@@ -227,40 +227,40 @@ The installation of the software is relatively straightforward and simple. This 
 The latest release builds of the VST3 plugin can be found at \href{link:needed}{text:needed}. Once downloaded, the installation of the plugin within the preferred Digital Audio Workstation will proceed as specified by the specific Digital Audio Workstation. Typically, the process consists of placing a copy of the VST3 plugin binary within the designated system folder for VST3 plugins and registering the new plugin within the Digital Audio Workstation. The Digital Audio Workstation must support ASIO drivers, MIDI input, and VSTi 3.0 plugins.
 
 For the purposes of demonstration, the $FL\ Studio\ 20$ Digital Audio Workstation running on the $Windows\ 10$ operating system will be shown and referenced in the instructions.
-\includegraphics[width=1.0]{FLStudioLogo.needed}
+\includegraphics[width=32em]{FLStudioLogo.png}
 
 \subsection{Registering the VST3 Plugin}
 The first step to installing the VST3 plugin is to copy the \texttt{.vst3} file into the appropriate directory set in the $Plugin\ Manager > Plugin\ search\ paths$ field. By default, the directory set for 64-bit plugins on 64 bit Windows 10 is typically found in the \texttt{'../Program Files/Common Files/VST3'} directory. 
 
 Afterward, the user should open the $Plugin\ Manager$ via the $Options$ by going to $File\ settings$ and then clicking on the $Manage\ plugins$ button. 
 
-\includegraphics[width=1.0]{ModuleRegistration.needed}
+\includegraphics[width=32em]{ModuleRegistration.png}
 
 After ensuring that the $Verify\ plugins$ radio button is turned on, the next step is to use the $Find\ Plugins$ button to scan the preregistered VST plugin folders for the new VST3 plugin. The window will then show the new plugin, named $Paradox\ Chains\ Synthesiser$, within the plugin list on the right panel. By selecting the star button next to the plugin name, the plugin will be added to the favorites to ensure ease of finding the plugin in the future. This last step completes the registration of the VST3 plugin within the FL Studio 20 Digital Audio Workstation.
 
-\includegraphics[width=1.0]{AddPluginList.needed}
+\includegraphics[width=32em]{AddPluginList.png}
 
 \section{Initialization and Workflow Integration}
 While the previous steps stated in the $Installation$ section \ref{Reference.needed} will only need to be completed once, the steps in this section and the following $Workflow\ Integration$ section \ref{reference.needed} will be the steps necessary to be taken for every new project established.
 
 To add an instance of the VST3 plugin to a project, simply go to the $Add$ dropdown menu in the top left, and then select the $Paradox\ Chains\ Synthesiser$ option. This action will automatically add an instance of the VST3 plugin to the $Channel\ rack$. The $Channel\ rack$ can be accessed via $'View\ >\ Channel\ rack'$ or via the $F6$ shortcut key. By clicking on the VST3 plugin within the $Channel\ rack$, the user can access the graphical user interface of the synthesizer.
 
-\includegraphics[width=1.0]{SynthesiserMainGUI.needed}
+\includegraphics[width=32em]{SynthesiserMainGUI.png}
 
 Each outlined portion of the graphical user interface of the VST3 plugin contains the controls which correspond to a process within the Digital Signal Processing chain. The specifics of each module will be discussed in the $Module\ Details$ section /ref{ref.needed}. Controls on the main user interface can be set during a project or modified in real-time during a performance as the situation demands. The Digital Synthesis Processes will automatically read in the new parameters and adjust the sound accordingly.
 
 The full list of detailed controls, with labels and fine controls, can be accessed by advanced users via the $Browser$ panel on the left side of the screen. By using the center $Current\ project$ tab, opening up the $Generators$ listing, and then opening up the $Paradox\ Chains\ Synthesiser$ listing, the advanced user will have access to all possible MIDI values for the VST3 plugin.
 
-\includegraphics[width=1.0]{BrowserPanel.needed}
+\includegraphics[width=32em]{BrowserPanel.png}
 
 Clicking on any one of them will bring up a detailed rotary slider that will also display a precise value to pass to the VST3 plugin. Note, the value displayed by the Digital Audio Workstation is from a range between $0.0$ and $100.0$, corresponding to the percentage of the range of the MIDI parameter. However, as detailed within the $Module\ Details$ section \ref{ref.needed}, the actual value range of the MIDI parameters will be different depending upon the parameter.
 
-\includegraphics[width=1.0]{ModifyingDetailedMIDI.needed}
+\includegraphics[width=32em]{ModifyingDetailedMIDI.png}
 
 Right-clicking on any of the detailed MIDI parameters will bring up advanced user options. The $"Init\ song\ with\ this\ position"$ option will allow the advanced user to set the current value as an initialization value. The $"Edit\ events"$ option will allow the advanced user to enter a detailed MIDI event graphical editor window. The $"Create\ automation\ clip"$ option will allow the advanced user to create tracks to automate the MIDI parameter. Lastly, but certainly not least, the $"Link\ to\ controller"$ option will allow the advanced user to link the MIDI parameter, or even the entire VST3 plugin, to either a software control panel, such as FL Studio's $Patcher$, or even a hardware MIDI device.
 
-\includegraphics[width=1.0]{ExtraOptions01.needed}
-\includegraphics[width=1.0]{ExtraOptions02.needed}
+\includegraphics[width=32em]{ExtraOptions01.png}
+\includegraphics[width=32em]{ExtraOptions02.png}
 
 The final step to integrating the $Paradox\ Chains\ Synthesiser$ into a workflow is to route the digital audio output to the mixer. By opening up the VST3 plugin's graphical user interface, there is an option to click on the Settings button to bring up the detailed settings window. There is a multitude of options, such as modifying the MIDI input and output ports; however, the relevant option is to change the Track Assignment in the top right corner of the window. By changing this value, the VST3 plugin will be assigned to the corresponding mixer track for further processing and routing to the final output.
 
@@ -268,25 +268,25 @@ The final step to integrating the $Paradox\ Chains\ Synthesiser$ into a workflow
 %-------here
 \subsection{Main Oscillator}
 The $Main\ Oscillator$ module controls the primary oscillator. This oscillator is the one which will play at full volume. The dropdown menu allows for the user to control which waveform should be generated by the primary oscillator.
-\includegraphics[width=1.0]{MainOscScreenshot.needed}
+\includegraphics[width=32em]{MainOscScreenshot.needed}
 \subsection{Additive Oscillator}
 The $Additive\ Oscillator$ module controls the secondary oscillator. This oscillator will generate a waveform which will be combined with the primary waveform via additive synthesis. The dropdown menu allows for the user to control which waveform should be generated by the secondary oscillator. The slider controls the mix amount of the secondary waveform to be used for additive synthesis.
-\includegraphics[width=1.0]{AddOscScreenshot.needed}
+\includegraphics[width=32em]{AddOscScreenshot.needed}
 \subsection{Subtractive Oscillator}
 The $Subtractive\ Oscillator$ module controls the tertiary oscillator. This oscillator will generate a waveform which will be combined with the primary waveform via subtractive synthesis. The dropdown menu allows for the user to control which waveform should be generated by the tertiary oscillator. The slider controls the mix amount of the tertiary waveform to be used for subtractive synthesis.
-\includegraphics[width=1.0]{SubOscScreenshot.needed}
+\includegraphics[width=32em]{SubOscScreenshot.needed}
 \subsection{Low Frequency Oscillator}
 The $Low\ Frequency\ Oscillator$ module controls the oscillator which generates the waveform controlling the amplitude modulation. The dropdown menu allows for the user to control whether or not the LFO amplitude modulation should be turned $On$ or $Off$. The left radial dial controls the frequency of the waveform generated by the oscillator. The right radial dial controls the amplitude of the waveform generated by the oscillator.
-\includegraphics[width=1.0]{LFOScreenshot.needed}
+\includegraphics[width=32em]{LFOScreenshot.needed}
 \subsection{Filter}
 The $Filter$ module controls the filter module which performs post processing filtering on the resulting signal from the three oscillators. The dropdown menu allows for the user to control which filter type is applied. The options available are $Low\ Pass$, $High\ Pass$, and $Band\ Pass$, each corresponding to their respective filter types. The left radial dial controls the cutoff frequency of the applied filter. The right radial dial controls the resonance of the applied filter.
-\includegraphics[width=1.0]{FilterScreenshot.needed}
+\includegraphics[width=32em]{FilterScreenshot.needed}
 \subsection{Envelope}
 The $Envelope$ module controls the envelope controlled amplitude modulation. This is applied to the generated signal from the combined output of the three oscillators. The four sliders are labeled with $A$, $D$, $S$, and $R$, corresponding to the $Attack$, $Decay$, $Sustain$, and $Release$ values of the envelope.
-\includegraphics[width=1.0]{EnvelopeScreenshot.needed}
+\includegraphics[width=32em]{EnvelopeScreenshot.needed}
 \subsection{Main}
 The $Main$ module controls the Master volume of the application along with pitch bend. The slider labeled with $Master$ controls the master volume, which is the final post processing step in the signal chain. The two sliders below the $PB Up/Down$ label control the pitch bend up and pitch bend down respectively.
-\includegraphics[width=1.0]{MainControlScreenshot.needed}
+\includegraphics[width=32em]{MainControlScreenshot.needed}
 
 
 \chapter{Developer Documentation}
@@ -320,7 +320,7 @@ The JUCE framework is required for the project as it provides the base framework
 \subsection{VST3 Standard}
 The JUCE framework's main strength is the robust support for working with the VST3 SDK. This acronym stands for the Virtual Studio Technology audio plugin interface developed by Steinberg Media Technologies. 
 
-\includegraphics[width=1.0]{VST3Logo.needed}
+\includegraphics[width=32em]{VST3Logo.needed}
 
 VST Plugins are designed to work in conjunction with a Digital Audio Workstation, or with a similar standalone wrapper application providing the same functionality. VST Plugins are generally categorized into two categories: Generators and Effects. A subcategory of the Effects category exists for the sole purpose of visualization and data representation called Visualizers. VST Plugins typically have an integrated graphical user interface for ease of use, presenting the End-User with controls that mimic their physical equivalents on audio hardware. However, many VST plugins have controls for advanced users that do not have a graphical user interface and rely on the host application or Digital Audio Workstation for the user interface.
 
