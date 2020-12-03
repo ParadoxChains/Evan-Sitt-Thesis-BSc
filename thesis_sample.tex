@@ -205,7 +205,6 @@ Each MIDI channel is responsible for transmitting MIDI event messages. These eve
 
 \subsection{MIDI Event Messages}
 \label{subsec:midieventmsg}
-\includegraphics[width=32em]{MIDIInstructionsTable.needed}
 
 MIDI event messages consist of 8-bit byte-words transmitted in series at a rate of 31.25 kilobits per second, a rate chosen for being an exact divisor of 1 MHz. Each byte-word starts with a bit indicating if the word is a status byte or a data byte. The next seven bits encode the relevant information or instruction. On top of the 8 bits forming the byte-word, a start bit and a stop bit are used to frame the byte-word, summing up to a total of ten bits per byte-word in transmission.
 
@@ -290,6 +289,9 @@ Right-clicking on any of the detailed MIDI parameters will bring up advanced use
 
 \begin{center}
 \includegraphics[width=24em]{ExtraOptions01.png}
+\end{center}
+
+\begin{center}
 \includegraphics[width=24em]{ExtraOptions02.png}
 \end{center}
 
@@ -380,7 +382,9 @@ The JUCE framework is required for the project as it provides the base framework
 \label{subsec:vst3standard}
 The JUCE framework's main strength is the robust support for working with the VST3 SDK. This acronym stands for the Virtual Studio Technology audio plugin interface developed by Steinberg Media Technologies. 
 
-\includegraphics[width=32em]{VST3Logo.needed}
+\begin{center}
+\includegraphics[width=16em]{VST3Logo.png}
+\end{center}
 
 VST Plugins are designed to work in conjunction with a Digital Audio Workstation, or with a similar standalone wrapper application providing the same functionality. VST Plugins are generally categorized into two categories: Generators and Effects. A subcategory of the Effects category exists for the sole purpose of visualization and data representation called Visualizers. VST Plugins typically have an integrated graphical user interface for ease of use, presenting the End-User with controls that mimic their physical equivalents on audio hardware. However, many VST plugins have controls for advanced users that do not have a graphical user interface and rely on the host application or Digital Audio Workstation for the user interface.
 
@@ -434,7 +438,7 @@ There are two parts to the handling of MIDI input and audio output. The \texttt{
 \begin{lstlisting}
 void JuceSynthFrameworkAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 \end{lstlisting}
-Within the \texttt{processBlock} function, the developer may choose to implement any sort of system-wide functionality that must occur in real-time. One of these functionalities is the retrieval of control and state values from the \texttt{AudioProcessorValueTreeState}, which will be discussed in detail in a later section \ref{ref.needed}.
+Within the \texttt{processBlock} function, the developer may choose to implement any sort of system-wide functionality that must occur in real-time. One of these functionalities is the retrieval of control and state values from the \texttt{AudioProcessorValueTreeState}, which will be discussed in detail in subsection \ref{subsec:apvt}.
 
 The first step is to ensure that a call is made to the \texttt{renderNextBlock} method of each \texttt{SynthesiserVoice} that was added to the \texttt{Synthesiser}. These calls are done within a loop that iterates through each \texttt{SynthesiserVoice}. The function call is as follows: 
 \begin{lstlisting}
@@ -457,11 +461,11 @@ for (int sample = 0; sample < numSamples; ++sample)
     ++startSample;
 }
 \end{lstlisting}
-The first argument is the channel index, the second argument is the sample index, and the last argument is the value to be written. To keep the code readable and maintainable, the value to be written is provided by the function \texttt{giveSample}. This function will be described in further detail in the subsection \ref{ref.needed}.
+The first argument is the channel index, the second argument is the sample index, and the last argument is the value to be written. To keep the code readable and maintainable, the value to be written is provided by the function \texttt{giveSample}. 
 
 In addition to the \texttt{renderNextBlock} method, additional methods are required in order to process the relevant MIDI event messages passed in from the MIDI buffer. The \texttt{startNote} and \texttt{stopNote} methods of the \texttt{SynthesiserVoice} class must be overridden by the developer. The \texttt{startNote} method is called whenever the $noteOn$ MIDI event is encountered within the MIDI buffer while the \texttt{stopNote} method is called whenever the $noteOff$ MIDI event is encountered in the MIDI buffer.	
 
-The \texttt{startNote} method must perform any function required whenever a new note is started. The \texttt{trigger} value of the \texttt{envelope} component, described in section \ref{ref.needed}, is set to the value of $1$ to indicate the start of the $Attack$ phase. The position of the pitch wheel, a general MIDI hardware component, is then passed to the function \texttt{setPitchBend} to set the \texttt{pitchBend} value which will be used as described in section \ref{ref.needed}. The \texttt{midiNoteNumber} is then converted to the corresponding frequency value in Hz and stored as the \texttt{frequency} value which will be used by the \texttt{oscillator} components, as described in section \ref{ref.needed}. Finally, the \texttt{velocity} value from the MIDI event instruction is stored into the \texttt{level} value. The following is the code snippet for the \texttt{startNote} method:
+The \texttt{startNote} method must perform any function required whenever a new note is started. The \texttt{trigger} value of the \texttt{envelope} component, described in subsection \ref{subsec:amenv}, is set to the value of $1$ to indicate the start of the $Attack$ phase. The position of the pitch wheel, a general MIDI hardware component, is then passed to the function \texttt{setPitchBend} to set the \texttt{pitchBend} value. The \texttt{midiNoteNumber} is then converted to the corresponding frequency value in Hz and stored as the \texttt{frequency} value which will be used by the \texttt{oscillator} components, as described in subsection \ref{subsec:waveformosc}. Finally, the \texttt{velocity} value from the MIDI event instruction is stored into the \texttt{level} value. The following is the code snippet for the \texttt{startNote} method:
 
 \begin{lstlisting}
 noteNumber = midiNoteNumber;
@@ -482,11 +486,11 @@ if (velocity == 0)
 
 \section{The Digital Synthesis Components}
 \label{sec:digitalsynthesiscomponents}
-The next parts for the developer to build are the individual Digital Synthesis components. The usage and purpose of each component have been discussed in the $Module Details$ section \ref{ref.needed}, and this section will focus on the implementation and technical details.
+The next parts for the developer to build are the individual Digital Synthesis components. The usage and purpose of each component have been discussed in the $Module Details$ section \ref{sec:moduledetails}, and this section will focus on the implementation and technical details.
 
 \subsection{Waveform Oscillators}
 \label{subsec:waveformosc}
-Designing an oscillator consists of two primary parts: designing the $Phase\ Accumulator$ as described in \ref{ref.needed} and designing the $Phase-to-Amplitude\ Converter$ as described in \ref{ref.needed}.
+Designing an oscillator consists of two primary parts: designing the $Phase\ Accumulator$ as described in \ref{sec:phaseaccu} and designing the $Phase-to-Amplitude\ Converter$ as described in section \ref{sec:phasetoamplitudeconverter}.
 
 The $Phase\ Accumulator$ is accomplished by declaring a \texttt{phase} variable for the \texttt{oscillator} class. This value will be used by each of the $Phase-to-Amplitude\ Converter$ functions. Since each $Phase-to-Amplitude\ Converter$ function uses the same \texttt{phase} value, it is ensured that the transition between different waveforms can be done with no phasing issues and with relative smoothness.
 
@@ -494,7 +498,7 @@ The \texttt{resetPhase} methods allow for the \texttt{oscillator} to reset the p
 \cfrac{\texttt{waveTableSize}}{(\cfrac{\texttt{sampleRate}}{\texttt{frequency}})}
 \end{math}
 
-The \texttt{waveTableSize} and \texttt{sampleRate} are constants set by the constructor of the \texttt{oscillator}. The \texttt{waveTableSize} represents the how many precalculated values are stored for a single waveform cycle within a Waveform Lookup Table as described in section \ref{ref.needed}. The \texttt{sampleRate} represents the number of samples to be rendered per second for the audio output. The \texttt{frequency} is a value that will be provided to the oscillator when it is called by the \texttt{SynthesiserVoice} class. By iterating the \texttt{phase} value by the calculated value from the \texttt{waveTableSize}, \texttt{sampleRate}, \texttt{frequency}, the \texttt{phase} can not only accurately represent the phase but also represent the wavetable lookup index.
+The \texttt{waveTableSize} and \texttt{sampleRate} are constants set by the constructor of the \texttt{oscillator}. The \texttt{waveTableSize} represents the how many precalculated values are stored for a single waveform cycle within a Waveform Lookup Table as described in subsection \ref{subsec:phasewavetablelookup}. The \texttt{sampleRate} represents the number of samples to be rendered per second for the audio output. The \texttt{frequency} is a value that will be provided to the oscillator when it is called by the \texttt{SynthesiserVoice} class. By iterating the \texttt{phase} value by the calculated value from the \texttt{waveTableSize}, \texttt{sampleRate}, \texttt{frequency}, the \texttt{phase} can not only accurately represent the phase but also represent the wavetable lookup index.
 
 With the $Phase\ Accumulator$ completed, the next step is to create the $Phase-to-Amplitude\ Converter$. In this project, both $Waveform\ Lookup\ Tables$ and $Waveform\ Functions$ are used. Each of the $Phase-to-Amplitude\ Converter$ functions follow the same conventions in regards to input and output. Each of the functions takes \texttt{frequency} as an argument, which acts as the $Tuning\ Word$, and returns a \texttt{double} representing the resulting amplitude from the conversion. These will be explained in the following paragraphs.
 
@@ -543,7 +547,7 @@ The \texttt{outputValue} returned from the $Phase-to-Amplitude\ Converter$ funct
 
 \subsection{Low-Frequency Oscillator Controlled Amplitude Modulator}
 \label{subsec:lfcocontrolampmod}
-The $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ acts similarly to an amplitude envelope on the signal. The main difference is that the amplitude modulation is not based on ADSR phases, as described previously in section \ref{ref.needed}, but based on the output values of an oscillator. Typically the output values of the oscillator are used as multipliers on the sample values from the input signal. In order to avoid silence at the nodes of the oscillator, the modulated signal is mixed back in with the dry signal to create the final output signal.
+The $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ acts similarly to an amplitude envelope on the signal. The main difference is that the amplitude modulation is not based on ADSR phases, as described previously in subsection \ref{subsec:adsr}, but based on the output values of an oscillator. Typically the output values of the oscillator are used as multipliers on the sample values from the input signal. In order to avoid silence at the nodes of the oscillator, the modulated signal is mixed back in with the dry signal to create the final output signal.
 
 The main logic block of the code is as follows:
 \begin{lstlisting}
@@ -552,13 +556,13 @@ lfoMix = sample * lfo01.sine(lfoFrequency01) * lfoMixLevel01;
 newSample = sampleMix + lfoMix;
 \end{lstlisting}
 
-The parameters that the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ uses are \texttt{lfoSwitch}, \texttt{lfoFreq}, and \texttt{lfoBlend}. These three parameters are passed in by the \texttt{AudioProcessorValueTreeState}, which will be discussed in section \ref{ref.needed}. The \texttt{lfoSwitch} parameter controls whether or not the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ will be bypassed or not. The \texttt{lfoFreq} parameter is assigned to the \texttt{lfoFrequency01} variable and controls the frequency of the Low-Frequency Oscillator. And finally, the \texttt{lfoBlend} parameter is assigned to the \texttt{lfoMixLevel01} variable which controls the final mix.
+The parameters that the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ uses are \texttt{lfoSwitch}, \texttt{lfoFreq}, and \texttt{lfoBlend}. These three parameters are passed in by the \texttt{AudioProcessorValueTreeState}, which will be discussed in subsection \ref{subsec:apvt}. The \texttt{lfoSwitch} parameter controls whether or not the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ will be bypassed or not. The \texttt{lfoFreq} parameter is assigned to the \texttt{lfoFrequency01} variable and controls the frequency of the Low-Frequency Oscillator. And finally, the \texttt{lfoBlend} parameter is assigned to the \texttt{lfoMixLevel01} variable which controls the final mix.
 
 \subsection{Amplitude Modulation Envelope}
 \label{subsec:amenv}
-The \texttt{envelope} component modifies the amplitude of the signal value by the parameters set for the \texttt{envelope} component. The implemented type of $Envelope$ component is the 4-step $ADSR Envelope$ as described in section \ref{ref.needed}. 
+The \texttt{envelope} component modifies the amplitude of the signal value by the parameters set for the \texttt{envelope} component. The implemented type of $Envelope$ component is the 4-step $ADSR Envelope$ as described in subsection \ref{subsec:adsr}. 
 
-Within the \texttt{envelope} class, the most important values are the \texttt{attack}, \texttt{decay}, \texttt{sustain}, \texttt{release}, and \texttt{trigger} variables. The \texttt{attack}, \texttt{decay}, and \texttt{release} correspond to the rates of their respective phases. The \texttt{sustain} value represents the sustained amplitude during the $Sustain$ phase. And lastly the \texttt{trigger} variable corresponds to the $noteOn$ and $noteOff$ MIDI event messages and is set by the \texttt{startNote} and \texttt{stopNote} methods as described in section \ref{ref.needed}.
+Within the \texttt{envelope} class, the most important values are the \texttt{attack}, \texttt{decay}, \texttt{sustain}, \texttt{release}, and \texttt{trigger} variables. The \texttt{attack}, \texttt{decay}, and \texttt{release} correspond to the rates of their respective phases. The \texttt{sustain} value represents the sustained amplitude during the $Sustain$ phase. And lastly the \texttt{trigger} variable corresponds to the $noteOn$ and $noteOff$ MIDI event messages and is set by the \texttt{startNote} and \texttt{stopNote} methods as described in subsection \ref{subsec:midieventmsg}.
 
 The \texttt{envelope} component tracks its internal state via four switch variables. These variables are \texttt{attackphase}, \texttt{decayphase}, \texttt{holdphase}, and \texttt{releasephase}. These four switch variables correspond to their respective $ADSR$ envelope phases. The envelope uses these switch variables to determine which state it operates in to process the input signal sample value. 
 
