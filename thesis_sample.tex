@@ -38,6 +38,7 @@
 \tableofcontents
 
 \chapter{Introduction}
+\label{chapter:intro}
 
 The application is a digital synthesizer built within the JUCE framework. It can be used as a VST3 plugin or as a standalone application. This digital synthesizer can be used with live MIDI input and produces audio output. The digital synthesizer can support additive and subtractive synthesis with the basic waveforms. The post processing effects included are LFO, Envelope, and Filters.
 
@@ -120,13 +121,13 @@ For each phase value received from the Phase Accumulator, the Phase to Amplitude
 The Phase/Wavetable Lookup method holds significant advantages that contribute to its popularity and continued usage. The efficiency of constant time complexity generation of each sample combined with the flexibility to store any waveform allows for nearly unbeatable processing speed for waveforms.
 
 \subsection{Waveform Function}
-%     - Waveform function
+\label{subsec:waveformfunction}
 The other method for Phase to Amplitude Conversion is the use of a Waveform Function. Typically Waveform Functions are used whenever the waveform to be generated can be computed with simple additive and multiplicative computations. Examples of waveforms that typically fit this are the sawtooth and triangle waveform types, as they contain linear sections. Another use case for Waveform Functions is in the case of the square and noise waveform types. In both cases, the resulting amplitude values can be "computed" via without involving any mathematics.
 
 An advantage of using a Waveform Function to convert the Phase to Amplitude is that there is generally no need for interpolation, which results in more accurate amplitude value results. However, as there is typically some form of calculation involved, this method is generally less efficient than the Phase/Wavetable lookup method by a small margin.
 
 \section{Additive \& Subtractive Synthesis}
-% - Additive/Subtractive synthesis
+\label{sec:addsubsynthesis}
 After the Phase to Amplitude conversion, the resulting amplitude value is passed down for Additive or Subtractive synthesis. Additive and Subtractive synthesis are exactly what their names imply; they involve the use of additive/subtractive operations between waveforms to create a new waveform. Applied in a systematic method, distinct types of waveforms can be formed.
 
 One method is to use the Fourier series approximation of a waveform. For example, the square wave can be generated via a weighted summation of harmonics of a sine wave. Starting with a fundamental sine wave at a base frequency, we add to this sine waveform each odd harmonic. A harmonic of a waveform is the waveform with a frequency at an integer multiple of the base frequency of the original waveform. The amplitude of each odd harmonic is multiplied by the reciprocal of the harmonic's frequency multiplier in relation to the base frequency.
@@ -134,17 +135,17 @@ One method is to use the Fourier series approximation of a waveform. For example
 Another method is to use additive and subtractive synthesis to replicate sounds found in real life, a technique called physical modeling. For example, a piano's sound can be characterized by analyzing a spectral graph of its frequencies. Afterward, this data can be used to generate a set of base frequency multipliers and amplitude multipliers. An Additive/Subtractive synthesizer will then use this set of frequency and amplitude multiplier values to replicate the sound of the piano with high accuracy. This use of Additive and Subtractive synthesis for physical modeling is the technique used and popularized by the Yamaha synthesizers in the 1970s.
 
 \section{LFO}
-% - LFO
+\label{sec:lfo}
 After the Additive and Subtractive synthesis processes generate a signal for the desired waveform, this is then passed on to the Low-Frequency Oscillator Controlled Modulation processes. Usually referred to as LFO's, these are modulation processes where a value produced by an oscillator modifies the value being modulated. This oscillator typically generates values using a basic sine wave. However, any waveform can be used, resulting in particularly interesting sound characteristics.
 
 Of particular interest are the two most commonly used LFO's: the amplitude LFO and the frequency LFO. Both will modulate their respective parameters using the value from the low-frequency oscillator. An amplitude LFO will reproduce the effect of a tremolo, while the frequency LFO will, on the other hand, reproduce the effect of a vibrato. LFO's can be further controlled by processing the signal from the control oscillators in the same manner as a standard oscillator, although in general, this processing is typically limited to just an Envelope.
 
 \section{Envelope}
-% - Envelope
+\label{sec:env}
 After the LFO processes the signal, it is then sent to the Envelope. An Envelope is a generalized term describing a function or set of values that control the modulation value of a certain characteristic of a digital signal. Envelopes can be applied to many different types of modulation, including amplitude modulation and frequency modulation. An envelope can also be applied to the frequency and amplitude multiplier values used within Additive and Subtractive synthesis for further refined sounds.
 
 \subsection{ADSR}
-%   - ADSR
+\label{subsec:adsr}
 The majority of digital synthesizers employ an Amplitude Modulation Envelope. These types of envelopes focus on modifying the amplitude of the sound over time, producing unique characteristics in sound, which can cause a synthesizer to produce the sound of a guitar vs. a violin. The simplest and most widely used envelope type is the ADSR envelope. ADSR stands for Attack-Decay-Sustain-Release, as these are the four parameters that the Envelope modifies.
 
 The Attack phase starts from the noteOn MIDI instruction and determines the amount of time required for the amplitude of the sound to transition from silence to its full value as determined by the MIDI velocity. After the Attack phase completes, the Decay phase begins, which acts in opposition to the Attack phase by determining the amount of time required for the amplitude to decrease down to its Sustain level. The Sustain level controls what percentage of the maximum amplitude the sound should be allowed to reach for the duration of the note. And finally, upon receiving a noteOff MIDI instruction, the Release phase begins, which determines the amount of time required for the sound amplitude to decrease back to silence.
@@ -158,7 +159,7 @@ In the Digital Signal Processing Chain, the order of the processes within the ch
 Digital Signal Processing effects can be categorized into three primary archetypes: Frequency-Based, Time-Based, and Amplitude-Based. Digital signal processing effects within each archetype deal primarily with that domain of the digital signal; however, there are frequently overlapping. For example, a simple reverberation effect is a Time-Based effect. However, more sophisticated reverberation effects will incorporate Frequency-Based effects to create a "shimmering" capability for the reverberation. A Multiband Compressor is also a common Amplitude-Based effect that will incorporate Frequency-Based filters to selectively modulate the amplitude from different parts of the frequency spectrum.
 
 \section{Filters}
-% - Filters
+\label{sec:filters}
 Multiple types of Frequency Domain filters can be implemented. Each of these filters operates within the Frequency Domain, best visualized with the instantaneous point in the digital audio signal represented within the Frequency vs. Amplitude domains. In the Frequency Domain, modulation takes place to the amplitude of various frequencies along the frequency response spectrum. 
 
 The various Frequency Domain filter types include the Low, High, and Band Passes, the Low and High Shelves, and the Peaking filter. Each of these types has a different characteristic of how they affect the incoming audio signal. These types, in turn, changes the timbre, or characteristic quality, of the sound produced. The details will be discussed in the following parts. However, it is good to note that despite the multitude of variations that exist, these are all additive or subtractive combinations of the basic Pass filters.
@@ -174,19 +175,19 @@ The most common audio filter designs used are the Butterworth filter, the Chebys
 Typically a synthesizer will be designed around whichever filter design best fits the sound design goal and hardware limitations. More sophisticated and capable synthesizers may utilize complex Audio Filters, which combine multiple filter designs to produce a hybrid design that can mitigate the disadvantages of each design. Within this project, the Butterworth filter design is used exclusively for all Audio Filter types for its ease of implementation, lack of audio artifacts, and efficiency.
 
 \subsection{Low Pass Filter}
-%   - Low Pass
+\label{subsec:lowpassfilter}
 A Low Pass Filter is the most commonly used variant of the Pass type filters. A Low Pass Filter will attenuate the amplitude of signals with frequencies higher a set Cutoff frequency to $-\infty$ dB and pass signals with frequencies lower than the Cutoff frequency. The resulting sound will have a "darker" or "smoother" timbre. A Low Pass filter can also be instrumental in helping remove certain high frequencies that can be too harsh for some people.
 
 An everyday use of a Low Pass filter within a music workflow is to apply it to a synthesizer that is being utilized as a bass synth, with the cutoff frequency set to somewhere around 100hz. In this manner, the Low Pass filter will pass through the relevant bass frequencies while filtering out the higher frequencies that may interfere with the desired frequencies of the other instruments.
 
 \subsection{High Pass Filter}
-%   - High Pass
+\label{subsec:highpassfilter}
 The High Pass filter works in exact opposite to how the Low Pass filter operates. While a Low Pass filter will pass frequencies lower than the target cutoff frequency while filtering out those frequencies higher than the target cutoff frequency, the High Pass filter will do the opposite. A High Pass filter can help eliminate common low-frequency rumbles within recordings.
 
 High Pass filters typically are used for vocal recordings where the low-end frequencies caused by vibrations to the microphone or recording setup produce undesirable sounds. Alternatively, a High Pass filter can be used to isolate specific high-frequency instruments, a triangle, for example, so that they can be processed separately.
 
 \subsection{Band Pass Filter}
-%   - Band Pass
+\label{subsec:bandpassfilter}
 When a High Pass filter is combined with a Low Pass filter, a Band Pass filter is created. A Band Pass filter will filter out frequencies within a certain range of the "cutoff" frequency while passing all frequencies outside of this range. The Band Pass filter is desirable for its ability to filter out a specific set of frequencies, and with a small enough range, even remove close to one single frequency.
 
 This functionality of the Band Pass filter is commonly used to eliminate noise and clean up synth waveforms. In recordings, it is common that a particular machine will cause noise at a specific frequency throughout the duration of the recording. By determining the frequency of this noise and filtering it with a Band Pass filter, it is possible to remove noise effectively. The Band Pass filter can help with Additive Synthesis as well, as there are many instances when two waveforms will have constructive interference at a specific frequency that may cause distortion. The Band Pass filter will help remove these distortions.
@@ -195,6 +196,7 @@ By combining a variety of the three types of pass filters, an Equalizer is creat
 
 
 \section{The MIDI Standard}
+\label{sec:midistandard}
 MIDI is an acronym for \emph{Musical Instrument Digital Interface}. Originating in 1983 from a panel of music industry representatives, it is a technical standard that describes a universal digital communications protocol for connecting any type of audio-related hardware and software. Analog hardware relies on converters that translate MIDI messages into analog control voltages. 
 
 A single MIDI link is capable of carrying up to sixteen channels of MIDI information. The routing of each channel can be completely independent of each other, allowing for flexible routing to and from different devices. Modern hardware and software will extend this functionality by using ports, with the current standard being 255 ports supported. Each port will support a full set of sixteen MIDI channels, making for a total of 4,080 available MIDI channels useable by the device.
@@ -202,6 +204,7 @@ A single MIDI link is capable of carrying up to sixteen channels of MIDI informa
 Each MIDI channel is responsible for transmitting MIDI event messages. These event messages typically contain data that specify instructions for music such as a note's notation, pitch, velocity, panning, pitch bend, and tempo. However, in many cases, devices will send and receive proprietary MIDI event messages that can contain instructions for anything, ranging from automating and triggering other devices to controlling performance lights and pyrotechnics. One notable example is the use of MIDI to connect the music playing to a crowd to a fireworks display in a manner that synchronizes well and is automated.
 
 \subsection{MIDI Event Messages}
+\label{subsec:midieventmsg}
 \includegraphics[width=32em]{MIDIInstructionsTable.needed}
 
 MIDI event messages consist of 8-bit byte-words transmitted in series at a rate of 31.25 kilobits per second, a rate chosen for being an exact divisor of 1 MHz. Each byte-word starts with a bit indicating if the word is a status byte or a data byte. The next seven bits encode the relevant information or instruction. On top of the 8 bits forming the byte-word, a start bit and a stop bit are used to frame the byte-word, summing up to a total of ten bits per byte-word in transmission.
@@ -213,6 +216,7 @@ Channel event messages contain instructions that usually are relevant to the aud
 System event messages are used to promote the flexibility and longevity of the MIDI communication standard by allowing manufacturers to create proprietary event messages. These System event messages allow for devices to communicate instructions typically corresponding to other software or hardware control parameters. For hardware and analog systems, a converter will translate the MIDI System event message to control voltage values. There are no universal standards for System event messages. However, with modern MIDI software and hardware systems, there are commonly used standards established by widely used software.
 
 \subsection{MIDI Channels and Ports}
+\label{subsec:midichannelports}
 Each MIDI link between devices is capable of carrying up to sixteen channels of MIDI information. The MIDI channels are identified with a binary encoding with values from $0$ to $15$. However, to the End-User, these are presented as the numbers 1 to 16. MIDI ports extend a device's MIDI link capacity. These MIDI ports are identified with hexadecimal encoding with values from $0$ to $255$. MIDI-compatible hardware and software support 16 MIDI channels of information, but they may choose to listen or ignore any number of these MIDI channels. On the other hand, the implementation of MIDI ports is dependent upon the constraints of the software or hardware and is more commonly found on modern devices.
 
 The application of this thesis project supports one MIDI link of sixteen channels, with all MIDI channels being handled at the same time. System event messages are ignored, as the application is not device or platform-specific, nor does it use proprietary interfaces. However, most MIDI event messages are handled by the application.
@@ -223,10 +227,12 @@ The application of this thesis project supports one MIDI link of sixteen channel
 In this chapter, the application will be explained from an End-User perspective with explanations on how to use each part of the application within their workflow to achieve the desired sound. This section will rely heavily on technical and musical terminology discussed in the previous chapter \ref{chapter:background}, and as so, will focus primarily on describing in detail the operation and effects of the application.
 
 \section{Installation}
-The installation of the software is relatively straightforward and simple. This section will walk the End-User through the Build, Installation, and Setup process on different platforms. For those who prefer to download the precompiled binaries for the VSTi plugin, please read the following subsection. However, for those who prefer to build the application from the source code, please refer to section \ref{ref:needed}.
+\label{sec:installation}
+The installation of the software is relatively straightforward and simple. This section will walk the End-User through the Build, Installation, and Setup process on different platforms. For those who prefer to download the precompiled binaries for the VSTi plugin, please read the following subsection. However, for those who prefer to build the application from the source code, please refer to section \ref{chapter:devdocs}.
 
 \subsection{Installing the VSTi}
-The latest release builds of the VST3 plugin can be found at \href{link:needed}{text:needed}. Once downloaded, the installation of the plugin within the preferred Digital Audio Workstation will proceed as specified by the specific Digital Audio Workstation. Typically, the process consists of placing a copy of the VST3 plugin binary within the designated system folder for VST3 plugins and registering the new plugin within the Digital Audio Workstation. The Digital Audio Workstation must support ASIO drivers, MIDI input, and VSTi 3.0 plugins.
+\label{subsec:installvsti}
+The latest release builds of the VST3 plugin can be found at \href{https://github.com/ParadoxChains/C3JI5D-Evan-Sitt-BSc-Thesis/tree/master/Release\%20Builds}{the Github page}. Once downloaded, the installation of the plugin within the preferred Digital Audio Workstation will proceed as specified by the specific Digital Audio Workstation. Typically, the process consists of placing a copy of the VST3 plugin binary within the designated system folder for VST3 plugins and registering the new plugin within the Digital Audio Workstation. The Digital Audio Workstation must support ASIO drivers, MIDI input, and VSTi 3.0 plugins.
 
 For the purposes of demonstration, the $FL\ Studio\ 20$ Digital Audio Workstation running on the $Windows\ 10$ operating system will be shown and referenced in the instructions.
 
@@ -235,6 +241,7 @@ For the purposes of demonstration, the $FL\ Studio\ 20$ Digital Audio Workstatio
 \end{center}
 
 \subsection{Registering the VST3 Plugin}
+\label{subsec:registeringvsti}
 The first step to installing the VST3 plugin is to copy the \texttt{.vst3} file into the appropriate directory set in the $Plugin\ Manager > Plugin\ search\ paths$ field. By default, the directory set for 64-bit plugins on 64 bit Windows 10 is typically found in the \texttt{'../Program Files/Common Files/VST3'} directory. 
 
 Afterward, the user should open the $Plugin\ Manager$ via the $Options$ by going to $File\ settings$ and then clicking on the $Manage\ plugins$ button. 
@@ -250,7 +257,8 @@ After ensuring that the $Verify\ plugins$ radio button is turned on, the next st
 \end{center}
 
 \section{Initialization and Workflow Integration}
-While the previous steps stated in the $Installation$ section \ref{Reference.needed} will only need to be completed once, the steps in this section and the following $Workflow\ Integration$ section \ref{reference.needed} will be the steps necessary to be taken for every new project established.
+\label{sec:initandworkflow}
+While the previous steps stated in the $Installation$ section \ref{sec:installation} will only need to be completed once, the steps in this section and the following $Workflow\ Integration$ section \ref{sec:initandworkflow} will be the steps necessary to be taken for every new project established.
 
 To add an instance of the VST3 plugin to a project, simply go to the $Add$ dropdown menu in the top left, and then select the $Paradox\ Chains\ Synthesiser$ option. This action will automatically add an instance of the VST3 plugin to the $Channel\ rack$. The $Channel\ rack$ can be accessed via $'View\ >\ Channel\ rack'$ or via the $F6$ shortcut key. By clicking on the VST3 plugin within the $Channel\ rack$, the user can access the graphical user interface of the synthesizer.
 
@@ -259,11 +267,11 @@ To add an instance of the VST3 plugin to a project, simply go to the $Add$ dropd
 \end{center}
 
 \begin{multicols}{2}
-Each outlined portion of the graphical user interface of the VST3 plugin contains the controls which correspond to a process within the Digital Signal Processing chain. The specifics of each module will be discussed in the $Module\ Details$ section /ref{ref.needed}. Controls on the main user interface can be set during a project or modified in real-time during a performance as the situation demands. The Digital Synthesis Processes will automatically read in the new parameters and adjust the sound accordingly.
+Each outlined portion of the graphical user interface of the VST3 plugin contains the controls which correspond to a process within the Digital Signal Processing chain. The specifics of each module will be discussed in the $Module\ Details$ section \ref{sec:moduledetails}. Controls on the main user interface can be set during a project or modified in real-time during a performance as the situation demands. The Digital Synthesis Processes will automatically read in the new parameters and adjust the sound accordingly.
 
 The full list of detailed controls, with labels and fine controls, can be accessed by advanced users via the $Browser$ panel on the left side of the screen. By using the center $Current\ project$ tab, opening up the $Generators$ listing, and then opening up the $Paradox\ Chains\ Synthesiser$ listing, the advanced user will have access to all possible MIDI values for the VST3 plugin.
 
-Clicking on any one of them will bring up a detailed rotary slider that will also display a precise value to pass to the VST3 plugin. Note, the value displayed by the Digital Audio Workstation is from a range between $0.0$ and $100.0$, corresponding to the percentage of the range of the MIDI parameter. However, as detailed within the $Module\ Details$ section \ref{ref.needed}, the actual value range of the MIDI parameters will be different depending upon the parameter.
+Clicking on any one of them will bring up a detailed rotary slider that will also display a precise value to pass to the VST3 plugin. Note, the value displayed by the Digital Audio Workstation is from a range between $0.0$ and $100.0$, corresponding to the percentage of the range of the MIDI parameter. However, as detailed within the $Module\ Details$ section \ref{sec:moduledetails}, the actual value range of the MIDI parameters will be different depending upon the parameter.
 
 \begin{center}
 \includegraphics[width=12em]{BrowserPanel.png}
@@ -288,8 +296,9 @@ Right-clicking on any of the detailed MIDI parameters will bring up advanced use
 The final step to integrating the $Paradox\ Chains\ Synthesiser$ into a workflow is to route the digital audio output to the mixer. By opening up the VST3 plugin's graphical user interface, there is an option to click on the Settings button to bring up the detailed settings window. There is a multitude of options, such as modifying the MIDI input and output ports; however, the relevant option is to change the Track Assignment in the top right corner of the window. By changing this value, the VST3 plugin will be assigned to the corresponding mixer track for further processing and routing to the final output.
 
 \section{Module Details}
-%-------here
+\label{sec:moduledetails}
 \subsection{Main Oscillator}
+\label{subsec:mainosc}
 The $Main\ Oscillator$ module controls the primary oscillator. This oscillator is the one which will play at full volume. The dropdown menu allows for the user to control which waveform should be generated by the primary oscillator.
 
 \begin{center}
@@ -297,6 +306,7 @@ The $Main\ Oscillator$ module controls the primary oscillator. This oscillator i
 \end{center}
 
 \subsection{Additive Oscillator}
+\label{subsec:addosc}
 The $Additive\ Oscillator$ module controls the secondary oscillator. This oscillator will generate a waveform which will be combined with the primary waveform via additive synthesis. The dropdown menu allows for the user to control which waveform should be generated by the secondary oscillator. The slider controls the mix amount of the secondary waveform to be used for additive synthesis.
 
 \begin{center}
@@ -304,6 +314,7 @@ The $Additive\ Oscillator$ module controls the secondary oscillator. This oscill
 \end{center}
 
 \subsection{Subtractive Oscillator}
+\label{subsec:subosc}
 The $Subtractive\ Oscillator$ module controls the tertiary oscillator. This oscillator will generate a waveform which will be combined with the primary waveform via subtractive synthesis. The dropdown menu allows for the user to control which waveform should be generated by the tertiary oscillator. The slider controls the mix amount of the tertiary waveform to be used for subtractive synthesis.
 
 \begin{center}
@@ -311,6 +322,7 @@ The $Subtractive\ Oscillator$ module controls the tertiary oscillator. This osci
 \end{center}
 
 \subsection{Low Frequency Oscillator}
+\label{subsec:lfo}
 The $Low\ Frequency\ Oscillator$ module controls the oscillator which generates the waveform controlling the amplitude modulation. The dropdown menu allows for the user to control whether or not the LFO amplitude modulation should be turned $On$ or $Off$. The left radial dial controls the frequency of the waveform generated by the oscillator. The right radial dial controls the amplitude of the waveform generated by the oscillator.
 
 \begin{center}
@@ -318,6 +330,7 @@ The $Low\ Frequency\ Oscillator$ module controls the oscillator which generates 
 \end{center}
 
 \subsection{Filter}
+\label{subsec:filter}
 The $Filter$ module controls the filter module which performs post processing filtering on the resulting signal from the three oscillators. The dropdown menu allows for the user to control which filter type is applied. The options available are $Low\ Pass$, $High\ Pass$, and $Band\ Pass$, each corresponding to their respective filter types. The left radial dial controls the cutoff frequency of the applied filter. The right radial dial controls the resonance of the applied filter.
 
 \begin{center}
@@ -325,6 +338,7 @@ The $Filter$ module controls the filter module which performs post processing fi
 \end{center}
 
 \subsection{Envelope}
+\label{subsec:env}
 The $Envelope$ module controls the envelope controlled amplitude modulation. This is applied to the generated signal from the combined output of the three oscillators. The four sliders are labeled with $A$, $D$, $S$, and $R$, corresponding to the $Attack$, $Decay$, $Sustain$, and $Release$ values of the envelope.
 
 \begin{center}
@@ -332,6 +346,7 @@ The $Envelope$ module controls the envelope controlled amplitude modulation. Thi
 \end{center}
 
 \subsection{Main}
+\label{subsec:main}
 The $Main$ module controls the Master volume of the application along with pitch bend. The slider labeled with $Master$ controls the master volume, which is the final post processing step in the signal chain. The two sliders below the $PB Up/Down$ label control the pitch bend up and pitch bend down respectively.
 
 \begin{center}
@@ -342,15 +357,8 @@ The $Main$ module controls the Master volume of the application along with pitch
 \chapter{Developer Documentation}
 \label{chapter:devdocs}
 
-% The Developer Documentation (or Developer's Manual) should contain
-% \begin{itemize}
-% \item the detailed specification of the problem,
-% \item the detailed description of the used methods, the definitions of the used notions,
-% \item the description of the logical and physical structure of the software (data structures, databases, modules, etc.),
-% \item the testing plan and the results of the tests.
-% \end{itemize}
-
 \section{Prerequisites}
+\label{sec:prereq}
 Before developing the code, the developer must have access to a few necessary tools.
 \begin{itemize}
 \item The Project Source Code, available from Github.
@@ -359,16 +367,17 @@ Before developing the code, the developer must have access to a few necessary to
 \item A Digital Audio Workstation of your choice. It must support VST3 plugins.
 \end{itemize}
 \subsection{Building the Software from Source Code}
+\label{subsec:buildingasoftware}
 The stable source code of this application can be downloaded from the \texttt{master} branch of the public repository found at Github: \href{https://github.com/ParadoxChains/C3JI5D-Evan-Sitt-BSc-Thesis}{https://github.com/ParadoxChains/C3JI5D-Evan-Sitt-BSc-Thesis}. The source code includes all of the $C++$ header and CPP files that are necessary for the application. However, the repository does not include the JUCE framework that is required for building the project.
 
 \subsection{JUCE Framework}
+\label{subsec:juceframework}
 The JUCE framework is a partially open-source, cross-platform C++ application framework. It is particularly notable for its robust support of the VST3 SDK providing developers with an easy toolset for interacting with VST3 applications. Additionally, the JUCE framework provides graphical user interface functionality, supports a large variety of integrated development environments and compilers, and is designed to compile and run compatibly on the Windows, Mac OS X, and Linux platforms.
 
 The JUCE framework is required for the project as it provides the base framework for interacting with the VST3 SDK. The JUCE framework can be found on the Roli JUCE website at: \href{https://juce.com/}{https://juce.com/}. The project for this application will work with both paid, free, and GPL licenses for JUCE. The Projucer application, a necessary extension of the JUCE framework, can be downloaded along with the framework. Further details on setting up the JUCE framework and Projucer application can be found on the JUCE website.
 
-% maybe more details on JUCE setup?
-
 \subsection{VST3 Standard}
+\label{subsec:vst3standard}
 The JUCE framework's main strength is the robust support for working with the VST3 SDK. This acronym stands for the Virtual Studio Technology audio plugin interface developed by Steinberg Media Technologies. 
 
 \includegraphics[width=32em]{VST3Logo.needed}
@@ -384,6 +393,7 @@ Many modern VST3 plugins are a hybrid of the Generator and Effect types. These V
 The VST standard specifies a standard for communication between Digital Audio Workstations and the VST Plugins. The standard includes communication of MIDI input and output, audio signal input and output, and parameter value input and output. The VST Plugin will specify to the Digital Audio Workstation which inputs are available. Based upon the inputs received from the Digital Audio Workstation, the VST Plugin will process this information and then send various output messages back to the Digital Audio Workstation. These output messages can go directly to the Digital Audio Workstation or can be directly passed on to other VST Plugins, creating a signal chain. As such, \emph{chaining} is a useful technique for connecting VSTs to form deeply layered and sophisticated sounds.
 
 \section{Process Flow}
+\label{sec:processflow}
 The central object which handles the flow of data is the \texttt{AudioProcessor} found within the \texttt{PluginProcessor} header and CPP files. The \texttt{AudioProcessor} is responsible for directing MIDI input and Audio output throughout the different objects. Additionally, the \texttt{AudioProcessor} is responsible for handling the MIDI buffer and Audio buffers. The \texttt{AudioProcessor} will contain instances of the other classes and assists them in interacting with each other.
 
 The front-end of the \texttt{AudioProcessor} that will be used by the End-User is handled by the \texttt{AudioProcessorEditor}. This \texttt{AudioProcessorEditor} object contains each of the individual graphical user interface objects and controls the overall appearance of the VST3 plugin. These individual graphical user interface objects are \texttt{processor} objects that each will contain the individual graphical user interface elements to assist the End-User in changing the state values of the VST3 plugin, such as sliders and rotary dials.
@@ -391,6 +401,7 @@ The front-end of the \texttt{AudioProcessor} that will be used by the End-User i
 The \texttt{AudioProcessor} also contains an array of \texttt{SynthesiserVoice}. Each of these objects is a Synthesiser object that will perform the computation of values that will be handed back to the \texttt{AudioProcessor}  for sending out to the audio buffer. The \texttt{AudioProcessor} is responsible for handling the MIDI buffer and sending those sets of instructions to the Synthesiser objects for processing.
 
 \section{Development Flow}
+\label{sec:devflow}
 While development can follow the flow of the process, it is not intuitive to develop in this manner. To develop the \texttt{AudioProcessor} first would require a complete understanding of which control and state values would be required for each synthesizer component.
 
 First, the developer must develop the functions for handling the MIDI buffer first and the corresponding synthesizer functions. The audio buffer functions must also be developed afterward to handle the output correctly.
@@ -402,6 +413,7 @@ Special care must be taken to ensure that all functions are thread-safe, as the 
 The following section will walk through the development flow as described and provide detailed instructions on each portion.
 
 \section{Initializing the Synthesiser}
+\label{sec:initializesynthesizer}
 The first step is to set up the \texttt{Synthesiser} controlled by the \texttt{AudioProcessor}. It is sufficient to declare the \texttt{Synthesiser} within the private members and allow it to use its default constructor. 
 Within the constructor of the \texttt{AudioProcessor}, we then create a loop that will add new instances of the \texttt{SynthesiserVoice} class and new instances of the \texttt{SynthesiserSound} class to the \texttt{Synthesiser}. The following is the code snippet that performs this action.
 \begin{lstlisting}
@@ -417,6 +429,7 @@ mySynth.addSound(new SynthSound());
 The \texttt{clearVoices} and \texttt{clearSounds} methods ensure that we are starting with a fresh \texttt{Synthesiser}.
 
 \section{Handling the MIDI and Audio Buffers}
+\label{sec:handlingbuffers}
 There are two parts to the handling of MIDI input and audio output. The \texttt{AudioProcessor} must implement a \texttt{processBlock} function. This function is called by the framework at every tick of the program, and is passed the references to the \texttt{AudioSampleBuffer} and the \texttt{MidiBuffer}. The following is the declaration required for this function:
 \begin{lstlisting}
 void JuceSynthFrameworkAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
@@ -468,9 +481,11 @@ if (velocity == 0)
 \end{lstlisting}
 
 \section{The Digital Synthesis Components}
+\label{sec:digitalsynthesiscomponents}
 The next parts for the developer to build are the individual Digital Synthesis components. The usage and purpose of each component have been discussed in the $Module Details$ section \ref{ref.needed}, and this section will focus on the implementation and technical details.
 
 \subsection{Waveform Oscillators}
+\label{subsec:waveformosc}
 Designing an oscillator consists of two primary parts: designing the $Phase\ Accumulator$ as described in \ref{ref.needed} and designing the $Phase-to-Amplitude\ Converter$ as described in \ref{ref.needed}.
 
 The $Phase\ Accumulator$ is accomplished by declaring a \texttt{phase} variable for the \texttt{oscillator} class. This value will be used by each of the $Phase-to-Amplitude\ Converter$ functions. Since each $Phase-to-Amplitude\ Converter$ function uses the same \texttt{phase} value, it is ensured that the transition between different waveforms can be done with no phasing issues and with relative smoothness.
@@ -527,6 +542,7 @@ outputValue = phase/waveTableSize;
 The \texttt{outputValue} returned from the $Phase-to-Amplitude\ Converter$ functions is sent from the \texttt{oscillator} class to the other Digital Signal Processing components. For each of the components, they all follow a similar input/output format. Each of the components take a \texttt{sample} value as a parameter, and return a \texttt{double} as their output. The \texttt{sample} value represents the output sample value from the previous component, and the returned \texttt{double} value corresponds to the processed output of the signal. Within this VST3 Plugin, the signal is routed from the \texttt{oscillator} component to the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$.
 
 \subsection{Low-Frequency Oscillator Controlled Amplitude Modulator}
+\label{subsec:lfcocontrolampmod}
 The $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ acts similarly to an amplitude envelope on the signal. The main difference is that the amplitude modulation is not based on ADSR phases, as described previously in section \ref{ref.needed}, but based on the output values of an oscillator. Typically the output values of the oscillator are used as multipliers on the sample values from the input signal. In order to avoid silence at the nodes of the oscillator, the modulated signal is mixed back in with the dry signal to create the final output signal.
 
 The main logic block of the code is as follows:
@@ -539,6 +555,7 @@ newSample = sampleMix + lfoMix;
 The parameters that the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ uses are \texttt{lfoSwitch}, \texttt{lfoFreq}, and \texttt{lfoBlend}. These three parameters are passed in by the \texttt{AudioProcessorValueTreeState}, which will be discussed in section \ref{ref.needed}. The \texttt{lfoSwitch} parameter controls whether or not the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ will be bypassed or not. The \texttt{lfoFreq} parameter is assigned to the \texttt{lfoFrequency01} variable and controls the frequency of the Low-Frequency Oscillator. And finally, the \texttt{lfoBlend} parameter is assigned to the \texttt{lfoMixLevel01} variable which controls the final mix.
 
 \subsection{Amplitude Modulation Envelope}
+\label{subsec:amenv}
 The \texttt{envelope} component modifies the amplitude of the signal value by the parameters set for the \texttt{envelope} component. The implemented type of $Envelope$ component is the 4-step $ADSR Envelope$ as described in section \ref{ref.needed}. 
 
 Within the \texttt{envelope} class, the most important values are the \texttt{attack}, \texttt{decay}, \texttt{sustain}, \texttt{release}, and \texttt{trigger} variables. The \texttt{attack}, \texttt{decay}, and \texttt{release} correspond to the rates of their respective phases. The \texttt{sustain} value represents the sustained amplitude during the $Sustain$ phase. And lastly the \texttt{trigger} variable corresponds to the $noteOn$ and $noteOff$ MIDI event messages and is set by the \texttt{startNote} and \texttt{stopNote} methods as described in section \ref{ref.needed}.
@@ -546,6 +563,7 @@ Within the \texttt{envelope} class, the most important values are the \texttt{at
 The \texttt{envelope} component tracks its internal state via four switch variables. These variables are \texttt{attackphase}, \texttt{decayphase}, \texttt{holdphase}, and \texttt{releasephase}. These four switch variables correspond to their respective $ADSR$ envelope phases. The envelope uses these switch variables to determine which state it operates in to process the input signal sample value. 
 
 \subsection{AudioProcessorValueTreeState}
+\label{subsec:apvt}
 One of the first crucial steps is to build the \texttt{AudioProcessorValueTreeState}, a JUCE framework tree object designed to facilitate the storage of state values of the VST3 plugin and the access and communication of this information between the Digital Audio Workstation and the VST3 plugin.
 
 The \texttt{AudioProcessorValueTreeState} is declared within the header file, and is initialized in the constructor list of the \texttt{AudioProcessor}. The following code block is an example of initializing the filter parameters:
@@ -570,6 +588,7 @@ In each initialization call, a call is made to a \texttt{std::make\_unique<>()} 
 The \texttt{AudioProcessorTreeValueState} is connected the other classes in order to provide access to the VST3 plugin state. Most notably, the \texttt{processor} objects which contain the graphical user interface elements are initialized with references to state values stored within the tree object.
 
 \section{Testing}
+\label{sec:testing}
 The unit testing for the project is implemented using \texttt{GoogleTest}, Google's in house C++ testing framework. The public Github repository, including the full documentation, for \texttt{GoogleTest} can be found at \href{https://github.com/google/googletest}{https://github.com/google/googletest}.
 
 The unit tests written are focused on the waveform synthesis module of the application as this module is at the centerpiece of the direct digital synthesis and any issues in the synthesis module would create increasingly distorted artifacts in the final output.
@@ -577,6 +596,7 @@ The unit tests written are focused on the waveform synthesis module of the appli
 The unit tests written for the application utilize the \emph{Text Fixtures} feature of \texttt{GoogleTest}, which allows for tests to be grouped into a test fixture to utilize the same resource without incurring the cost of rebuilding and tearing down for each test. 
 
 \subsection{Phase Tests}
+\label{subsec:phasetests}
 The first set of unit tests are focused on testing the phase accumulation of each waveform function generator. The phase should be consistent and match expected outputs with the given frequency input. Additionally, the phase should never exceed 360 degrees and should return to 0 degrees after a full cycle at the given frequency. The phase values are obtained by calling the \texttt{getPhase()} function.
 
 The C++ class \texttt{OscillatorPhaseTest} constructs the \texttt{oscillator} required to run the tests. The phase tests are part of the \texttt{OscillatorPhaseTest} test fixture which utilizes the class.
@@ -590,6 +610,7 @@ The next set of phase tests check to ensure that the phase value stays within ex
 These tests are also made for each of the different waveform function generators, i.e. \emph{Square}, \emph{Saw}, and \emph{Triangle}. The respective tests are called \texttt{SquareSynthesisPhaseTest} \& \texttt{SquareSynthesisPhaseResetTest}, \texttt{SawSynthesisPhaseTest} \& \texttt{SawSynthesisPhaseResetTest}, and \texttt{TriangleSynthesisPhaseTest} \& \texttt{TriangleSynthesisPhaseResetTest}. One additional test exists for the \emph{Saw} waveform generator, the \texttt{SawSynthesisPhaseFlipTest}. As the \emph{Saw} waveform generator modifies the phase value between $[-360,360]$ degrees, this test checks if the phase value flips at the expected iteration.
 
 \subsection{Value Tests}
+\label{subsec:valuetests}
 Value unit tests are crucial to ensure that each waveform function generator will create the waveform as expected. The best way to test for this is to check the generated values at specific phase values with known output values. Additionally, the generated values should never exceed the range of $[-1.0,1.0]$.
 
 The C++ class \texttt{OscillatorValueTest} constructs the \texttt{oscillator} required to run the tests. The phase tests are part of the \texttt{OscillatorValueTest} test fixture which utilizes the class.
@@ -601,14 +622,12 @@ The functions are similar for the \emph{Saw}, \emph{Square}, \emph{Triangle} wav
 The \texttt{SineSynthesisValueRangeTest} performs 100 iterations of the \texttt{sine()} function. At each iteration, the value generated is checked to ensure that it is within the range of $[-1.0,1.0]$. If any iteration fails the check, the iteration is reported back in the test failure.
 
 Each of the other waveform function generators also have their respective value range tests. These are \texttt{SquareSynthesisValueRangeTest}, \texttt{SawSynthesisValueRangeTest}, and \texttt{TriangleSynthesisValueRangeTest}.
-% ------------------------------------------------------------------------------
 
-\section{Results}
+\chapter{Results}
+\label{chapter:results}
 The project was successful and performs not only to my original spec, but even surpassed it as I was able to include more features than originally intended. The current application is capable of working with live MIDI input to produce synthesized sounds with the basic Sine, Square, Triangle, and Saw waveforms. Additionally, I was able to add Envelope, Filters, LFO, and Delay functionality to the synthesizer, allowing for far more customization of the synth and a much more professional sounding result. 
 
 \chapter{Appendix}
-
-% ------------------------------------------------------------------------------
 
 \begin{thebibliography}{9}
 \bibitem{v} Somebody, something.
