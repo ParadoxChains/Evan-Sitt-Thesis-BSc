@@ -23,13 +23,8 @@
 
 \begin{document}
 
-% ------------------------------------------------------------------------------
-% Címlap
-
 \input{titlepage.tex}
 
-% ------------------------------------------------------------------------------
-% Témabejelentõ
 
 \vspace*{\fill}
 \begin{center}
@@ -40,76 +35,81 @@
 \newpage
 \setcounter{page}{1}
 
-% ------------------------------------------------------------------------------
-% Tartalomjegyzék
-
 \tableofcontents
-
-% ------------------------------------------------------------------------------
-
 
 \chapter{Introduction}
 
 The application is a digital synthesizer built within the JUCE framework. It can be used as a VST3 plugin or as a standalone application. This digital synthesizer can be used with live MIDI input and produces audio output. The digital synthesizer can support additive and subtractive synthesis with the basic waveforms. The post processing effects included are LFO, Envelope, and Filters.
-This digital synthesizer application allows for flexible customization of the synthesizer sound with flexible usage and integration into an exisitng workflow.
-\includegraphics[width=32em]{OverallScreenshot.png}
+
+This digital synthesizer application allows for flexible customization of the synthesizer sound with flexible usage and integration into an existing workflow within a Digital Audio Workstation. It is also possible to use the digital synthesizer application as a standalone as well.
+
+\begin{center}
+\includegraphics[width=36em]{OverallScreenshot.png}
+\end{center}
+
 \chapter{Background}
+\label{chapter:background}
 \section{Audio Basics}
-% - Audio Basics
+\label{sec:audiobasics}
 Before we delve into the background for Digital Synthesis and Digital Signal Processing, it behooves us first to have a brief overview of audio. Audio typically deals with the way we create a sound, the way our ears receives the sound, and the way our mind perceives the sound.
 
 \subsection{Waveform}
+\label{subsec:waveform}
 We start with the basic building block of sound, the waveform. A Waveform is an abstract way of representing a sound. Typically a waveform is visualized on the Time Domain with Amplitude as the range containing a single cycle of a waveform. Time Domain of a waveform is typically represented in seconds. The Amplitude range, on the other hand, can be represented in many different units. The most common unit used is the decibel (dB). 
 
 \subsection{Decibel}
+\label{subsec:decibel}
 A decibel is a relative unit of measurement representing the ratio of the value of a power quantity to another. For example, if $x$ represents the ratio of the power quantity of one system to another system, then the decibels can be calculated via $10 log_10 x$. Since the decibel is a relative unit, it is always essential to establish what the reference measure of power is. 
 
 In colloquial usage, when one refers to the loudness of a jet-plane engine as +80dB, this is in reference to the lower threshold of sound pressure that is perceivable to the human hearing system. In the case that a waveform is referencing the lower threshold of human hearing, then the range is typically visualized with "0" of the range as 0dB and the values above the horizontal axis going up in decibel value and values below the horizontal axis going down in decibel value. A negative value is representative of the vibration of a membrane, such as an eardrum, in reaction to negative sound pressure. 
 
 \subsection{Decibels in Digital Synthesis and Audio Engineering}
+\label{subsec:decibelindigitalsynthesis}
 In contrast to the colloquial usage of decibels, within audio engineering, the decibel value used is called the Decibels Relative to Overload.  In this variant, 0dB is assigned to the maximal power level that can be output by a system before clipping occurs. Clipping is the term to describe the type of distortion that occurs when a signal overshoots the maximal output. For example, a speaker representing a sound pressure of 0dB will be outputting the signal at its maximum power, and representing the sound pressure at half power would be -6dB. In hardware, safeguards are implemented at certain decibel levels to curb a signal before it clips.
 
 \subsection{Digital Representation of Decibels}
+\label{subsec:digitalrepdecibels}
 Within a Digital Synthesis system, the power of a signal is represented using \texttt{float} data types. Typically, $1.0$ would represent the maximal power output, $0.0$ would represent the minimum power output, and $-1.0$ would represent the maximal power output with negative sound pressure. Sound pressure levels between maximal and minimal are represented as decimal values between $0.0$ and $1.0$. As with any floating-point value stored within a digital context, the precision of this value is highly dependent on the number of bits used to store the floating-point value. For the \texttt{PCM\ WAV} standard used for the majority of digital audio synthesis done on computer systems, 8-bit, 16-bit, and 32-bit floating-point values are commonly used.
 
 \subsection{Frequency Domain}
+\label{subsec:freqdomain}
 The other commonly used representation of sound is the Frequency Domain representation. Here the frequency is the domain, while amplitude remains as the range. In contrast to the Time Domain, there are no time values within the Frequency Domain. As such, the view of the Frequency Domain graph represents the frequency spectrum and amplitude values at an instantaneous point in time.
 
 Frequency refers to the rate at which a sound repeats a single cycle of its periodic function. The frequency is measured in hertz, which represents $cycles/seconds$. Human hearing is capable of perceiving sound with frequencies between 20Hz and 20kHz. While the actual range of any one person's audible range will vary depending on their age, health, and several other factors, the majority of sound reproduction systems will operate within the full range between 20Hz and 20kHz. 
 
 \subsection{Frequency Spectrum}
+\label{subsec:freqspect}
 The graphical representation of the Frequency Domain of a sound is usually referred to as the $Frequency\ Spectrum$ or the $Spectral\ Graph$. These graphical representations will typically represent frequencies between 20Hz and 20kHz, with amplitudes from 0dB to -$\infty$dB. The varying values of the Frequency Spectrum of any waveform control the timbre, or sonic characteristics, of the resulting sound.
 
 A variation on the Frequency Spectrum that is used in digital audio synthesis is the $Harmonics\ Graph$. The Harmonics Graph also represents the Frequency Domain of a waveform. However, the domain represents values from 0 to $\infty$. These do not represent any specific frequencies; instead, the values in the domain represent multipliers of a base frequency. Integer multiplier values are referred to as the $harmonics$ of a sound. A Harmonics Graph represents the unique character of a specific sound-producing object, such as a person's vocals chords, regardless of the frequency of the sound being produced. Harmonics Graphs are commonly used for physical modeling of instruments, which is then later used in reconstructing that sound in Digital Synthesis with the weighted summation of primitive sine waves.
 
 
 \section{Digital Synthesis}
-% - Digital Synthesis
+\label{subsec:digitalsynth}
 Digital synthesis is a field in which an audio engineer utilizes digital signal processing techniques to make musical sounds. One of the most prominent early examples were the keyboards manufactured by Yamaha, which employed their proprietary FM Synthesis algorithms back in the 1970s.
 
 A frequency synthesizer refers to a synthesizer with circuitry capable of generating a range of frequencies from a single reference frequency input. One typical application of a frequency synthesizer is the use of a Fourier Series to construct waveforms via Additive Synthesis.
 
 \subsection{Direct Digital Synthesis}
-% - Direct Digital Synthesis
+\label{subsec:directdigitalsynth}
 When designing a digital synthesizer, there is a multitude of techniques available to the designer for generating frequencies, including Phase Locked Loop, Digital-Analog Conversion, and Direct Digital Synthesis. This project approaches the problem of digital synthesis by using Direct Digital Synthesis. Direct Digital Synthesis is a technique utilized by modern frequency synthesizers. Direct Digital Synthesis utilizes a singular fixed-frequency reference clock as a stable time basis for the entire system. In contrast to the alternative Phase-Locked Loop system, where the output phase is locked directly to the phase of the input signal, Direct Digital Synthesis holds significant advantages in flexibility, the most prominent being better frequency agility. Frequency agility is defined as the capacity to switch the oscillator between different frequencies without introducing a significant delay in the signal. This advantage is offered as a result of Direct Digital Synthesis using discrete sample operations. Other advantages offered by the Direct Digital Synthesis technique include access to a broader spectrum of frequencies and finer frequency resolution. Additionally, a Direct Digital Synthesis device has the potential to have low overhead and power draw.
 
 A Direct Digital Synthesis device typically consists of a few parts: a digital signal input, a phase accumulator, a phase register, a phase to amplitude converter, a digital to analog converter, and finally the reference oscillator.
 
 \subsection{Digital Signal Input}
-%   - Digital Signal Input
+\label{subsec:digitalsignalinput}
 The digital signal input acts as the Tuning Word for the system. The demanded frequency value is provided as an input to the system. Additional information that can be provided at this stage of the system includes the type of waveform to be generated, along with any MIDI instructions for the other signal processing modules further down the signal chain.
 
 \section{Phase Accumulator}
-%   - Phase Accumulator
+\label{sec:phaseaccu}
 The Phase Accumulator holds the digital number, which represents the current phase of the Direct Digital Synthesizer. The Phase Accumulator iterates the phase with a value controlled by the Tuning Word input. The frequency and sampling rate make up the Tuning Word. Once the phase stored overflows a specified threshold value, modulus mathematics is used to reset the phase within the range specified. With a higher frequency, the Tuning Word will cause the Phase Accumulator to cycle through the phase range more rapidly, in essence accomplishing the task of converting the frequency input into a phase value. In a way, the Phase Accumulator can be thought of as a modulus counter.
 
-%   - Phase Register
 \section{Phase to Amplitude Converter}
-%   - Phase to Amplitude Converter
+\label{sec:phasetoamplitudeconverter}
 After the Phase Accumulator step, the phase value is then passed to the Phase to Amplitude Converter. The goal of the Phase to Amplitude Converter is to change the phase value to a digital amplitude value, which can then be further processed. This goal can be accomplished via two different methods: a Phase/Wavetable lookup, or a Waveform Function.
 
 \subsection{Phase/Wavetable Lookup}
-%     - Phase/Wavetable Lookup
+\label{subsec:phasewavetablelookup}
 The Phase/Wavetable Lookup method was developed in the late 1970s as a more efficient method of generating waveforms on low spec hardware devices. The concept relies on the efficiency advantage of accessing values from a stored array over repeated mathematical calculations of sinusoidal functions. While the hardware constraints are no longer an issue for modern digital synthesizers, the technique is still used for its relative flexibility when compared to the use of sinusoidal functions.
 
 For the Phase/Wavetable Lookup method, a wavetable is stored within the system. This wavetable is named so since it contains a predefined number of precomputed amplitude values of the desired waveform. Typically this waveform is a fundamental sine wave, as other waveforms can be achieved via Fourier series reconstruction, which relies on additive and subtractive operations rather than trigonometric functions. Additionally, the wavetable is typically stored within a direct-access data structure such as arrays for even better efficiency.
@@ -219,7 +219,8 @@ The application of this thesis project supports one MIDI link of sixteen channel
 
 
 \chapter{User Documentation}
-In this chapter, the application will be explained from an End-User perspective with explanations on how to use each part of the application within their workflow to achieve the desired sound. This section will rely heavily on technical and musical terminology discussed in the previous chapter \ref{ref:needed}, and as so, will focus primarily on describing in detail the operation and effects of the application.
+\label{chapter:userdoc}
+In this chapter, the application will be explained from an End-User perspective with explanations on how to use each part of the application within their workflow to achieve the desired sound. This section will rely heavily on technical and musical terminology discussed in the previous chapter \ref{chapter:background}, and as so, will focus primarily on describing in detail the operation and effects of the application.
 
 \section{Installation}
 The installation of the software is relatively straightforward and simple. This section will walk the End-User through the Build, Installation, and Setup process on different platforms. For those who prefer to download the precompiled binaries for the VSTi plugin, please read the following subsection. However, for those who prefer to build the application from the source code, please refer to section \ref{ref:needed}.
@@ -228,18 +229,25 @@ The installation of the software is relatively straightforward and simple. This 
 The latest release builds of the VST3 plugin can be found at \href{link:needed}{text:needed}. Once downloaded, the installation of the plugin within the preferred Digital Audio Workstation will proceed as specified by the specific Digital Audio Workstation. Typically, the process consists of placing a copy of the VST3 plugin binary within the designated system folder for VST3 plugins and registering the new plugin within the Digital Audio Workstation. The Digital Audio Workstation must support ASIO drivers, MIDI input, and VSTi 3.0 plugins.
 
 For the purposes of demonstration, the $FL\ Studio\ 20$ Digital Audio Workstation running on the $Windows\ 10$ operating system will be shown and referenced in the instructions.
-\includegraphics[width=32em]{FLStudioLogo.png}
+
+\begin{center}
+\includegraphics[width=12em]{FLStudioLogo.png}
+\end{center}
 
 \subsection{Registering the VST3 Plugin}
 The first step to installing the VST3 plugin is to copy the \texttt{.vst3} file into the appropriate directory set in the $Plugin\ Manager > Plugin\ search\ paths$ field. By default, the directory set for 64-bit plugins on 64 bit Windows 10 is typically found in the \texttt{'../Program Files/Common Files/VST3'} directory. 
 
 Afterward, the user should open the $Plugin\ Manager$ via the $Options$ by going to $File\ settings$ and then clicking on the $Manage\ plugins$ button. 
 
+\begin{center}
 \includegraphics[width=32em]{ModuleRegistration.png}
+\end{center}
 
 After ensuring that the $Verify\ plugins$ radio button is turned on, the next step is to use the $Find\ Plugins$ button to scan the preregistered VST plugin folders for the new VST3 plugin. The window will then show the new plugin, named $Paradox\ Chains\ Synthesiser$, within the plugin list on the right panel. By selecting the star button next to the plugin name, the plugin will be added to the favorites to ensure ease of finding the plugin in the future. This last step completes the registration of the VST3 plugin within the FL Studio 20 Digital Audio Workstation.
 
+\begin{center}
 \includegraphics[width=32em]{AddPluginList.png}
+\end{center}
 
 \section{Initialization and Workflow Integration}
 While the previous steps stated in the $Installation$ section \ref{Reference.needed} will only need to be completed once, the steps in this section and the following $Workflow\ Integration$ section \ref{reference.needed} will be the steps necessary to be taken for every new project established.
@@ -253,8 +261,9 @@ To add an instance of the VST3 plugin to a project, simply go to the $Add$ dropd
 \begin{multicols}{2}
 Each outlined portion of the graphical user interface of the VST3 plugin contains the controls which correspond to a process within the Digital Signal Processing chain. The specifics of each module will be discussed in the $Module\ Details$ section /ref{ref.needed}. Controls on the main user interface can be set during a project or modified in real-time during a performance as the situation demands. The Digital Synthesis Processes will automatically read in the new parameters and adjust the sound accordingly.
 
-
 The full list of detailed controls, with labels and fine controls, can be accessed by advanced users via the $Browser$ panel on the left side of the screen. By using the center $Current\ project$ tab, opening up the $Generators$ listing, and then opening up the $Paradox\ Chains\ Synthesiser$ listing, the advanced user will have access to all possible MIDI values for the VST3 plugin.
+
+Clicking on any one of them will bring up a detailed rotary slider that will also display a precise value to pass to the VST3 plugin. Note, the value displayed by the Digital Audio Workstation is from a range between $0.0$ and $100.0$, corresponding to the percentage of the range of the MIDI parameter. However, as detailed within the $Module\ Details$ section \ref{ref.needed}, the actual value range of the MIDI parameters will be different depending upon the parameter.
 
 \begin{center}
 \includegraphics[width=12em]{BrowserPanel.png}
@@ -263,7 +272,7 @@ The full list of detailed controls, with labels and fine controls, can be access
 
 
 
-Clicking on any one of them will bring up a detailed rotary slider that will also display a precise value to pass to the VST3 plugin. Note, the value displayed by the Digital Audio Workstation is from a range between $0.0$ and $100.0$, corresponding to the percentage of the range of the MIDI parameter. However, as detailed within the $Module\ Details$ section \ref{ref.needed}, the actual value range of the MIDI parameters will be different depending upon the parameter.
+
 
 \begin{center}
 \includegraphics[width=24em]{ModifyingDetailedMIDI.png}
@@ -331,6 +340,7 @@ The $Main$ module controls the Master volume of the application along with pitch
 
 
 \chapter{Developer Documentation}
+\label{chapter:devdocs}
 
 % The Developer Documentation (or Developer's Manual) should contain
 % \begin{itemize}
