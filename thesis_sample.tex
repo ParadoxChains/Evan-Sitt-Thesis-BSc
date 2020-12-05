@@ -40,9 +40,11 @@
 \chapter{Introduction}
 \label{chapter:intro}
 
-The application is a digital synthesizer built within the JUCE framework. It can be used as a VST3 plugin or as a standalone application. This digital synthesizer can be used with live MIDI input and produces audio output. The digital synthesizer can support additive and subtractive synthesis with the basic waveforms. The post processing effects included are LFO, Envelope, and Filters.
+The application is a digital synthesizer built within the JUCE framework. It can be used as a VST3 plugin or as a standalone application. This digital synthesizer can be used with live MIDI input and produces audio output. The digital synthesizer can support additive and subtractive synthesis with the basic waveforms. The post processing effects included are LFO, Envelope, and Filters. The aim is to create an entry level commercial level product which can be by professional music producers and composers.
 
 This digital synthesizer application allows for flexible customization of the synthesizer sound with flexible usage and integration into an existing workflow within a Digital Audio Workstation. It is also possible to use the digital synthesizer application as a standalone as well.
+
+
 
 \begin{center}
 \includegraphics[width=36em]{OverallScreenshot.png}
@@ -420,7 +422,7 @@ The following section will walk through the development flow as described and pr
 \label{sec:initializesynthesizer}
 The first step is to set up the \texttt{Synthesiser} controlled by the \texttt{AudioProcessor}. It is sufficient to declare the \texttt{Synthesiser} within the private members and allow it to use its default constructor. 
 Within the constructor of the \texttt{AudioProcessor}, we then create a loop that will add new instances of the \texttt{SynthesiserVoice} class and new instances of the \texttt{SynthesiserSound} class to the \texttt{Synthesiser}. The following is the code snippet that performs this action.
-\begin{lstlisting}
+\begin{lstlisting}[caption={Instantiating Voices},label={code:instantiatingvoices},captionpos=b]
 mySynth.clearVoices();
     
 for (int i = 0; i < 5; i++)
@@ -435,23 +437,23 @@ The \texttt{clearVoices} and \texttt{clearSounds} methods ensure that we are sta
 \section{Handling the MIDI and Audio Buffers}
 \label{sec:handlingbuffers}
 There are two parts to the handling of MIDI input and audio output. The \texttt{AudioProcessor} must implement a \texttt{processBlock} function. This function is called by the framework at every tick of the program, and is passed the references to the \texttt{AudioSampleBuffer} and the \texttt{MidiBuffer}. The following is the declaration required for this function:
-\begin{lstlisting}
+\begin{lstlisting}[caption={processBlock Declaration},label={code:processblockdeclaration},captionpos=b]
 void JuceSynthFrameworkAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 \end{lstlisting}
 Within the \texttt{processBlock} function, the developer may choose to implement any sort of system-wide functionality that must occur in real-time. One of these functionalities is the retrieval of control and state values from the \texttt{AudioProcessorValueTreeState}, which will be discussed in detail in subsection \ref{subsec:apvt}.
 
 The first step is to ensure that a call is made to the \texttt{renderNextBlock} method of each \texttt{SynthesiserVoice} that was added to the \texttt{Synthesiser}. These calls are done within a loop that iterates through each \texttt{SynthesiserVoice}. The function call is as follows: 
-\begin{lstlisting}
+\begin{lstlisting}[caption={renderNextBlock Function Call},label={code:rendernextblockfunccall},captionpos=b]
 mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 \end{lstlisting}
 Within the \texttt{renderNextBlock} function call, the audio buffer and MIDI buffer are both passed in by reference, followed by the index of the starting sample and the index of the last sample.
 
 Within the \texttt{SynthesiserVoice} derived class we must implement an override on the \texttt{renderNextBlock} method. The function declaration is as follows:
-\begin{lstlisting}
+\begin{lstlisting}[caption={renderNextBlock() Override},label={code:rendernextblockoverride},captionpos=b]
 void renderNextBlock(AudioBuffer <float>& outputBuffer, int startSample, int numSamples) override
 \end{lstlisting}
 This method must accomplish the task of rendering and adding the audio output sample values to the provided \texttt{AudioBuffer}. The code within this consists of two nested loops, one which iterates through each sample of the \texttt{AudioBuffer}, and the other which iterates through each audio channel that needs a sample. Within the loops we call an \texttt{AudioBuffer} method, \texttt{addSample}, to add the new sample to the \texttt{AudioBuffer}. The code snippet is as follows:
-\begin{lstlisting}
+\begin{lstlisting}[caption={addSample()},label={code:addsample},captionpos=b]
 for (int sample = 0; sample < numSamples; ++sample)
 {
     for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
@@ -467,7 +469,7 @@ In addition to the \texttt{renderNextBlock} method, additional methods are requi
 
 The \texttt{startNote} method must perform any function required whenever a new note is started. The \texttt{trigger} value of the \texttt{envelope} component, described in subsection \ref{subsec:amenv}, is set to the value of $1$ to indicate the start of the $Attack$ phase. The position of the pitch wheel, a general MIDI hardware component, is then passed to the function \texttt{setPitchBend} to set the \texttt{pitchBend} value. The \texttt{midiNoteNumber} is then converted to the corresponding frequency value in Hz and stored as the \texttt{frequency} value which will be used by the \texttt{oscillator} components, as described in subsection \ref{subsec:waveformosc}. Finally, the \texttt{velocity} value from the MIDI event instruction is stored into the \texttt{level} value. The following is the code snippet for the \texttt{startNote} method:
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={startNote()},label={code:startnote},captionpos=b]
 noteNumber = midiNoteNumber;
 envelope01.trigger = 1;
 setPitchBend(currentPitchWheelPosition);
@@ -477,12 +479,13 @@ level = velocity;
 
 The \texttt{stopNote} method must perform all functions required whenever the current note is ended. The \texttt{trigger} value of the \texttt{envelope} component is set to $0$ to indicate the start of the $Release$ phase. The \texttt{allowTailOff} value is set to \texttt{true} to indicate to the $JUCE$ framework that the release tail should be allowed to persist in the audio output buffer. Finally, after the \texttt{velocity} value is equivalent to $0$, then the \texttt{clearCurrentNote} method is called which ensures that the current note is cleared from the instructions received from the MIDI buffer. The following code snippet is the instructions involved within the \texttt{stopNote} method:
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={stopNote()},label={code:stopnote},captionpos=b]
 envelope01.trigger = 0;
 allowTailOff = true;
 if (velocity == 0)
     clearCurrentNote();
 \end{lstlisting}
+
 
 \section{The Digital Synthesis Components}
 \label{sec:digitalsynthesiscomponents}
@@ -505,7 +508,7 @@ With the $Phase\ Accumulator$ completed, the next step is to create the $Phase-t
 The \texttt{sine} function operates using a $Waveform\ Lookup\ Table$ in order to bypass incurring the repeated computation cost of sine calculations. A precalculated wavetable, \texttt{double sineWaveTable[ ]} is stored within the CPP file. This array contains a predetermined number of precalculated values representing values of one cycle of the primitive sine function with an amplitude of $1$. The size of the wavetable is 4800 values. This number, $4800$, is calculated by dividing the highest possible sampling rate for $PCM WAV$ encoding, $98,000Hz$, by the lowest audible frequency, $20Hz$. While a lower number of precalculated values may be sufficient, some systems use a wavetable with as few precalculated values like 128, having a larger wavetable size ensures for much higher accuracy with less reliance on interpolative accuracy. Additionally, the extra overhead incurred by the memory allocated for a larger array of \texttt{double} values is negligible by the standard of modern computing hardware and is typically not a limiting factor.
 
 The \texttt{sine} function first checks the \texttt{phase} value to ensure that it is within the bounds of the wavetable size. If the \texttt{phase} value is not within these bounds, then modulus mathematics is applied to the \texttt{phase} value to shift it to a value within those bounds. This \texttt{phase} value, as calculated by the \texttt{iteratePhase} method, serves as the access index of the wavetable. As this access index typically will not fall on an integer value, but rather some real number index, the value can not be simply accessed from the wavetable. Instead, the $floor$ of the \texttt{phase} value is calculated and four values are accessed. These values are the value at the floored index, the value immediately following that position, and the two values immediately preceding that position. With these four values, a $4-Point Polynomial Interpolation$ algorithm is used to calculate the final value. The following is the code for the $4-Point Polynomial Interpolation$ algorithm.
-\begin{lstlisting}
+\begin{lstlisting}[caption={4-Point Polynomial Interpolation implementation},label={code:4ptpolyinterpolation},captionpos=b]
 decimalPlaces = phase - floor(phase);
 a = sineWaveTable[(long)phase - 1];
 b = sineWaveTable[(long)phase];
@@ -521,7 +524,7 @@ The final \texttt{outputValue} is then returned from the function, which will be
 Since the calculation of values for the Saw, Square, and Triangle waveforms involve only elementary addition, subtraction, multiplication, and division, the cost of repeated calculations is far cheaper than repeated sine calculations. For this reason, the $Phase-to-Amplitude\ Converter$ functions for these waveforms are implemented as $Waveform Functions$.
 
 The \texttt{square} function contains a conditional block which will set the \texttt{outputValue} to either $-1.0$ or $1.0$ depending on the current \texttt{phase} value. It will also perform modulus mathematics to ensure that the \texttt{phase} value is within the value range. Below is the core code block of the \texttt{square} function:
-\begin{lstlisting}
+\begin{lstlisting}[caption={square()},label={code:square},captionpos=b]
 if (phase < 0.5 * waveTableSize)
     outputValue = -1.0;
 else if (phase >= 0.5 * waveTableSize)
@@ -531,7 +534,7 @@ if (phase >= waveTableSize)
 \end{lstlisting}
 
 The \texttt{triangle} function involves a conditional block controlling the linear transformation of the \texttt{phase} value to the \texttt{outputValue}.  As with the previous functions, modulus mathematics is also performed on the \texttt{phase} value to ensure it remains within the valid range. The following is the main logic block of the \texttt{triangle} function:
-\begin{lstlisting}
+\begin{lstlisting}[caption={triangle()},label={code:triangle},captionpos=b]
 if (phase <= 0.5 * waveTableSize)
     outputValue = ((phase - (0.25 * waveTableSize)) * 4)/waveTableSize;
 else
@@ -539,7 +542,7 @@ else
 \end{lstlisting}
 
 Lastly, the \texttt{saw} function is the simplest of the $Waveform\ Functions$, involving a linear transformation of the \texttt{phase} value to the \texttt{outputValue}. The modulus arithmetic is present within this function in the same manner as the previous $Waveform\ Functions$. The logic block of the \texttt{saw} function is accomplished by this single line:
-\begin{lstlisting}
+\begin{lstlisting}[caption={saw()},label={code:saw},captionpos=b]
 outputValue = phase/waveTableSize;
 \end{lstlisting}
 
@@ -550,7 +553,7 @@ The \texttt{outputValue} returned from the $Phase-to-Amplitude\ Converter$ funct
 The $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ acts similarly to an amplitude envelope on the signal. The main difference is that the amplitude modulation is not based on ADSR phases, as described previously in subsection \ref{subsec:adsr}, but based on the output values of an oscillator. Typically the output values of the oscillator are used as multipliers on the sample values from the input signal. In order to avoid silence at the nodes of the oscillator, the modulated signal is mixed back in with the dry signal to create the final output signal.
 
 The main logic block of the code is as follows:
-\begin{lstlisting}
+\begin{lstlisting}[caption={LFO Mix},label={code:addsample},captionpos=b]
 sampleMix = sample * (1 - lfoMixLevel01);
 lfoMix = sample * lfo01.sine(lfoFrequency01) * lfoMixLevel01;
 newSample = sampleMix + lfoMix;
@@ -572,7 +575,7 @@ One of the first crucial steps is to build the \texttt{AudioProcessorValueTreeSt
 
 The \texttt{AudioProcessorValueTreeState} is declared within the header file, and is initialized in the constructor list of the \texttt{AudioProcessor}. The following code block is an example of initializing the filter parameters:
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Initializing Filter Parameters},label={code:initfilterparam},captionpos=b]
 tree(*this, nullptr, "PARAMETERS",
         {   
             //Filter Parameters
@@ -627,14 +630,27 @@ The \texttt{SineSynthesisValueRangeTest} performs 100 iterations of the \texttt{
 
 Each of the other waveform function generators also have their respective value range tests. These are \texttt{SquareSynthesisValueRangeTest}, \texttt{SawSynthesisValueRangeTest}, and \texttt{TriangleSynthesisValueRangeTest}.
 
-\chapter{Results}
+\chapter{Conclusion}
 \label{chapter:results}
 The project was successful and performs not only to my original spec, but even surpassed it as I was able to include more features than originally intended. The current application is capable of working with live MIDI input to produce synthesized sounds with the basic Sine, Square, Triangle, and Saw waveforms. Additionally, I was able to add Envelope, Filters, LFO, and Delay functionality to the synthesizer, allowing for far more customization of the synth and a much more professional sounding result. 
 
+The result matched my expectations for an entry-level digital synthesis plugin. As an music producer myself, I was able to achieve a customized sound from my digital synthesis plugin, and I was capable of creating an entire workflow built solely around instances of this digital synthesis plugin.
+
+Additional work can be done in the future to further expand the capabilities of the digital synthesizer. Frequency Modulation and Low Frequency Oscillator controlled Frequency Modulation can both be added for a more 21st century sound and the capability to create dubstep synths. A visualizer can be added to display the output waveform to allow the user to better understand the sound being generated and how it is being modified.
 \chapter{Appendix}
 
 \begin{thebibliography}{9}
 \bibitem{v} Somebody, something.
 \end{thebibliography}
+
+\cleardoublepage
+% \phantomsection
+% \addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+\cleardoublepage
+% \phantomsection
+\addcontentsline{toc}{chapter}{List of Codes}
+\lstlistoflistings
+
 
 \end{document}
