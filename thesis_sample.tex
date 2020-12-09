@@ -304,28 +304,23 @@ Each outlined portion of the graphical user interface of the VST3 plugin contain
 
 The full list of detailed controls, with labels and fine controls, can be accessed by advanced users via the $Browser$ panel on the left side of the screen. By using the center $Current\ project$ tab, opening up the $Generators$ listing, and then opening up the $Paradox\ Chains\ Synthesiser$ listing, the advanced user will have access to all possible MIDI values for the VST3 plugin.
 
-Clicking on any one of them will bring up a detailed rotary slider that will also display a precise value to pass to the VST3 plugin. Note, the value displayed by the Digital Audio Workstation is from a range between $0.0$ and $100.0$, corresponding to the percentage of the range of the MIDI parameter. However, as detailed within the $Module\ Details$ section \ref{sec:moduledetails}, the actual value range of the MIDI parameters will be different depending upon the parameter.
-
 \begin{figure} \centering
 \includegraphics[width=12em]{BrowserPanel.png}
     \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
-
-
-
+Clicking on any one of them will bring up a detailed rotary slider that will also display a precise value to pass to the VST3 plugin. Note, the value displayed by the Digital Audio Workstation is from a range between $0.0$ and $100.0$, corresponding to the percentage of the range of the MIDI parameter. However, as detailed within the $Module\ Details$ section \ref{sec:moduledetails}, the actual value range of the MIDI parameters will be different depending upon the parameter.
 
 \begin{figure} \centering
-\includegraphics[width=24em]{ModifyingDetailedMIDI.png}
+\includegraphics[width=16em]{ModifyingDetailedMIDI.png}
     \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 Right-clicking on any of the detailed MIDI parameters will bring up advanced user options. The $"Init\ song\ with\ this\ position"$ option will allow the advanced user to set the current value as an initialization value. The $"Edit\ events"$ option will allow the advanced user to enter a detailed MIDI event graphical editor window. The $"Create\ automation\ clip"$ option will allow the advanced user to create tracks to automate the MIDI parameter. Lastly, but certainly not least, the $"Link\ to\ controller"$ option will allow the advanced user to link the MIDI parameter, or even the entire VST3 plugin, to either a software control panel, such as FL Studio's $Patcher$, or even a hardware MIDI device.
 
 \begin{figure} \centering
-\includegraphics[width=24em]{ExtraOptions01.png}
+\includegraphics[width=16em]{ExtraOptions01.png}
     \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
-
 \begin{figure} \centering
-\includegraphics[width=24em]{ExtraOptions02.png}
+\includegraphics[width=16em]{ExtraOptions02.png}
     \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 The final step to integrating the $Paradox\ Chains\ Synthesiser$ into a workflow is to route the digital audio output to the mixer. By opening up the VST3 plugin's graphical user interface, there is an option to click on the Settings button to bring up the detailed settings window. There is a multitude of options, such as modifying the MIDI input and output ports; however, the relevant option is to change the Track Assignment in the top right corner of the window. By changing this value, the VST3 plugin will be assigned to the corresponding mixer track for further processing and routing to the final output.
