@@ -19,7 +19,36 @@
 \usepackage{amsmath}
 \usepackage{multicol}
 
-
+\usepackage{listings}
+\usepackage{textcomp}
+\usepackage{xcolor} \definecolor{Darkgreen}{rgb}{0,0.4,0}
+\definecolor{lbcolor}{rgb}{1,1,1}
+\lstset{
+backgroundcolor=\color{lbcolor},
+    tabsize=4,    
+%   rulecolor=,
+    language=[GNU]C++,
+        basicstyle=\scriptsize,
+        upquote=true,
+        aboveskip={1.5\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=false,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        numbers=left,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.026,0.112,0.095},
+        stringstyle=\color[rgb]{0.627,0.126,0.941},
+        numberstyle=\color[rgb]{0.205, 0.142, 0.73},
+%        \lstdefinestyle{C++}{language=C++,style=numbers}’.
+}
+\usepackage{enumitem}
 
 \begin{document}
 
@@ -40,15 +69,18 @@
 \chapter{Introduction}
 \label{chapter:intro}
 
-The application is a digital synthesizer built within the JUCE framework. It can be used as a VST3 plugin or as a standalone application. This digital synthesizer can be used with live MIDI input and produces audio output. The digital synthesizer can support additive and subtractive synthesis with the basic waveforms. The post processing effects included are LFO, Envelope, and Filters. The aim is to create an entry level commercial level product which can be by professional music producers and composers.
+The application is a digital synthesizer built within the JUCE framework. It is packaged both as a VST3 plugin and as a standalone application. This digital synthesizer can be used with live MIDI input and produces audio output. The digital synthesizer can support additive and subtractive synthesis with the basic waveforms. The post processing effects included are LFO, Envelope, and Filters. The aim is to create an entry level commercial level product which can be utilized by professional music producers and composers.
 
 This digital synthesizer application allows for flexible customization of the synthesizer sound with flexible usage and integration into an existing workflow within a Digital Audio Workstation. It is also possible to use the digital synthesizer application as a standalone as well.
 
 
 
-\begin{center}
+\begin{figure}
+\centering
 \includegraphics[width=36em]{OverallScreenshot.png}
-\end{center}
+    \caption{Standalone application interface}
+    \label{fig:standaloneapplicationinterface}
+\end{figure}
 
 \chapter{Background}
 \label{chapter:background}
@@ -68,7 +100,7 @@ In colloquial usage, when one refers to the loudness of a jet-plane engine as +8
 
 \subsection{Decibels in Digital Synthesis and Audio Engineering}
 \label{subsec:decibelindigitalsynthesis}
-In contrast to the colloquial usage of decibels, within audio engineering, the decibel value used is called the Decibels Relative to Overload.  In this variant, 0dB is assigned to the maximal power level that can be output by a system before clipping occurs. Clipping is the term to describe the type of distortion that occurs when a signal overshoots the maximal output. For example, a speaker representing a sound pressure of 0dB will be outputting the signal at its maximum power, and representing the sound pressure at half power would be -6dB. In hardware, safeguards are implemented at certain decibel levels to curb a signal before it clips.
+In contrast to the colloquial usage of decibels, within audio engineering, the decibel value used is called the Decibels Relative to Overload.  In this variant, 0dB is assigned to the maximal power level that can be output by a system before clipping occurs. $Clipping$ is the term to describe the type of distortion that occurs when a signal overshoots the maximal output. For example, a speaker representing a sound pressure of 0dB will be outputting the signal at its maximum power, and representing the sound pressure at half power would be -6dB. In hardware, safeguards are implemented at certain decibel levels to curb a signal before it clips.
 
 \subsection{Digital Representation of Decibels}
 \label{subsec:digitalrepdecibels}
@@ -95,7 +127,7 @@ A frequency synthesizer refers to a synthesizer with circuitry capable of genera
 
 \subsection{Direct Digital Synthesis}
 \label{subsec:directdigitalsynth}
-When designing a digital synthesizer, there is a multitude of techniques available to the designer for generating frequencies, including Phase Locked Loop, Digital-Analog Conversion, and Direct Digital Synthesis. This project approaches the problem of digital synthesis by using Direct Digital Synthesis. Direct Digital Synthesis is a technique utilized by modern frequency synthesizers. Direct Digital Synthesis utilizes a singular fixed-frequency reference clock as a stable time basis for the entire system. In contrast to the alternative Phase-Locked Loop system, where the output phase is locked directly to the phase of the input signal, Direct Digital Synthesis holds significant advantages in flexibility, the most prominent being better frequency agility. Frequency agility is defined as the capacity to switch the oscillator between different frequencies without introducing a significant delay in the signal. This advantage is offered as a result of Direct Digital Synthesis using discrete sample operations. Other advantages offered by the Direct Digital Synthesis technique include access to a broader spectrum of frequencies and finer frequency resolution. Additionally, a Direct Digital Synthesis device has the potential to have low overhead and power draw.
+When designing a digital synthesizer, there is a multitude of techniques available to the designer for generating frequencies, including Phase Locked Loop, Digital-Analog Conversion, and Direct Digital Synthesis. This project approaches the problem of digital synthesis by using Direct Digital Synthesis. Direct Digital Synthesis is a technique used by modern frequency synthesizers. Direct Digital Synthesis utilizes a singular fixed-frequency reference clock as a stable time basis for the entire system. In contrast to the alternative Phase-Locked Loop system, where the output phase is locked directly to the phase of the input signal, Direct Digital Synthesis holds significant advantages in flexibility, the most prominent being better frequency agility. Frequency agility is defined as the capacity to switch the oscillator between different frequencies without introducing a significant delay in the signal. This advantage is offered as a result of Direct Digital Synthesis using discrete sample operations. Other advantages offered by the Direct Digital Synthesis technique include access to a broader spectrum of frequencies and finer frequency resolution. Additionally, a Direct Digital Synthesis device has the potential to have low overhead and power draw.
 
 A Direct Digital Synthesis device typically consists of a few parts: a digital signal input, a phase accumulator, a phase register, a phase to amplitude converter, a digital to analog converter, and finally the reference oscillator.
 
@@ -134,7 +166,7 @@ After the Phase to Amplitude conversion, the resulting amplitude value is passed
 
 One method is to use the Fourier series approximation of a waveform. For example, the square wave can be generated via a weighted summation of harmonics of a sine wave. Starting with a fundamental sine wave at a base frequency, we add to this sine waveform each odd harmonic. A harmonic of a waveform is the waveform with a frequency at an integer multiple of the base frequency of the original waveform. The amplitude of each odd harmonic is multiplied by the reciprocal of the harmonic's frequency multiplier in relation to the base frequency.
 
-Another method is to use additive and subtractive synthesis to replicate sounds found in real life, a technique called physical modeling. For example, a piano's sound can be characterized by analyzing a spectral graph of its frequencies. Afterward, this data can be used to generate a set of base frequency multipliers and amplitude multipliers. An Additive/Subtractive synthesizer will then use this set of frequency and amplitude multiplier values to replicate the sound of the piano with high accuracy. This use of Additive and Subtractive synthesis for physical modeling is the technique used and popularized by the Yamaha synthesizers in the 1970s.
+Another method for creating new waveforms is to use additive and subtractive synthesis to replicate sounds found in real life, a technique called physical modeling. For example, a piano's sound can be characterized by analyzing a spectral graph of its frequencies. Afterward, this data can be used to generate a set of base frequency multipliers and amplitude multipliers. An Additive/Subtractive synthesizer will then use this set of frequency and amplitude multiplier values to replicate the sound of the piano with high accuracy. This use of Additive and Subtractive synthesis for physical modeling is the technique used and popularized by the Yamaha synthesizers in the 1970s.
 
 \section{LFO}
 \label{sec:lfo}
@@ -158,7 +190,7 @@ Typically, the Envelope is considered the end of the Digital Signal Generation c
 
 In the Digital Signal Processing Chain, the order of the processes within the chain is entirely flexible and typically customizable by the end-user to best fit the sound they wish to generate. Additionally, the processes can be applied either in series or in parallel, depending upon the architecture of the synthesizer and the underlying framework. Setting up the Digital Signal Processing circuits in parallel holds an advantage for normalizing audio data to avoid artifacts and peaking, the term used for when the power or amplitude audio signal overloads the design capacity of the system. However, setting up the Digital Signal Processing circuits in series can avoid significant phase-shift issues that can occur from the asynchronous nature of parallel processes. The Digital Signal Processing effect types discussed in the following pages are presented in their serial order within the application.
 
-Digital Signal Processing effects can be categorized into three primary archetypes: Frequency-Based, Time-Based, and Amplitude-Based. Digital signal processing effects within each archetype deal primarily with that domain of the digital signal; however, there are frequently overlapping. For example, a simple reverberation effect is a Time-Based effect. However, more sophisticated reverberation effects will incorporate Frequency-Based effects to create a "shimmering" capability for the reverberation. A Multiband Compressor is also a common Amplitude-Based effect that will incorporate Frequency-Based filters to selectively modulate the amplitude from different parts of the frequency spectrum.
+Digital Signal Processing effects can be categorized into three primary archetypes: Frequency-Based, Time-Based, and Amplitude-Based. Digital signal processing effects within each archetype deal primarily with that domain of the digital signal; however, these are frequently overlapping. For example, a simple reverberation effect is a Time-Based effect. However, more sophisticated reverberation effects will incorporate Frequency-Based effects to create a "shimmering" capability for the reverberation. A Multiband Compressor is also a common Amplitude-Based effect that will incorporate Frequency-Based filters to selectively modulate the amplitude from different parts of the frequency spectrum.
 
 \section{Filters}
 \label{sec:filters}
@@ -237,9 +269,9 @@ The latest release builds of the VST3 plugin can be found at \href{https://githu
 
 For the purposes of demonstration, the $FL\ Studio\ 20$ Digital Audio Workstation running on the $Windows\ 10$ operating system will be shown and referenced in the instructions.
 
-\begin{center}
-\includegraphics[width=12em]{FLStudioLogo.png}
-\end{center}
+\begin{figure} \centering
+\includegraphics[width=8em]{FLStudioLogo.png}
+    \caption{FL Studio logo}     \label{fig:FLLogo} \end{figure}
 
 \subsection{Registering the VST3 Plugin}
 \label{subsec:registeringvsti}
@@ -247,15 +279,15 @@ The first step to installing the VST3 plugin is to copy the \texttt{.vst3} file 
 
 Afterward, the user should open the $Plugin\ Manager$ via the $Options$ by going to $File\ settings$ and then clicking on the $Manage\ plugins$ button. 
 
-\begin{center}
-\includegraphics[width=32em]{ModuleRegistration.png}
-\end{center}
+\begin{figure} \centering
+\includegraphics[width=36em]{ModuleRegistration.png}
+    \caption{Module registration screen}     \label{fig:modulereg} \end{figure}
 
 After ensuring that the $Verify\ plugins$ radio button is turned on, the next step is to use the $Find\ Plugins$ button to scan the preregistered VST plugin folders for the new VST3 plugin. The window will then show the new plugin, named $Paradox\ Chains\ Synthesiser$, within the plugin list on the right panel. By selecting the star button next to the plugin name, the plugin will be added to the favorites to ensure ease of finding the plugin in the future. This last step completes the registration of the VST3 plugin within the FL Studio 20 Digital Audio Workstation.
 
-\begin{center}
+\begin{figure} \centering
 \includegraphics[width=32em]{AddPluginList.png}
-\end{center}
+    \caption{Menu for adding plugins}     \label{fig:addplugin} \end{figure}
 
 \section{Initialization and Workflow Integration}
 \label{sec:initandworkflow}
@@ -263,39 +295,38 @@ While the previous steps stated in the $Installation$ section \ref{sec:installat
 
 To add an instance of the VST3 plugin to a project, simply go to the $Add$ dropdown menu in the top left, and then select the $Paradox\ Chains\ Synthesiser$ option. This action will automatically add an instance of the VST3 plugin to the $Channel\ rack$. The $Channel\ rack$ can be accessed via $'View\ >\ Channel\ rack'$ or via the $F6$ shortcut key. By clicking on the VST3 plugin within the $Channel\ rack$, the user can access the graphical user interface of the synthesizer.
 
-\begin{center}
+\begin{figure} \centering
 \includegraphics[width=36em]{SynthesiserMainGUI.png}
-\end{center}
+    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
-\begin{multicols}{2}
+
 Each outlined portion of the graphical user interface of the VST3 plugin contains the controls which correspond to a process within the Digital Signal Processing chain. The specifics of each module will be discussed in the $Module\ Details$ section \ref{sec:moduledetails}. Controls on the main user interface can be set during a project or modified in real-time during a performance as the situation demands. The Digital Synthesis Processes will automatically read in the new parameters and adjust the sound accordingly.
 
 The full list of detailed controls, with labels and fine controls, can be accessed by advanced users via the $Browser$ panel on the left side of the screen. By using the center $Current\ project$ tab, opening up the $Generators$ listing, and then opening up the $Paradox\ Chains\ Synthesiser$ listing, the advanced user will have access to all possible MIDI values for the VST3 plugin.
 
 Clicking on any one of them will bring up a detailed rotary slider that will also display a precise value to pass to the VST3 plugin. Note, the value displayed by the Digital Audio Workstation is from a range between $0.0$ and $100.0$, corresponding to the percentage of the range of the MIDI parameter. However, as detailed within the $Module\ Details$ section \ref{sec:moduledetails}, the actual value range of the MIDI parameters will be different depending upon the parameter.
 
-\begin{center}
+\begin{figure} \centering
 \includegraphics[width=12em]{BrowserPanel.png}
-\end{center}
-\end{multicols}
+    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 
 
 
 
-\begin{center}
+\begin{figure} \centering
 \includegraphics[width=24em]{ModifyingDetailedMIDI.png}
-\end{center}
+    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 Right-clicking on any of the detailed MIDI parameters will bring up advanced user options. The $"Init\ song\ with\ this\ position"$ option will allow the advanced user to set the current value as an initialization value. The $"Edit\ events"$ option will allow the advanced user to enter a detailed MIDI event graphical editor window. The $"Create\ automation\ clip"$ option will allow the advanced user to create tracks to automate the MIDI parameter. Lastly, but certainly not least, the $"Link\ to\ controller"$ option will allow the advanced user to link the MIDI parameter, or even the entire VST3 plugin, to either a software control panel, such as FL Studio's $Patcher$, or even a hardware MIDI device.
 
-\begin{center}
+\begin{figure} \centering
 \includegraphics[width=24em]{ExtraOptions01.png}
-\end{center}
+    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
-\begin{center}
+\begin{figure} \centering
 \includegraphics[width=24em]{ExtraOptions02.png}
-\end{center}
+    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 The final step to integrating the $Paradox\ Chains\ Synthesiser$ into a workflow is to route the digital audio output to the mixer. By opening up the VST3 plugin's graphical user interface, there is an option to click on the Settings button to bring up the detailed settings window. There is a multitude of options, such as modifying the MIDI input and output ports; however, the relevant option is to change the Track Assignment in the top right corner of the window. By changing this value, the VST3 plugin will be assigned to the corresponding mixer track for further processing and routing to the final output.
 
@@ -305,57 +336,57 @@ The final step to integrating the $Paradox\ Chains\ Synthesiser$ into a workflow
 \label{subsec:mainosc}
 The $Main\ Oscillator$ module controls the primary oscillator. This oscillator is the one which will play at full volume. The dropdown menu allows for the user to control which waveform should be generated by the primary oscillator.
 
-\begin{center}
-\includegraphics[width=12em]{MainOscScreenshot.png}
-\end{center}
+\begin{figure} \centering
+\includegraphics[width=8em]{MainOscScreenshot.png}
+    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 \subsection{Additive Oscillator}
 \label{subsec:addosc}
 The $Additive\ Oscillator$ module controls the secondary oscillator. This oscillator will generate a waveform which will be combined with the primary waveform via additive synthesis. The dropdown menu allows for the user to control which waveform should be generated by the secondary oscillator. The slider controls the mix amount of the secondary waveform to be used for additive synthesis.
 
-\begin{center}
-\includegraphics[width=12em]{AddOscScreenshot.png}
-\end{center}
+\begin{figure} \centering
+\includegraphics[width=8em]{AddOscScreenshot.png}
+    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 \subsection{Subtractive Oscillator}
 \label{subsec:subosc}
 The $Subtractive\ Oscillator$ module controls the tertiary oscillator. This oscillator will generate a waveform which will be combined with the primary waveform via subtractive synthesis. The dropdown menu allows for the user to control which waveform should be generated by the tertiary oscillator. The slider controls the mix amount of the tertiary waveform to be used for subtractive synthesis.
 
-\begin{center}
-\includegraphics[width=12em]{SubOscScreenshot.png}
-\end{center}
+\begin{figure} \centering
+\includegraphics[width=8em]{SubOscScreenshot.png}
+    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 \subsection{Low Frequency Oscillator}
 \label{subsec:lfo}
 The $Low\ Frequency\ Oscillator$ module controls the oscillator which generates the waveform controlling the amplitude modulation. The dropdown menu allows for the user to control whether or not the LFO amplitude modulation should be turned $On$ or $Off$. The left radial dial controls the frequency of the waveform generated by the oscillator. The right radial dial controls the amplitude of the waveform generated by the oscillator.
 
-\begin{center}
-\includegraphics[width=12em]{LFOScreenshot.png}
-\end{center}
+\begin{figure} \centering
+\includegraphics[width=8em]{LFOScreenshot.png}
+    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 \subsection{Filter}
 \label{subsec:filter}
 The $Filter$ module controls the filter module which performs post processing filtering on the resulting signal from the three oscillators. The dropdown menu allows for the user to control which filter type is applied. The options available are $Low\ Pass$, $High\ Pass$, and $Band\ Pass$, each corresponding to their respective filter types. The left radial dial controls the cutoff frequency of the applied filter. The right radial dial controls the resonance of the applied filter.
 
-\begin{center}
-\includegraphics[width=12em]{FilterScreenshot.png}
-\end{center}
+\begin{figure} \centering
+\includegraphics[width=8em]{FilterScreenshot.png}
+    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 \subsection{Envelope}
 \label{subsec:env}
 The $Envelope$ module controls the envelope controlled amplitude modulation. This is applied to the generated signal from the combined output of the three oscillators. The four sliders are labeled with $A$, $D$, $S$, and $R$, corresponding to the $Attack$, $Decay$, $Sustain$, and $Release$ values of the envelope.
 
-\begin{center}
-\includegraphics[width=12em]{EnvelopeScreenshot.png}
-\end{center}
+\begin{figure} \centering
+\includegraphics[width=8em]{EnvelopeScreenshot.png}
+    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 \subsection{Main}
 \label{subsec:main}
 The $Main$ module controls the Master volume of the application along with pitch bend. The slider labeled with $Master$ controls the master volume, which is the final post processing step in the signal chain. The two sliders below the $PB Up/Down$ label control the pitch bend up and pitch bend down respectively.
 
-\begin{center}
-\includegraphics[width=12em]{MainControlScreenshot.png}
-\end{center}
+\begin{figure} \centering
+\includegraphics[width=8em]{MainControlScreenshot.png}
+    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 
 \chapter{Developer Documentation}
@@ -363,7 +394,7 @@ The $Main$ module controls the Master volume of the application along with pitch
 
 \section{Prerequisites}
 \label{sec:prereq}
-Before developing the code, the developer must have access to a few necessary tools.
+Before writing the code, the developer must have access to a few necessary tools.
 \begin{itemize}
 \item The Project Source Code, available from Github.
 \item The JUCE C++ Application Framework
@@ -384,9 +415,9 @@ The JUCE framework is required for the project as it provides the base framework
 \label{subsec:vst3standard}
 The JUCE framework's main strength is the robust support for working with the VST3 SDK. This acronym stands for the Virtual Studio Technology audio plugin interface developed by Steinberg Media Technologies. 
 
-\begin{center}
+\begin{figure} \centering
 \includegraphics[width=16em]{VST3Logo.png}
-\end{center}
+    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 VST Plugins are designed to work in conjunction with a Digital Audio Workstation, or with a similar standalone wrapper application providing the same functionality. VST Plugins are generally categorized into two categories: Generators and Effects. A subcategory of the Effects category exists for the sole purpose of visualization and data representation called Visualizers. VST Plugins typically have an integrated graphical user interface for ease of use, presenting the End-User with controls that mimic their physical equivalents on audio hardware. However, many VST plugins have controls for advanced users that do not have a graphical user interface and rely on the host application or Digital Audio Workstation for the user interface.
 
@@ -410,7 +441,7 @@ The \texttt{AudioProcessor} also contains an array of \texttt{SynthesiserVoice}.
 \label{sec:devflow}
 While development can follow the flow of the process, it is not intuitive to develop in this manner. To develop the \texttt{AudioProcessor} first would require a complete understanding of which control and state values would be required for each synthesizer component.
 
-First, the developer must develop the functions for handling the MIDI buffer first and the corresponding synthesizer functions. The audio buffer functions must also be developed afterward to handle the output correctly.
+First, the developer must implement the functions for handling the MIDI buffer first and the corresponding synthesizer functions. The audio buffer functions must also be developed afterward to handle the output correctly.
 
 Then at this point, the synthesizer components can be created. After this, developing the \texttt{AudioProcessor} to manage the control and state values is much more straightforward. From here, it is advised to develop the graphical user interface for the new synthesizer component, which will connect to the \texttt{AudioProcessor}, and then finally adding it to the \texttt{AudioProcessorEditor}.
 
@@ -422,7 +453,8 @@ The following section will walk through the development flow as described and pr
 \label{sec:initializesynthesizer}
 The first step is to set up the \texttt{Synthesiser} controlled by the \texttt{AudioProcessor}. It is sufficient to declare the \texttt{Synthesiser} within the private members and allow it to use its default constructor. 
 Within the constructor of the \texttt{AudioProcessor}, we then create a loop that will add new instances of the \texttt{SynthesiserVoice} class and new instances of the \texttt{SynthesiserSound} class to the \texttt{Synthesiser}. The following is the code snippet that performs this action.
-\begin{lstlisting}[caption={Instantiating Voices},label={code:instantiatingvoices},captionpos=b]
+
+ \noindent\begin{minipage}{\linewidth} \begin{lstlisting}[caption={Instantiating Voices},label={code:instantiatingvoices},captionpos=b]
 mySynth.clearVoices();
     
 for (int i = 0; i < 5; i++)
@@ -432,28 +464,37 @@ for (int i = 0; i < 5; i++)
 mySynth.clearSounds();
 mySynth.addSound(new SynthSound());
 \end{lstlisting}
+\end{minipage}
+
 The \texttt{clearVoices} and \texttt{clearSounds} methods ensure that we are starting with a fresh \texttt{Synthesiser}.
 
 \section{Handling the MIDI and Audio Buffers}
 \label{sec:handlingbuffers}
 There are two parts to the handling of MIDI input and audio output. The \texttt{AudioProcessor} must implement a \texttt{processBlock} function. This function is called by the framework at every tick of the program, and is passed the references to the \texttt{AudioSampleBuffer} and the \texttt{MidiBuffer}. The following is the declaration required for this function:
-\begin{lstlisting}[caption={processBlock Declaration},label={code:processblockdeclaration},captionpos=b]
+
+ \noindent\begin{minipage}{\linewidth} \begin{lstlisting}[caption={processBlock Declaration},label={code:processblockdeclaration},captionpos=b]
 void JuceSynthFrameworkAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
-\end{lstlisting}
+\end{lstlisting} \end{minipage}
+
 Within the \texttt{processBlock} function, the developer may choose to implement any sort of system-wide functionality that must occur in real-time. One of these functionalities is the retrieval of control and state values from the \texttt{AudioProcessorValueTreeState}, which will be discussed in detail in subsection \ref{subsec:apvt}.
 
 The first step is to ensure that a call is made to the \texttt{renderNextBlock} method of each \texttt{SynthesiserVoice} that was added to the \texttt{Synthesiser}. These calls are done within a loop that iterates through each \texttt{SynthesiserVoice}. The function call is as follows: 
-\begin{lstlisting}[caption={renderNextBlock Function Call},label={code:rendernextblockfunccall},captionpos=b]
+
+ \noindent\begin{minipage}{\linewidth} \begin{lstlisting}[caption={renderNextBlock Function Call},label={code:rendernextblockfunccall},captionpos=b]
 mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-\end{lstlisting}
+\end{lstlisting} \end{minipage}
+
 Within the \texttt{renderNextBlock} function call, the audio buffer and MIDI buffer are both passed in by reference, followed by the index of the starting sample and the index of the last sample.
 
 Within the \texttt{SynthesiserVoice} derived class we must implement an override on the \texttt{renderNextBlock} method. The function declaration is as follows:
-\begin{lstlisting}[caption={renderNextBlock() Override},label={code:rendernextblockoverride},captionpos=b]
+
+ \noindent\begin{minipage}{\linewidth} \begin{lstlisting}[caption={renderNextBlock() Override},label={code:rendernextblockoverride},captionpos=b]
 void renderNextBlock(AudioBuffer <float>& outputBuffer, int startSample, int numSamples) override
-\end{lstlisting}
+\end{lstlisting} \end{minipage}
+
 This method must accomplish the task of rendering and adding the audio output sample values to the provided \texttt{AudioBuffer}. The code within this consists of two nested loops, one which iterates through each sample of the \texttt{AudioBuffer}, and the other which iterates through each audio channel that needs a sample. Within the loops we call an \texttt{AudioBuffer} method, \texttt{addSample}, to add the new sample to the \texttt{AudioBuffer}. The code snippet is as follows:
-\begin{lstlisting}[caption={addSample()},label={code:addsample},captionpos=b]
+
+ \noindent\begin{minipage}{\linewidth} \begin{lstlisting}[caption={addSample()},label={code:addsample},captionpos=b]
 for (int sample = 0; sample < numSamples; ++sample)
 {
     for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
@@ -462,29 +503,30 @@ for (int sample = 0; sample < numSamples; ++sample)
     }
     ++startSample;
 }
-\end{lstlisting}
+\end{lstlisting} \end{minipage}
+
 The first argument is the channel index, the second argument is the sample index, and the last argument is the value to be written. To keep the code readable and maintainable, the value to be written is provided by the function \texttt{giveSample}. 
 
 In addition to the \texttt{renderNextBlock} method, additional methods are required in order to process the relevant MIDI event messages passed in from the MIDI buffer. The \texttt{startNote} and \texttt{stopNote} methods of the \texttt{SynthesiserVoice} class must be overridden by the developer. The \texttt{startNote} method is called whenever the $noteOn$ MIDI event is encountered within the MIDI buffer while the \texttt{stopNote} method is called whenever the $noteOff$ MIDI event is encountered in the MIDI buffer.	
 
 The \texttt{startNote} method must perform any function required whenever a new note is started. The \texttt{trigger} value of the \texttt{envelope} component, described in subsection \ref{subsec:amenv}, is set to the value of $1$ to indicate the start of the $Attack$ phase. The position of the pitch wheel, a general MIDI hardware component, is then passed to the function \texttt{setPitchBend} to set the \texttt{pitchBend} value. The \texttt{midiNoteNumber} is then converted to the corresponding frequency value in Hz and stored as the \texttt{frequency} value which will be used by the \texttt{oscillator} components, as described in subsection \ref{subsec:waveformosc}. Finally, the \texttt{velocity} value from the MIDI event instruction is stored into the \texttt{level} value. The following is the code snippet for the \texttt{startNote} method:
 
-\begin{lstlisting}[caption={startNote()},label={code:startnote},captionpos=b]
+ \noindent\begin{minipage}{\linewidth} \begin{lstlisting}[caption={startNote()},label={code:startnote},captionpos=b]
 noteNumber = midiNoteNumber;
 envelope01.trigger = 1;
 setPitchBend(currentPitchWheelPosition);
 frequency = noteHz(noteNumber, pitchBendCents());
 level = velocity;
-\end{lstlisting}
+\end{lstlisting} \end{minipage}
 
 The \texttt{stopNote} method must perform all functions required whenever the current note is ended. The \texttt{trigger} value of the \texttt{envelope} component is set to $0$ to indicate the start of the $Release$ phase. The \texttt{allowTailOff} value is set to \texttt{true} to indicate to the $JUCE$ framework that the release tail should be allowed to persist in the audio output buffer. Finally, after the \texttt{velocity} value is equivalent to $0$, then the \texttt{clearCurrentNote} method is called which ensures that the current note is cleared from the instructions received from the MIDI buffer. The following code snippet is the instructions involved within the \texttt{stopNote} method:
 
-\begin{lstlisting}[caption={stopNote()},label={code:stopnote},captionpos=b]
+ \noindent\begin{minipage}{\linewidth} \begin{lstlisting}[caption={stopNote()},label={code:stopnote},captionpos=b]
 envelope01.trigger = 0;
 allowTailOff = true;
 if (velocity == 0)
     clearCurrentNote();
-\end{lstlisting}
+\end{lstlisting} \end{minipage}
 
 
 \section{The Digital Synthesis Components}
@@ -508,7 +550,8 @@ With the $Phase\ Accumulator$ completed, the next step is to create the $Phase-t
 The \texttt{sine} function operates using a $Waveform\ Lookup\ Table$ in order to bypass incurring the repeated computation cost of sine calculations. A precalculated wavetable, \texttt{double sineWaveTable[ ]} is stored within the CPP file. This array contains a predetermined number of precalculated values representing values of one cycle of the primitive sine function with an amplitude of $1$. The size of the wavetable is 4800 values. This number, $4800$, is calculated by dividing the highest possible sampling rate for $PCM WAV$ encoding, $98,000Hz$, by the lowest audible frequency, $20Hz$. While a lower number of precalculated values may be sufficient, some systems use a wavetable with as few precalculated values like 128, having a larger wavetable size ensures for much higher accuracy with less reliance on interpolative accuracy. Additionally, the extra overhead incurred by the memory allocated for a larger array of \texttt{double} values is negligible by the standard of modern computing hardware and is typically not a limiting factor.
 
 The \texttt{sine} function first checks the \texttt{phase} value to ensure that it is within the bounds of the wavetable size. If the \texttt{phase} value is not within these bounds, then modulus mathematics is applied to the \texttt{phase} value to shift it to a value within those bounds. This \texttt{phase} value, as calculated by the \texttt{iteratePhase} method, serves as the access index of the wavetable. As this access index typically will not fall on an integer value, but rather some real number index, the value can not be simply accessed from the wavetable. Instead, the $floor$ of the \texttt{phase} value is calculated and four values are accessed. These values are the value at the floored index, the value immediately following that position, and the two values immediately preceding that position. With these four values, a $4-Point Polynomial Interpolation$ algorithm is used to calculate the final value. The following is the code for the $4-Point Polynomial Interpolation$ algorithm.
-\begin{lstlisting}[caption={4-Point Polynomial Interpolation implementation},label={code:4ptpolyinterpolation},captionpos=b]
+
+ \noindent\begin{minipage}{\linewidth} \begin{lstlisting}[caption={4-Point Polynomial Interpolation implementation},label={code:4ptpolyinterpolation},captionpos=b]
 decimalPlaces = phase - floor(phase);
 a = sineWaveTable[(long)phase - 1];
 b = sineWaveTable[(long)phase];
@@ -518,33 +561,37 @@ x = 0.5f * (c - a);
 y = a - 2.5f * b + 2.0f * c - 0.5f * d;
 z = 0.5f * (d - a) + 1.5f * (b - c);
 outputValue = double(((z * decimalPlaces + y) * decimalPlaces + x) * decimalPlaces + b);
-\end{lstlisting}
+\end{lstlisting} \end{minipage}
+
 The final \texttt{outputValue} is then returned from the function, which will be used for further Digital Signal Processing.
 
 Since the calculation of values for the Saw, Square, and Triangle waveforms involve only elementary addition, subtraction, multiplication, and division, the cost of repeated calculations is far cheaper than repeated sine calculations. For this reason, the $Phase-to-Amplitude\ Converter$ functions for these waveforms are implemented as $Waveform Functions$.
 
 The \texttt{square} function contains a conditional block which will set the \texttt{outputValue} to either $-1.0$ or $1.0$ depending on the current \texttt{phase} value. It will also perform modulus mathematics to ensure that the \texttt{phase} value is within the value range. Below is the core code block of the \texttt{square} function:
-\begin{lstlisting}[caption={square()},label={code:square},captionpos=b]
+
+ \noindent\begin{minipage}{\linewidth} \begin{lstlisting}[caption={square()},label={code:square},captionpos=b]
 if (phase < 0.5 * waveTableSize)
     outputValue = -1.0;
 else if (phase >= 0.5 * waveTableSize)
     outputValue = 1.0;
 if (phase >= waveTableSize)
     phase -= waveTableSize;
-\end{lstlisting}
+\end{lstlisting} \end{minipage}
 
 The \texttt{triangle} function involves a conditional block controlling the linear transformation of the \texttt{phase} value to the \texttt{outputValue}.  As with the previous functions, modulus mathematics is also performed on the \texttt{phase} value to ensure it remains within the valid range. The following is the main logic block of the \texttt{triangle} function:
-\begin{lstlisting}[caption={triangle()},label={code:triangle},captionpos=b]
+
+ \noindent\begin{minipage}{\linewidth} \begin{lstlisting}[caption={triangle()},label={code:triangle},captionpos=b]
 if (phase <= 0.5 * waveTableSize)
     outputValue = ((phase - (0.25 * waveTableSize)) * 4)/waveTableSize;
 else
     outputValue = (((waveTableSize - phase) - (0.25 * waveTableSize)) * 4)/waveTableSize;
-\end{lstlisting}
+\end{lstlisting} \end{minipage}
 
 Lastly, the \texttt{saw} function is the simplest of the $Waveform\ Functions$, involving a linear transformation of the \texttt{phase} value to the \texttt{outputValue}. The modulus arithmetic is present within this function in the same manner as the previous $Waveform\ Functions$. The logic block of the \texttt{saw} function is accomplished by this single line:
-\begin{lstlisting}[caption={saw()},label={code:saw},captionpos=b]
+
+ \noindent\begin{minipage}{\linewidth} \begin{lstlisting}[caption={saw()},label={code:saw},captionpos=b]
 outputValue = phase/waveTableSize;
-\end{lstlisting}
+\end{lstlisting} \end{minipage}
 
 The \texttt{outputValue} returned from the $Phase-to-Amplitude\ Converter$ functions is sent from the \texttt{oscillator} class to the other Digital Signal Processing components. For each of the components, they all follow a similar input/output format. Each of the components take a \texttt{sample} value as a parameter, and return a \texttt{double} as their output. The \texttt{sample} value represents the output sample value from the previous component, and the returned \texttt{double} value corresponds to the processed output of the signal. Within this VST3 Plugin, the signal is routed from the \texttt{oscillator} component to the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$.
 
@@ -553,11 +600,12 @@ The \texttt{outputValue} returned from the $Phase-to-Amplitude\ Converter$ funct
 The $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ acts similarly to an amplitude envelope on the signal. The main difference is that the amplitude modulation is not based on ADSR phases, as described previously in subsection \ref{subsec:adsr}, but based on the output values of an oscillator. Typically the output values of the oscillator are used as multipliers on the sample values from the input signal. In order to avoid silence at the nodes of the oscillator, the modulated signal is mixed back in with the dry signal to create the final output signal.
 
 The main logic block of the code is as follows:
-\begin{lstlisting}[caption={LFO Mix},label={code:addsample},captionpos=b]
+
+ \noindent\begin{minipage}{\linewidth} \begin{lstlisting}[caption={LFO Mix},label={code:addsample},captionpos=b]
 sampleMix = sample * (1 - lfoMixLevel01);
 lfoMix = sample * lfo01.sine(lfoFrequency01) * lfoMixLevel01;
 newSample = sampleMix + lfoMix;
-\end{lstlisting}
+\end{lstlisting} \end{minipage}
 
 The parameters that the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ uses are \texttt{lfoSwitch}, \texttt{lfoFreq}, and \texttt{lfoBlend}. These three parameters are passed in by the \texttt{AudioProcessorValueTreeState}, which will be discussed in subsection \ref{subsec:apvt}. The \texttt{lfoSwitch} parameter controls whether or not the $Low-Frequency\ Oscillator\ Controlled\ Amplitude\ Modulator$ will be bypassed or not. The \texttt{lfoFreq} parameter is assigned to the \texttt{lfoFrequency01} variable and controls the frequency of the Low-Frequency Oscillator. And finally, the \texttt{lfoBlend} parameter is assigned to the \texttt{lfoMixLevel01} variable which controls the final mix.
 
@@ -575,7 +623,8 @@ One of the first crucial steps is to build the \texttt{AudioProcessorValueTreeSt
 
 The \texttt{AudioProcessorValueTreeState} is declared within the header file, and is initialized in the constructor list of the \texttt{AudioProcessor}. The following code block is an example of initializing the filter parameters:
 
-\begin{lstlisting}[caption={Initializing Filter Parameters},label={code:initfilterparam},captionpos=b]
+
+ \noindent\begin{minipage}{\linewidth} \begin{lstlisting}[caption={Initializing Filter Parameters},label={code:initfilterparam},captionpos=b]
 tree(*this, nullptr, "PARAMETERS",
         {   
             //Filter Parameters
@@ -586,7 +635,7 @@ tree(*this, nullptr, "PARAMETERS",
             std::make_unique<AudioParameterFloat>("filterCutoff", "FilterCutoff", NormalisableRange<float>(20.0f, 10000.0f), 400.0f),
             std::make_unique<AudioParameterFloat>("filterRes", "FilterRes", NormalisableRange<float>(1.0f, 5.0f), 1.0f),
         })
-\end{lstlisting}
+\end{lstlisting} \end{minipage}
 
 This block will initialize the specified MIDI control value and state values that the VST3 plugin will need to make accessible to the Digital Audio Workstation. Any state value that will only be used and modified internally does not need to be added to the \texttt{AudioProcessorValueTreeState} object.
 
@@ -634,7 +683,7 @@ Each of the other waveform function generators also have their respective value 
 \label{chapter:results}
 The project was successful and performs not only to my original spec, but even surpassed it as I was able to include more features than originally intended. The current application is capable of working with live MIDI input to produce synthesized sounds with the basic Sine, Square, Triangle, and Saw waveforms. Additionally, I was able to add Envelope, Filters, LFO, and Delay functionality to the synthesizer, allowing for far more customization of the synth and a much more professional sounding result. 
 
-The result matched my expectations for an entry-level digital synthesis plugin. As an music producer myself, I was able to achieve a customized sound from my digital synthesis plugin, and I was capable of creating an entire workflow built solely around instances of this digital synthesis plugin.
+The result matched my expectations for an entry-level digital synthesis plugin. As a music producer myself, I was able to achieve a customized sound from my digital synthesis plugin, and I was capable of creating an entire workflow built solely around instances of this digital synthesis plugin.
 
 Additional work can be done in the future to further expand the capabilities of the digital synthesizer. Frequency Modulation and Low Frequency Oscillator controlled Frequency Modulation can both be added for a more 21st century sound and the capability to create dubstep synths. A visualizer can be added to display the output waveform to allow the user to better understand the sound being generated and how it is being modified.
 % \chapter{Appendix}
@@ -643,10 +692,10 @@ Additional work can be done in the future to further expand the capabilities of 
 \bibitem{v} Somebody, something.
 \end{thebibliography}
 
-% \cleardoublepage
+\cleardoublepage
 % % \phantomsection
 % % \addcontentsline{toc}{chapter}{\listfigurename}
-% \listoffigures
+\listoffigures
 \cleardoublepage
 % \phantomsection
 \addcontentsline{toc}{chapter}{List of Codes}
