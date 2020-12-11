@@ -69,18 +69,12 @@ backgroundcolor=\color{lbcolor},
 \chapter{Introduction}
 \label{chapter:intro}
 
-The application is a digital synthesizer built within the JUCE framework. It is packaged both as a VST3 plugin and as a standalone application. This digital synthesizer can be used with live MIDI input and produces audio output. The digital synthesizer can support additive and subtractive synthesis with the basic waveforms. The post processing effects included are LFO, Envelope, and Filters. The aim is to create an entry level commercial level product which can be utilized by professional music producers and composers.
+The application is a digital synthesizer built within the JUCE framework. It is packaged both as a VST3 plugin and as a standalone application. This digital synthesizer can be used with live MIDI input and produces audio output via ASIO. The digital synthesizer can support additive and subtractive synthesis with the basic waveforms. The post processing effects included are LFO, Envelope, and Filters. The aim is to create an entry level commercial level product which can be utilized by professional music producers and composers.
 
 This digital synthesizer application allows for flexible customization of the synthesizer sound with flexible usage and integration into an existing workflow within a Digital Audio Workstation. It is also possible to use the digital synthesizer application as a standalone as well.
 
+The chapters are as follows: \emph{Background} (chapter \ref{chapter:background}) will cover the theoretical background necessary for developing and using the application, the \emph{User Documentation} (chapter \ref{chapter:userdoc}) will cover the user of the plugin within the FL Studio DAW, and finally the \emph{Developer Documentation} (chapter \ref{chapter:devdocs}) will cover the necessary knowledge for implementing the code with the JUCE framework.
 
-
-\begin{figure}
-\centering
-\includegraphics[width=36em]{OverallScreenshot.png}
-    \caption{Standalone application interface}
-    \label{fig:standaloneapplicationinterface}
-\end{figure}
 
 \chapter{Background}
 \label{chapter:background}
@@ -90,13 +84,27 @@ Before we delve into the background for Digital Synthesis and Digital Signal Pro
 
 \subsection{Waveform}
 \label{subsec:waveform}
-We start with the basic building block of sound, the waveform. A Waveform is an abstract way of representing a sound. Typically a waveform is visualized on the Time Domain with Amplitude as the range containing a single cycle of a waveform. Time Domain of a waveform is typically represented in seconds. The Amplitude range, on the other hand, can be represented in many different units. The most common unit used is the decibel (dB). 
+We start with the basic building block of sound, the waveform. A Waveform is an abstract way of representing a sound. Typically a waveform is visualized on the Time Domain with Amplitude as the range containing a single cycle of a waveform. Time Domain of a waveform is typically represented in seconds. The Amplitude range, on the other hand, can be represented in many different units. The most common unit used is the decibel (dB). A sample waveform representation with correspondence to sound pressure is illustrated by figure \ref{fig:particledisplacementsoundpressure}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=32em]{ParticleDisplacement-SoundPressure-Node-Antinode.jpg}
+    \caption{Sound pressure and particle displacement}
+    \label{fig:particledisplacementsoundpressure}
+\end{figure}
 
 \subsection{Decibel}
 \label{subsec:decibel}
 A decibel is a relative unit of measurement representing the ratio of the value of a power quantity to another. For example, if $x$ represents the ratio of the power quantity of one system to another system, then the decibels can be calculated via $10 log_10 x$. Since the decibel is a relative unit, it is always essential to establish what the reference measure of power is. 
 
-In colloquial usage, when one refers to the loudness of a jet-plane engine as +80dB, this is in reference to the lower threshold of sound pressure that is perceivable to the human hearing system. In the case that a waveform is referencing the lower threshold of human hearing, then the range is typically visualized with "0" of the range as 0dB and the values above the horizontal axis going up in decibel value and values below the horizontal axis going down in decibel value. A negative value is representative of the vibration of a membrane, such as an eardrum, in reaction to negative sound pressure. 
+In colloquial usage, when one refers to the loudness of a jet-plane engine as +80dB, this is in reference to the lower threshold of sound pressure that is perceivable to the human hearing system. In the case that a waveform is referencing the lower threshold of human hearing, then the range is typically visualized with "0" of the range as 0dB and the values above the horizontal axis going up in decibel value and values below the horizontal axis going down in decibel value. A negative value is representative of the vibration of a membrane, such as an eardrum, in reaction to negative sound pressure. This is illustrated in figure \ref{fig:decibelsscale}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=36em]{DecibelsScale.png}
+    \caption{Decibels scale with typical comparisons}
+    \label{fig:decibelsscale}
+\end{figure}
 
 \subsection{Decibels in Digital Synthesis and Audio Engineering}
 \label{subsec:decibelindigitalsynthesis}
@@ -116,8 +124,14 @@ Frequency refers to the rate at which a sound repeats a single cycle of its peri
 \label{subsec:freqspect}
 The graphical representation of the Frequency Domain of a sound is usually referred to as the $Frequency\ Spectrum$ or the $Spectral\ Graph$. These graphical representations will typically represent frequencies between 20Hz and 20kHz, with amplitudes from 0dB to -$\infty$dB. The varying values of the Frequency Spectrum of any waveform control the timbre, or sonic characteristics, of the resulting sound.
 
-A variation on the Frequency Spectrum that is used in digital audio synthesis is the $Harmonics\ Graph$. The Harmonics Graph also represents the Frequency Domain of a waveform. However, the domain represents values from 0 to $\infty$. These do not represent any specific frequencies; instead, the values in the domain represent multipliers of a base frequency. Integer multiplier values are referred to as the $harmonics$ of a sound. A Harmonics Graph represents the unique character of a specific sound-producing object, such as a person's vocals chords, regardless of the frequency of the sound being produced. Harmonics Graphs are commonly used for physical modeling of instruments, which is then later used in reconstructing that sound in Digital Synthesis with the weighted summation of primitive sine waves.
+A variation on the Frequency Spectrum that is used in digital audio synthesis is the $Harmonics\ Graph$. The Harmonics Graph also represents the Frequency Domain of a waveform. However, the domain represents values from 0 to $\infty$. These do not represent any specific frequencies; instead, the values in the domain represent multipliers of a base frequency. Integer multiplier values are referred to as the $harmonics$ of a sound. A Harmonics Graph represents the unique character of a specific sound-producing object, such as a person's vocals chords, regardless of the frequency of the sound being produced. Harmonics Graphs are commonly used for physical modeling of instruments, which is then later used in reconstructing that sound in Digital Synthesis with the weighted summation of primitive sine waves. An example of a harmonics graph, in this case of a cello, is shown in figure \ref{fig:CelloHarmonicsGraph}.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=12em]{CelloHarmonicsGraph.png}
+    \caption{Harmonics graph of a cello}
+    \label{fig:CelloHarmonicsGraph}
+\end{figure}
 
 \section{Digital Synthesis}
 \label{subsec:digitalsynth}
@@ -129,7 +143,14 @@ A frequency synthesizer refers to a synthesizer with circuitry capable of genera
 \label{subsec:directdigitalsynth}
 When designing a digital synthesizer, there is a multitude of techniques available to the designer for generating frequencies, including Phase Locked Loop, Digital-Analog Conversion, and Direct Digital Synthesis. This project approaches the problem of digital synthesis by using Direct Digital Synthesis. Direct Digital Synthesis is a technique used by modern frequency synthesizers. Direct Digital Synthesis utilizes a singular fixed-frequency reference clock as a stable time basis for the entire system. In contrast to the alternative Phase-Locked Loop system, where the output phase is locked directly to the phase of the input signal, Direct Digital Synthesis holds significant advantages in flexibility, the most prominent being better frequency agility. Frequency agility is defined as the capacity to switch the oscillator between different frequencies without introducing a significant delay in the signal. This advantage is offered as a result of Direct Digital Synthesis using discrete sample operations. Other advantages offered by the Direct Digital Synthesis technique include access to a broader spectrum of frequencies and finer frequency resolution. Additionally, a Direct Digital Synthesis device has the potential to have low overhead and power draw.
 
-A Direct Digital Synthesis device typically consists of a few parts: a digital signal input, a phase accumulator, a phase register, a phase to amplitude converter, a digital to analog converter, and finally the reference oscillator.
+A Direct Digital Synthesis device typically consists of a few parts: a digital signal input, a phase accumulator, a phase register, a phase to amplitude converter, a digital to analog converter, and finally the reference oscillator. This signal flow is illustrated in figure \ref{fig:dds}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=36em]{DDS.png}
+    \caption{Direct digital synthesis signal flow}
+    \label{fig:dds}
+\end{figure}
 
 \subsection{Digital Signal Input}
 \label{subsec:digitalsignalinput}
@@ -162,9 +183,23 @@ An advantage of using a Waveform Function to convert the Phase to Amplitude is t
 
 \section{Additive \& Subtractive Synthesis}
 \label{sec:addsubsynthesis}
-After the Phase to Amplitude conversion, the resulting amplitude value is passed down for Additive or Subtractive synthesis. Additive and Subtractive synthesis are exactly what their names imply; they involve the use of additive/subtractive operations between waveforms to create a new waveform. Applied in a systematic method, distinct types of waveforms can be formed.
+After the Phase to Amplitude conversion, the resulting amplitude value is passed down for Additive or Subtractive synthesis. Additive and Subtractive synthesis are exactly what their names imply; they involve the use of additive/subtractive operations between waveforms to create a new waveform. Applied in a systematic method, distinct types of waveforms can be formed. An example of this is shown in figure \ref{fig:additivesynthesis}.
 
-One method is to use the Fourier series approximation of a waveform. For example, the square wave can be generated via a weighted summation of harmonics of a sine wave. Starting with a fundamental sine wave at a base frequency, we add to this sine waveform each odd harmonic. A harmonic of a waveform is the waveform with a frequency at an integer multiple of the base frequency of the original waveform. The amplitude of each odd harmonic is multiplied by the reciprocal of the harmonic's frequency multiplier in relation to the base frequency.
+\begin{figure}
+    \centering
+    \includegraphics[width=24em]{AdditiveSynthesis.png}
+    \caption{An example of additive synthesis of basic sine waves}
+    \label{fig:additivesynthesis}
+\end{figure}
+
+One method is to use the Fourier series approximation of a waveform. For example, the square wave can be generated via a weighted summation of harmonics of a sine wave. Starting with a fundamental sine wave at a base frequency, we add to this sine waveform each odd harmonic. A harmonic of a waveform is the waveform with a frequency at an integer multiple of the base frequency of the original waveform. The amplitude of each odd harmonic is multiplied by the reciprocal of the harmonic's frequency multiplier in relation to the base frequency. This is illustrated in figure \ref{fig:AdditiveSynthesisbyHarmonics}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=24em]{AdditiveSynthesisbyHarmonics.jpg}
+    \caption{Additive synthesis of harmonic partials}
+    \label{fig:AdditiveSynthesisbyHarmonics}
+\end{figure}
 
 Another method for creating new waveforms is to use additive and subtractive synthesis to replicate sounds found in real life, a technique called physical modeling. For example, a piano's sound can be characterized by analyzing a spectral graph of its frequencies. Afterward, this data can be used to generate a set of base frequency multipliers and amplitude multipliers. An Additive/Subtractive synthesizer will then use this set of frequency and amplitude multiplier values to replicate the sound of the piano with high accuracy. This use of Additive and Subtractive synthesis for physical modeling is the technique used and popularized by the Yamaha synthesizers in the 1970s.
 
@@ -176,11 +211,25 @@ Of particular interest are the two most commonly used LFO's: the amplitude LFO a
 
 \section{Envelope}
 \label{sec:env}
-After the LFO processes the signal, it is then sent to the Envelope. An Envelope is a generalized term describing a function or set of values that control the modulation value of a certain characteristic of a digital signal. Envelopes can be applied to many different types of modulation, including amplitude modulation and frequency modulation. An envelope can also be applied to the frequency and amplitude multiplier values used within Additive and Subtractive synthesis for further refined sounds.
+After the LFO processes the signal, it is then sent to the Envelope. An Envelope is a generalized term describing a function or set of values that control the modulation value of a certain characteristic of a digital signal. Envelopes can be applied to many different types of modulation, including amplitude modulation and frequency modulation. An envelope can also be applied to the frequency and amplitude multiplier values used within Additive and Subtractive synthesis for further refined sounds. An example of a waveform with an applied envelope is shown in figure \ref{fig:ADSRWaveform}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=36em]{ADSRWaveform.png}
+    \caption{Sawtooth waveform with an applied amplitude modulation envelope}
+    \label{fig:ADSRWaveform}
+\end{figure}
 
 \subsection{ADSR}
 \label{subsec:adsr}
-The majority of digital synthesizers employ an Amplitude Modulation Envelope. These types of envelopes focus on modifying the amplitude of the sound over time, producing unique characteristics in sound, which can cause a synthesizer to produce the sound of a guitar vs. a violin. The simplest and most widely used envelope type is the ADSR envelope. ADSR stands for Attack-Decay-Sustain-Release, as these are the four parameters that the Envelope modifies.
+The majority of digital synthesizers employ an Amplitude Modulation Envelope. These types of envelopes focus on modifying the amplitude of the sound over time, producing unique characteristics in sound, which can cause a synthesizer to produce the sound of a guitar vs. a violin. The simplest and most widely used envelope type is the ADSR envelope. ADSR stands for Attack-Decay-Sustain-Release, as these are the four parameters that the Envelope modifies. A descriptive diagram is shown in figure \ref{fig:ADSRExplained}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=24em]{ADSRExplained.jpg}
+    \caption{ADSR envelope}
+    \label{fig:ADSRExplained}
+\end{figure}
 
 The Attack phase starts from the noteOn MIDI instruction and determines the amount of time required for the amplitude of the sound to transition from silence to its full value as determined by the MIDI velocity. After the Attack phase completes, the Decay phase begins, which acts in opposition to the Attack phase by determining the amount of time required for the amplitude to decrease down to its Sustain level. The Sustain level controls what percentage of the maximum amplitude the sound should be allowed to reach for the duration of the note. And finally, upon receiving a noteOff MIDI instruction, the Release phase begins, which determines the amount of time required for the sound amplitude to decrease back to silence.
 
@@ -204,25 +253,39 @@ The Frequency-Domain Ripple factor describes the amount of periodic variation in
 
 The Roll-Off property of an audio filter design refers to the steepness of the transfer function with frequency, or in other words, the rate at which the amplitude changes with respect to frequency.  Differing audio filter designs will have different capabilities for Roll-Off, with some mathematical functions such as the Elliptic functions being capable of accomplishing much steeper Roll-Off in contrast to other mathematical functions that can only support gentle slow Roll-Off. While a Roll-Off with a steeper value can be desirable for precise audio signal filters, a Roll-Off with a gentler value can be desirable for the more natural-sounding resulting audio signal.
 
-The most common audio filter designs used are the Butterworth filter, the Chebyshev filter, and the Elliptic filter. Each of these audio filter designs has its advantages and trade-offs for each property. For example, the Butterworth filter design, also known as the maximally flat magnitude filter, holds the sole advantage over the other design types in that the Butterworth filter design has no Frequency Domain Ripple in the frequency response graph before the Roll-Off, however, the Butterworth filter design can only support slow and gentle Roll-Off with low Resonance values. By drastic contrast, the Elliptic filter design can support the steepest Roll-Off and the highest Resonance values. However, the Frequency Domain Ripple for Elliptic filters can quickly produce undesirable artifacts.
+The most common audio filter designs used are the Butterworth filter, the Chebyshev filter, and the Elliptic filter. Each of these audio filter designs has its advantages and trade-offs for each property. For example, the Butterworth filter design, also known as the maximally flat magnitude filter, holds the sole advantage over the other design types in that the Butterworth filter design has no Frequency Domain Ripple in the frequency response graph before the Roll-Off, however, the Butterworth filter design can only support slow and gentle Roll-Off with low Resonance values. By drastic contrast, the Elliptic filter design can support the steepest Roll-Off and the highest Resonance values. However, the Frequency Domain Ripple for Elliptic filters can quickly produce undesirable artifacts. Figure \ref{fig:FilterDesigns} shows typical frequency response graph of these audio filter design types.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=36em]{FilterDesigns.png}
+    \caption{Butterworth, Chebyshev, Chebyshev2, and Elliptic filter frequency response graphs}
+    \label{fig:FilterDesigns}
+\end{figure}
 
 Typically a synthesizer will be designed around whichever filter design best fits the sound design goal and hardware limitations. More sophisticated and capable synthesizers may utilize complex Audio Filters, which combine multiple filter designs to produce a hybrid design that can mitigate the disadvantages of each design. Within this project, the Butterworth filter design is used exclusively for all Audio Filter types for its ease of implementation, lack of audio artifacts, and efficiency.
 
 \subsection{Low Pass Filter}
 \label{subsec:lowpassfilter}
-A Low Pass Filter is the most commonly used variant of the Pass type filters. A Low Pass Filter will attenuate the amplitude of signals with frequencies higher a set Cutoff frequency to $-\infty$ dB and pass signals with frequencies lower than the Cutoff frequency. The resulting sound will have a "darker" or "smoother" timbre. A Low Pass filter can also be instrumental in helping remove certain high frequencies that can be too harsh for some people.
+A Low Pass Filter is the most commonly used variant of the Pass type filters. A Low Pass Filter will attenuate the amplitude of signals with frequencies higher a set Cutoff frequency to $-\infty$ dB and pass signals with frequencies lower than the Cutoff frequency. The resulting sound will have a "darker" or "smoother" timbre. A Low Pass filter can also be instrumental in helping remove certain high frequencies that can be too harsh for some people. A frequency response graph of a low pass filter can be seen in figure \ref{fig:FilterTypes}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=36em]{FilterTypes.jpg}
+    \caption{Filter types}
+    \label{fig:FilterTypes}
+\end{figure}
 
 An everyday use of a Low Pass filter within a music workflow is to apply it to a synthesizer that is being utilized as a bass synth, with the cutoff frequency set to somewhere around 100hz. In this manner, the Low Pass filter will pass through the relevant bass frequencies while filtering out the higher frequencies that may interfere with the desired frequencies of the other instruments.
 
 \subsection{High Pass Filter}
 \label{subsec:highpassfilter}
-The High Pass filter works in exact opposite to how the Low Pass filter operates. While a Low Pass filter will pass frequencies lower than the target cutoff frequency while filtering out those frequencies higher than the target cutoff frequency, the High Pass filter will do the opposite. A High Pass filter can help eliminate common low-frequency rumbles within recordings.
+The High Pass filter works in exact opposite to how the Low Pass filter operates. While a Low Pass filter will pass frequencies lower than the target cutoff frequency while filtering out those frequencies higher than the target cutoff frequency, the High Pass filter will do the opposite. A High Pass filter can help eliminate common low-frequency rumbles within recordings. A frequency response graph of a high pass filter can be seen in figure \ref{fig:FilterTypes}.
 
 High Pass filters typically are used for vocal recordings where the low-end frequencies caused by vibrations to the microphone or recording setup produce undesirable sounds. Alternatively, a High Pass filter can be used to isolate specific high-frequency instruments, a triangle, for example, so that they can be processed separately.
 
 \subsection{Band Pass Filter}
 \label{subsec:bandpassfilter}
-When a High Pass filter is combined with a Low Pass filter, a Band Pass filter is created. A Band Pass filter will filter out frequencies within a certain range of the "cutoff" frequency while passing all frequencies outside of this range. The Band Pass filter is desirable for its ability to filter out a specific set of frequencies, and with a small enough range, even remove close to one single frequency.
+When a High Pass filter is combined with a Low Pass filter, a Band Pass filter is created. A Band Pass filter will filter out frequencies within a certain range of the "cutoff" frequency while passing all frequencies outside of this range. The Band Pass filter is desirable for its ability to filter out a specific set of frequencies, and with a small enough range, even remove close to one single frequency. A frequency response graph of a band pass filter can be seen in figure \ref{fig:FilterTypes}.
 
 This functionality of the Band Pass filter is commonly used to eliminate noise and clean up synth waveforms. In recordings, it is common that a particular machine will cause noise at a specific frequency throughout the duration of the recording. By determining the frequency of this noise and filtering it with a Band Pass filter, it is possible to remove noise effectively. The Band Pass filter can help with Additive Synthesis as well, as there are many instances when two waveforms will have constructive interference at a specific frequency that may cause distortion. The Band Pass filter will help remove these distortions.
 
@@ -329,9 +392,9 @@ The final step to integrating the $Paradox\ Chains\ Synthesiser$ into a workflow
 \label{subsec:mainosc}
 The $Main\ Oscillator$ module controls the primary oscillator. This oscillator is the one which will play at full volume. The dropdown menu allows for the user to control which waveform should be generated by the primary oscillator.
 
-\begin{figure} \centering
-\includegraphics[width=8em]{MainOscScreenshot.png}
-    \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
+% \begin{figure} \centering
+% \includegraphics[width=8em]{MainOscScreenshot.png}
+%     \caption{Project folder structure}     \label{fig:folder_structure} \end{figure}
 
 \subsection{Additive Oscillator}
 \label{subsec:addosc}
