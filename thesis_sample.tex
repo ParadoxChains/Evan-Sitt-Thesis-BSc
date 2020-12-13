@@ -93,7 +93,7 @@ We start with the basic building block of sound, the waveform. A Waveform is an 
 \begin{figure}[h][h]
     \centering
     \includegraphics[width=32em]{ParticleDisplacement-SoundPressure-Node-Antinode.png}
-    \caption{Sound pressure and particle displacement}
+    \caption{Sound pressure and particle displacement \cite{standingwaves}}
     \label{fig:particledisplacementsoundpressure}
 \end{figure}
 
@@ -108,7 +108,7 @@ In colloquial usage, when one refers to the loudness of a jet-plane engine as +8
 \begin{figure}[h]
     \centering
     \includegraphics[width=36em]{DecibelsScale.png}
-    \caption{Decibels scale with typical comparisons}
+    \caption{Decibels scale with typical comparisons \cite{noiselevel}}
     \label{fig:decibelsscale}
 \end{figure}
 
@@ -137,7 +137,7 @@ A variation on the Frequency Spectrum that is used in digital audio synthesis is
 \begin{figure}[h]
     \centering
     \includegraphics[width=36em]{CelloHarmonicsGraph.png}
-    \caption{Harmonics graph of a cello}
+    \caption{Harmonics graph of a cello \cite{cellotone}}
     \label{fig:CelloHarmonicsGraph}
 \end{figure}
 
@@ -156,7 +156,7 @@ A Direct Digital Synthesis device typically consists of a few parts: a digital s
 \begin{figure}
     \centering
     \includegraphics[width=24em]{DDS.png}
-    \caption{Direct digital synthesis signal flow}
+    \caption{Direct digital synthesis signal flow \cite{allaboutdds}}
     \label{fig:dds}
 \end{figure}
 
@@ -198,7 +198,7 @@ After the Phase to Amplitude conversion, the resulting amplitude value is passed
 \begin{figure}[h]
     \centering
     \includegraphics[width=16em]{AdditiveSynthesis.png}
-    \caption{An example of additive synthesis of basic sine waves}
+    \caption{An example of additive synthesis of basic sine waves \cite{planetoftunes}}
     \label{fig:additivesynthesis}
 \end{figure}
 
@@ -207,7 +207,7 @@ One method is to use the Fourier series approximation of a waveform. For example
 \begin{figure}[h]
     \centering
     \includegraphics[width=24em]{AdditiveSynthesisbyHarmonics.jpg}
-    \caption{Additive synthesis of harmonic partials}
+    \caption{Additive synthesis of harmonic partials \cite{addsynthbasics}}
     \label{fig:AdditiveSynthesisbyHarmonics}
 \end{figure}
 
@@ -228,7 +228,7 @@ After the LFO processes the signal, it is then sent to the envelope. An envelope
 \begin{figure}[h]
     \centering
     \includegraphics[width=36em]{ADSRWaveform.png}
-    \caption{Sawtooth waveform with an applied amplitude modulation envelope}
+    \caption{Sawtooth waveform with an applied amplitude modulation envelope \cite{stm32f4}}
     \label{fig:ADSRWaveform}
 \end{figure}
 
@@ -241,7 +241,7 @@ The majority of digital synthesizers employ an Amplitude Modulation Envelope. Th
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\textwidth,height=6.8cm]{ADSRExplained.jpg}
-    \caption{ADSR envelope}
+    \caption{ADSR envelope \cite{adsrenvinfo}}
     \label{fig:ADSRExplained}
 \end{figure}
 
@@ -272,7 +272,7 @@ The most common audio filter designs used are the Butterworth filter, the Chebys
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.9\textwidth,height=9.5cm]{FilterDesigns.png}
-    \caption{Butterworth, Chebyshev, Chebyshev2, and Elliptic filter frequency response graphs}
+    \caption{Butterworth, Chebyshev, Chebyshev2, and Elliptic filter frequency response graphs \cite{linearfilter}}
     \label{fig:FilterDesigns}
 \end{figure}
 
@@ -285,7 +285,7 @@ A Low Pass Filter is the most commonly used variant of the Pass type filters. A 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.6\textwidth,height=3cm]{FilterTypes.jpg}
-    \caption{Filter types}
+    \caption{Filter types \cite{basicspassivercfilters}}
     \label{fig:FilterTypes}
 \end{figure}
 
@@ -354,7 +354,9 @@ For the purposes of demonstration, the $FL\ Studio\ 20$ Digital Audio Workstatio
 
 \begin{figure}[h] \centering
 \includegraphics[width=8em]{FLStudioLogo.png}
-    \caption{FL Studio logo}     \label{fig:FLLogo} \end{figure}
+    \caption{FL Studio logo \cite{floverview}}
+    \label{fig:FLLogo}
+\end{figure}
 
 \subsection{Registering the VST3 plugin}
 \label{subsec:registeringvsti}
@@ -491,7 +493,9 @@ The JUCE framework's main strength is the robust support for working with the VS
 
 \begin{figure}[h] \centering
 \includegraphics[width=10em]{VST3Logo.png}
-    \caption{Virtual Studio Technology logo}     \label{fig:VST3Logo} \end{figure}
+    \caption{Virtual Studio Technology logo \cite{vstwiki}}
+    \label{fig:VST3Logo}
+\end{figure}
 
 VST Plugins are designed to work in conjunction with a Digital Audio Workstation, or with a similar standalone wrapper application providing the same functionality. VST Plugins are generally categorized into two categories: Generators and Effects. A subcategory of the Effects category exists for the sole purpose of visualization and data representation called Visualizers. VST Plugins typically have an integrated graphical user interface for ease of use, presenting the End-User with controls that mimic their physical equivalents on audio hardware. However, many VST plugins have controls for advanced users that do not have a graphical user interface and rely on the host application or Digital Audio Workstation for the user interface.
 
@@ -762,9 +766,9 @@ The project was successful and performs not only to my original specifications, 
 
 The plugin allows for flexible customization of the synthesizer sounds. The combinations possible with the primary oscillator, additive secondary oscillator, and subtractive tertiary oscillator allow for sophisticated waveforms, taking the sound far past the 8-bit aesthetics of single oscillator synthesizers and into the sophistication of 1980's synthesizer aesthetics. Additionally, I was able to implement the Envelope, Filters, LFO, and Delay signal post processing functionality to the synthesizer, allowing for even more customization of the resulting synthesizer sounds. The VST3 integration into the DAW allows for deep integration into the workflow, opening up the possibility for a much more professional sounding result. 
 
-As a music producer myself, I was extremely satisfied with the final result. The plugin permitted me the level of control and flexibility achieve a customized sound from my digital synthesis plugin, and I was capable of creating an entire workflow built solely around instances of this digital synthesis plugin within FL Studio, my DAW of choice. From this workflow, I was able to easily produce music without any problems.
+As a music producer myself, I was extremely satisfied with the final result. The plugin permitted me the level of control and flexibility to achieve a customized sound from my digital synthesis plugin, and I was capable of creating an entire workflow built solely around instances of this digital synthesis plugin within FL Studio, my DAW of choice. From this workflow, I was able to easily produce music without any problems.
 
-Additional work can be done in the future to further expand the capabilities of the digital synthesizer. Frequency Modulation and Low Frequency Oscillator controlled Frequency Modulation can both be added for a more 21st century sound and the capability to create dubstep synths. A visualizer can be added to display the output waveform to allow the user to better understand the sound being generated and how it is being modified.
+Additional work can be done in the future to further expand the capabilities of the digital synthesizer. Frequency Modulation, both static envelope and low frequency oscillator controlled, could be added for a more 21st century sound and the capability to create dubstep synths. A visualizer can be added to display the output waveform to allow the user to better understand the sound being generated and how the signal post processing being applied modifies the audio.
 % \chapter{Appendix}
 
 \addcontentsline{toc}{chapter}{Bibliography}
@@ -843,6 +847,61 @@ Retrieved 15 December 2020.
 \bibitem{googletestprimer}
 GoogleTest Primer\\
 \url{https://github.com/google/googletest/blob/master/googletest/docs/primer.md}.\\
+Retrieved 15 December 2020.
+
+\bibitem{standingwaves}
+Standing Waves\\
+\url{http://230nsc1.phy-astr.gsu.edu/hbase/Waves/standw.html}.\\
+Retrieved 15 December 2020.
+
+\bibitem{noiselevel}
+Noise Level Chart: Decibel Levels of Common Sounds With Examples\\
+\url{https://boomspeaker.com/noise-level-chart-db-level-chart/}.\\
+Retrieved 15 December 2020.
+
+\bibitem{cellotone}
+Cello Tone Analysis\\
+\url{https://vobarian.com/celloanly/index.html}.\\
+Retrieved 15 December 2020.
+
+\bibitem{allaboutdds}
+All About Direct Digital Synthesis\\
+\url{https://www.analog.com/en/analog-dialogue/articles/all-about-direct-digital-synthesis.html#}.\\
+Retrieved 15 December 2020.
+
+\bibitem{addsynthbasics}
+Additive Synthesis Basics\\
+\url{https://www.youtube.com/watch?v=ZAgiC0vtc8M&ab_channel=DanHosken}.\\
+Retrieved 15 December 2020.
+
+\bibitem{adsrenvinfo}
+ADSR Envelopes: How to Build The Perfect Sound [Infographic]\\
+\url{https://blog.landr.com/adsr-envelopes-infographic/}.\\
+Retrieved 15 December 2020.
+
+\bibitem{planetoftunes}
+Planet of Tunes - Synthesis types\\
+\url{http://www.planetoftunes.com/synthesis/synthesis-types.htm}.\\
+Retrieved 15 December 2020.
+
+\bibitem{stm32f4}
+STM32F4-Discovery MIDI input and basic synthesis\\
+\url{https://minddumpdotnet.wordpress.com/2013/05/23/stm32f4-discovery-midi-input-and-basic-synthesis/}.\\
+Retrieved 15 December 2020.
+
+\bibitem{linearfilter}
+Linear filter\\
+\url{https://en.wikipedia.org/wiki/Linear_filter}.\\
+Retrieved 15 December 2020.
+
+\bibitem{basicspassivercfilters}
+What Is a Low Pass Filter? A Tutorial on the Basics of Passive RC Filters\\
+\url{https://www.allaboutcircuits.com/technical-articles/low-pass-filter-tutorial-basics-passive-RC-filter/}.\\
+Retrieved 15 December 2020.
+
+\bibitem{vstwiki}
+Virtual Studio Technology\\
+\url{https://en.wikipedia.org/wiki/Virtual_Studio_Technology}.\\
 Retrieved 15 December 2020.
 
 \end{thebibliography}
