@@ -71,7 +71,7 @@ backgroundcolor=\color{lbcolor},
 \chapter{Introduction}
 \label{chapter:intro}
 
-The application is a digital synthesizer built within the JUCE framework. It is packaged both as a VST3 plugin and as a standalone application. This digital synthesizer can be used with live MIDI input and produces audio output via ASIO. The digital synthesizer can support additive and subtractive synthesis with the basic waveforms. The post processing effects included are LFO, Envelope, and Filters. The aim is to create an entry level commercial level product which can be utilized by professional music producers and composers.
+The application is a digital synthesizer built within the JUCE framework, a C++ application framework. It is packaged both as a VST3 plugin and as a standalone application. This digital synthesizer can be used with live MIDI input and produces audio output via ASIO. The digital synthesizer can support additive and subtractive synthesis with the basic waveforms. The post processing effects included are LFO, Envelope, and Filters. The aim is to create an entry level commercial level product which can be utilized by professional music producers and composers.
 
 This digital synthesizer application allows for flexible customization of the synthesizer sound with flexible usage and integration into an existing workflow within a Digital Audio Workstation. It is also possible to use the digital synthesizer application as a standalone as well.
 
@@ -95,6 +95,8 @@ We start with the basic building block of sound, the waveform. A Waveform is an 
     \label{fig:particledisplacementsoundpressure}
 \end{figure}
 
+In the application, four waveforms are utilized: the \emph{Sine}, \emph{Sawtooth}, \emph{Square}, and \emph{Triangle} waveforms. These are explained in more detail in the \emph{User Documentation} (chapter \ref{chapter:userdoc}) and the \emph{Developer Documentation} (chapter \ref{chapter:devdocs}).
+
 \subsection{Decibel}
 \label{subsec:decibel}
 A decibel is a relative unit of measurement representing the ratio of the value of a power quantity to another. For example, if $x$ represents the ratio of the power quantity of one system to another system, then the decibels can be calculated via $10 log_10 x$. Since the decibel is a relative unit, it is always essential to establish what the reference measure of power is. 
@@ -115,6 +117,8 @@ In contrast to the colloquial usage of decibels, within audio engineering, the d
 \subsection{Digital Representation of Decibels}
 \label{subsec:digitalrepdecibels}
 Within a Digital Synthesis system, the power of a signal is represented using \texttt{float} data types. Typically, $1.0$ would represent the maximal power output, $0.0$ would represent the minimum power output, and $-1.0$ would represent the maximal power output with negative sound pressure. Sound pressure levels between maximal and minimal are represented as decimal values between $0.0$ and $1.0$. As with any floating-point value stored within a digital context, the precision of this value is highly dependent on the number of bits used to store the floating-point value. For the \texttt{PCM\ \-WAV} standard used for the majority of digital audio synthesis done on computer systems, 8-bit, 16-bit, and 32-bit floating-point values are commonly used.
+
+This concept is used continuously during development, as described in chapter \ref{chapter:devdocs} and play a crucial part in the Testing section as well, most particularly during the \emph{Value Tests} (subsection \ref{subsec:valuetests}).
 
 \subsection{Frequency Domain}
 \label{subsec:freqdomain}
@@ -153,6 +157,8 @@ A Direct Digital Synthesis device typically consists of a few parts: a digital s
     \caption{Direct digital synthesis signal flow}
     \label{fig:dds}
 \end{figure}
+
+This is particularly important during the development of the digital synthesis pieces of the application as discussed in section \ref{sec:digitalsynthesiscomponents}.
 
 \subsection{Digital Signal Input}
 \label{subsec:digitalsignalinput}
@@ -211,9 +217,11 @@ After the Additive and Subtractive synthesis processes generate a signal for the
 
 Of particular interest are the two most commonly used LFO's: the amplitude LFO and the frequency LFO. Both will modulate their respective parameters using the value from the low-frequency oscillator. An amplitude LFO will reproduce the effect of a tremolo, while the frequency LFO will, on the other hand, reproduce the effect of a vibrato. LFO's can be further controlled by processing the signal from the control oscillators in the same manner as a standard oscillator, although in general, this processing is typically limited to just an Envelope.
 
+The LFO in the digital synthesis plugin is described in the User Documentation in subsection \ref{subsec:lfo} and its implementaiton is discussed in the Developer Documentation in subsection \ref{subsec:lfcocontrolampmod}.
+
 \section{Envelope}
 \label{sec:env}
-After the LFO processes the signal, it is then sent to the Envelope. An Envelope is a generalized term describing a function or set of values that control the modulation value of a certain characteristic of a digital signal. Envelopes can be applied to many different types of modulation, including amplitude modulation and frequency modulation. An envelope can also be applied to the frequency and amplitude multiplier values used within Additive and Subtractive synthesis for further refined sounds. An example of a waveform with an applied envelope is shown in figure \ref{fig:ADSRWaveform}.
+After the LFO processes the signal, it is then sent to the envelope. An envelope is a generalized term describing a function or set of values that control the modulation value of a certain characteristic of a digital signal. Envelopes can be applied to many different types of modulation, including amplitude modulation and frequency modulation. An envelope can also be applied to the frequency and amplitude multiplier values used within additive and aubtractive synthesis for further refined sounds. An example of a waveform with an applied envelope is shown in figure \ref{fig:ADSRWaveform}.
 
 \begin{figure}
     \centering
@@ -221,6 +229,8 @@ After the LFO processes the signal, it is then sent to the Envelope. An Envelope
     \caption{Sawtooth waveform with an applied amplitude modulation envelope}
     \label{fig:ADSRWaveform}
 \end{figure}
+
+The use of the envelope module in the digital synthesis plugin is described in the User Documentation in subsection \ref{subsec:env} and its implementation is discussed in the Developer Documentation in subsection \ref{subsec:amenv}.
 
 \subsection{ADSR}
 \label{subsec:adsr}
@@ -334,7 +344,7 @@ The installation of the software is relatively straightforward and simple. This 
 
 \subsection{Installing the VSTi}
 \label{subsec:installvsti}
-The latest release builds of the VST3 plugin can be found at \href{https://github.com/ParadoxChains/C3JI5D-Evan-Sitt-BSc-Thesis/tree/master/Release\%20Builds}{the Github page}. Once downloaded, the installation of the plugin within the preferred Digital Audio Workstation will proceed as specified by the specific Digital Audio Workstation. Typically, the process consists of placing a copy of the VST3 plugin binary within the designated system folder for VST3 plugins and registering the new plugin within the Digital Audio Workstation. The Digital Audio Workstation must support ASIO drivers, MIDI input, and VSTi 3.0 plugins.
+The latest release builds of the VST3 plugin can be found at \href{https://github.com/ParadoxChains/C3JI5D-Evan-Sitt-BSc-Thesis/tree/master/Release\%20Builds}{the Github page}\cite{github}. Once downloaded, the installation of the plugin within the preferred Digital Audio Workstation will proceed as specified by the specific Digital Audio Workstation. Typically, the process consists of placing a copy of the VST3 plugin binary within the designated system folder for VST3 plugins and registering the new plugin within the Digital Audio Workstation. The Digital Audio Workstation must support ASIO drivers, MIDI input, and VSTi 3.0 plugins.
 
 For the purposes of demonstration, the $FL\ Studio\ 20$ Digital Audio Workstation running on the $Windows\ 10$ operating system will be shown and referenced in the instructions.
 
@@ -437,6 +447,9 @@ The $Envelope$ module controls the envelope controlled amplitude modulation. Thi
 \label{subsec:main}
 The $Main$ module controls the Master volume of the application along with pitch bend. The slider labeled with $Master$ controls the master volume, which is the final post processing step in the signal chain. The two sliders below the $PB \-Up/Down$ label control the pitch bend up and pitch bend down respectively.
 
+\section{Results}
+After setting up the digital synthesis plugin and routing it properly within the workflow of the digital audio workstation, MIDI note input from either a MIDI controller such as a keyboard or from MIDI notation should produce the expected sound from the digital synthesis plugin. This audio should be routed through the mixer panel which should allow for additional mixer signal post processing modules to be added onto the signal chain.
+
 \chapter{Developer Documentation}
 \label{chapter:devdocs}
 This chapter will cover the basics and the process for developing the digital synthesis plugin. The developer is presumed to have the prerequisite knowledge of C++ and familiarity with Visual Studio. Visual Studio can be downloaded from the main website \cite{visualstudio}, and usage information can be found through the documentation \cite{vsdocs}.
@@ -445,8 +458,8 @@ This chapter will cover the basics and the process for developing the digital sy
 \label{sec:prereq}
 Before writing the code, the developer must have access to a few necessary tools.
 \begin{itemize}
-\item The Project Source Code, available from Github.
-\item The JUCE C++ Application Framework
+\item The Project Source Code, available from Github\cite{github}.
+\item The JUCE C++ Application Framework\cite{madewithjuce}
 \item A development environment of your choice. JUCE natively supports Visual Studio, XCode, and Linux Make.
 \item A Digital Audio Workstation of your choice. It must support VST3 plugins.
 \end{itemize}
@@ -694,11 +707,13 @@ The \texttt{Audio\-Processor\-Tree\-Value\-State} is connected the other classes
 
 \section{Testing}
 \label{sec:testing}
-The unit testing for the project is implemented using \texttt{Google\-Test}, Google's in house C++ testing framework. The public Github repository, including the full documentation, for \texttt{Google\-Test} can be found at \href{https://github.com/google/googletest}{https://github.com/google/googletest}.
+The unit testing for the project is implemented using \texttt{Google\-Test}, Google's in house C++ testing framework. The public Github repository, including the full documentation, for \texttt{Google\-Test} can be found at \href{https://github.com/google/googletest}{https://github.com/google/googletest} \cite{googletest}.
 
 The unit tests written are focused on the waveform synthesis module of the application as this module is at the centerpiece of the direct digital synthesis and any issues in the synthesis module would create increasingly distorted artifacts in the final output.
 
 The unit tests written for the application utilize the \emph{Text Fixtures} feature of \texttt{Google\-Test}, which allows for tests to be grouped into a test fixture to utilize the same resource without incurring the cost of rebuilding and tearing down for each test. 
+
+Additional documentation and resources for writing GoogleTest test suites and test cases can be found on their primer \ref{googletestprimer}.
 
 \subsection{Phase Tests}
 \label{subsec:phasetests}
@@ -797,6 +812,16 @@ Retrieved 15 December 2020.
 \bibitem{beginneraudiosynthesis}
 The Beginner's Guide to Audio Synthesis
 \\\texttt{https://www.blackghostaudio.com/blog\-/the-beginners-guide-to-audio-synthesis}.\\
+Retrieved 15 December 2020.
+
+\bibitem{googletest}
+GoogleTest Github Repository
+\\\texttt{https://github.com/google/googletest}.\\
+Retrieved 15 December 2020.
+
+\bibitem{googletestprimer}
+GoogleTest Primer
+\\\texttt{https://github.com/google/googletest/blob/master/googletest/docs/primer.md}.\\
 Retrieved 15 December 2020.
 
 \end{thebibliography}
