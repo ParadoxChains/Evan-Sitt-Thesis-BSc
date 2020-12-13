@@ -296,7 +296,7 @@ By combining a variety of the three types of pass filters, an Equalizer is creat
 
 \section{The MIDI Standard}
 \label{sec:midistandard}
-MIDI is an acronym for \emph{Musical Instrument Digital Interface}. Originating in 1983 from a panel of music industry representatives, it is a technical standard that describes a universal digital communications protocol for connecting any type of audio-related hardware and software. Analog hardware relies on converters that translate MIDI messages into analog control voltages. 
+MIDI \cite{midihome} is an acronym for \emph{Musical Instrument Digital Interface}. Originating in 1983 from a panel of music industry representatives, it is a technical standard that describes a universal digital communications protocol for connecting any type of audio-related hardware and software. Analog hardware relies on converters that translate MIDI messages into analog control voltages. 
 
 A single MIDI link is capable of carrying up to sixteen channels of MIDI information. The routing of each channel can be completely independent of each other, allowing for flexible routing to and from different devices. Modern hardware and software will extend this functionality by using ports, with the current standard being 255 ports supported. Each port will support a full set of sixteen MIDI channels, making for a total of 4,080 available MIDI channels useable by the device.
 
@@ -305,7 +305,7 @@ Each MIDI channel is responsible for transmitting MIDI event messages. These eve
 \subsection{MIDI Event Messages}
 \label{subsec:midieventmsg}
 
-MIDI event messages consist of 8-bit byte-words transmitted in series at a rate of 31.25 kilobits per second, a rate chosen for being an exact divisor of 1 MHz. Each byte-word starts with a bit indicating if the word is a status byte or a data byte. The next seven bits encode the relevant information or instruction. On top of the 8 bits forming the byte-word, a start bit and a stop bit are used to frame the byte-word, summing up to a total of ten bits per byte-word in transmission.
+MIDI event messages consist of 8-bit byte-words transmitted in series at a rate of 31.25 kilobits per second, a rate chosen for being an exact divisor of 1 MHz. Each byte-word starts with a bit indicating if the word is a status byte or a data byte. The next seven bits encode the relevant information or instruction. On top of the 8 bits forming the byte-word, a start bit and a stop bit are used to frame the byte-word, summing up to a total of ten bits per byte-word in transmission \cite{midispec}. 
 
 Each MIDI event message contains an instruction for which the receiving device may choose to act upon. The two main categories of MIDI event messages are Channel event messages and System event messages. A device can choose to act upon or ignore any or all MIDI event messages received.
 
@@ -319,10 +319,14 @@ Each MIDI link between devices is capable of carrying up to sixteen channels of 
 
 The application of this thesis project supports one MIDI link of sixteen channels, with all MIDI channels being handled at the same time. System event messages are ignored, as the application is not device or platform-specific, nor does it use proprietary interfaces. However, most MIDI event messages are handled by the application.
 
+More details about MIDI specification can be found at the MIDI specification website \cite{midispec}.
+
 
 \chapter{User Documentation}
 \label{chapter:userdoc}
 In this chapter, the application will be explained from an End-User perspective with explanations on how to use each part of the application within their workflow to achieve the desired sound. This section will rely heavily on technical and musical terminology discussed in the previous chapter \ref{chapter:background}, and as so, will focus primarily on describing in detail the operation and effects of the application.
+
+This chapter will assume that the user will be familiarized with the use of DAWs and has one installed. For demonstration purposes, \emph{FL Studio} will be the DAW shown. More information can be found on the Image-Line website \cite{floverview}, and details on installation and usage of FL Studio can be found on the user manual website \cite{flmanual}. Guided tutorials can also be found on the tutorial site \cite{fltutorials}.
 
 \section{Installation}
 \label{sec:installation}
@@ -435,6 +439,7 @@ The $Main$ module controls the Master volume of the application along with pitch
 
 \chapter{Developer Documentation}
 \label{chapter:devdocs}
+This chapter will cover the basics and the process for developing the digital synthesis plugin. The developer is presumed to have the prerequisite knowledge of C++ and familiarity with Visual Studio. Visual Studio can be downloaded from the main website \cite{visualstudio}, and usage information can be found through the documentation \cite{vsdocs}.
 
 \section{Prerequisites}
 \label{sec:prereq}
@@ -447,13 +452,13 @@ Before writing the code, the developer must have access to a few necessary tools
 \end{itemize}
 \subsection{Building the Software from Source Code}
 \label{subsec:buildingasoftware}
-The stable source code of this application can be downloaded from the \texttt{master} branch of the public repository found at Github: \href{https://github.com/ParadoxChains/C3JI5D-Evan-Sitt-BSc-Thesis}{https://github.com/\-ParadoxChains/\-C3JI5D-Evan-Sitt-BSc-Thesis}. The source code includes all of the $C++$ header and CPP files that are necessary for the application. However, the repository does not include the JUCE framework that is required for building the project.
+The stable source code of this application can be downloaded from the \texttt{master} branch of the public repository found at Github: \href{https://github.com/ParadoxChains/C3JI5D-Evan-Sitt-BSc-Thesis}{https://github.com/\-ParadoxChains/\-C3JI5D-Evan-Sitt-BSc-Thesis} \cite{github}. The source code includes all of the $C++$ header and CPP files that are necessary for the application. However, the repository does not include the JUCE framework that is required for building the project.
 
 \subsection{JUCE Framework}
 \label{subsec:juceframework}
-The JUCE framework is a partially open-source, cross-platform C++ application framework. It is particularly notable for its robust support of the VST3 SDK providing developers with an easy toolset for interacting with VST3 applications. Additionally, the JUCE framework provides graphical user interface functionality, supports a large variety of integrated development environments and compilers, and is designed to compile and run compatibly on the Windows, Mac OS X, and Linux platforms.
+The JUCE framework is a partially open-source, cross-platform C++ application framework. It is particularly notable for its robust support of the VST3 SDK providing developers with an easy toolset for interacting with VST3 applications. Additionally, the JUCE framework provides graphical user interface functionality, supports a large variety of integrated development environments and compilers, and is designed to compile and run compatibly on the Windows, Mac OS X, and Linux platforms. More information regarding JUCE can be found on the homepage \cite{madewithjuce}.
 
-The JUCE framework is required for the project as it provides the base framework for interacting with the VST3 SDK. The JUCE framework can be found on the Roli JUCE website at: \href{https://juce.com/}{https://juce.com/}. The project for this application will work with both paid, free, and GPL licenses for JUCE. The Projucer application, a necessary extension of the JUCE framework, can be downloaded along with the framework. Further details on setting up the JUCE framework and Projucer application can be found on the JUCE website.
+The JUCE framework is required for the project as it provides the base framework for interacting with the VST3 SDK. The JUCE framework can be found on the Roli JUCE website at: \href{https://juce.com/}{https://juce.com/}. The project for this application will work with both paid, free, and GPL licenses for JUCE. The Projucer application, a necessary extension of the JUCE framework, can be downloaded along with the framework. Further details on setting up the JUCE framework and Projucer application can be found on the JUCE website\cite{madewithjuce}. Additional information regarding JUCE development basics can be found on various tutorial sites \cite{jucevstdevelopment}.
 
 \subsection{VST3 Standard}
 \label{subsec:vst3standard}
@@ -475,7 +480,7 @@ The VST standard specifies a standard for communication between Digital Audio Wo
 
 \section{Process Flow}
 \label{sec:processflow}
-The central object which handles the flow of data is the \texttt{Audio\-Processor} found within the \texttt{Plugin\-Processor} header and CPP files. The \texttt{Audio\-Processor} is responsible for directing MIDI input and Audio output throughout the different objects. Additionally, the \texttt{Audio\-Processor} is responsible for handling the MIDI buffer and Audio buffers. The \texttt{Audio\-Processor} will contain instances of the other classes and assists them in interacting with each other.
+The central object which handles the flow of data is the \texttt{Audio\-Processor} found within the \texttt{Plugin\-Processor} header and CPP files. The \texttt{Audio\-Processor} is responsible for directing MIDI input and Audio output throughout the different objects. Additionally, the \texttt{Audio\-Processor} is responsible for handling the MIDI buffer and Audio buffers. The \texttt{Audio\-Processor} will contain instances of the other classes and assists them in interacting with each other \cite{juceclassindex}.
 
 The front-end of the \texttt{Audio\-Processor} that will be used by the End-User is handled by the \texttt{Audio\-Processor\-Editor}. This \texttt{Audio\-Processor\-Editor} object contains each of the individual graphical user interface objects and controls the overall appearance of the VST3 plugin. These individual graphical user interface objects are \texttt{processor} objects that each will contain the individual graphical user interface elements to assist the End-User in changing the state values of the VST3 plugin, such as sliders and rotary dials.
 
@@ -489,7 +494,7 @@ First, the developer must implement the functions for handling the MIDI buffer f
 
 Then at this point, the synthesizer components can be created. After this, developing the \texttt{Audio\-Processor} to manage the control and state values is much more straightforward. From here, it is advised to develop the graphical user interface for the new synthesizer component, which will connect to the \texttt{Audio\-Processor}, and then finally adding it to the \texttt{Audio\-Processor\-Editor}.
 
-Special care must be taken to ensure that all functions are thread-safe, as the JUCE framework makes full use of VST3's multithreading support for performance, especially when handling high polyphony counts.
+Special care must be taken to ensure that all functions are thread-safe, as the JUCE framework makes full use of VST3's multithreading support for performance, especially when handling high polyphony counts \cite{juceclassindex}.
 
 The following section will walk through the development flow as described and provide detailed instructions on each portion.
 
@@ -727,7 +732,7 @@ Each of the other waveform function generators also have their respective value 
 \label{chapter:results}
 The project was successful and performs not only to my original spec, but even surpassed it as I was able to include more features than originally intended. The current application is capable of working with live MIDI input to produce synthesized sounds with the basic Sine, Square, Triangle, and Saw waveforms. Additionally, I was able to add Envelope, Filters, LFO, and Delay functionality to the synthesizer, allowing for far more customization of the synth and a much more professional sounding result. 
 
-The result matched my expectations for an entry-level digital synthesis plugin. As a music producer myself, I was able to achieve a customized sound from my digital synthesis plugin, and I was capable of creating an entire workflow built solely around instances of this digital synthesis plugin.
+The result matched my expectations for an entry-level digital synthesis plugin. As a music producer myself, I was able to achieve a customized sound from my digital synthesis plugin, and I was capable of creating an entire workflow built solely around instances of this digital synthesis plugin within FL Studio, my DAW of choice. From this workflow, I was able to easily produce music without any problems.
 
 Additional work can be done in the future to further expand the capabilities of the digital synthesizer. Frequency Modulation and Low Frequency Oscillator controlled Frequency Modulation can both be added for a more 21st century sound and the capability to create dubstep synths. A visualizer can be added to display the output waveform to allow the user to better understand the sound being generated and how it is being modified.
 % \chapter{Appendix}
@@ -751,7 +756,7 @@ Retrieved 15 December 2020.
 
 \bibitem{github}
 Source Code on Github
-\\\texttt{https://github.com/ParadoxChains\-/C3JI5D-Evan-Sitt-BSc-Thesis}.\\
+\\\texttt{https://github.com\-/ParadoxChains\-/C3JI5D-Evan-Sitt-BSc-Thesis}.\\
 Retrieved 15 December 2020.
 
 \bibitem{visualstudio}
