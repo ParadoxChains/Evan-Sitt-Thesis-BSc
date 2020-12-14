@@ -51,7 +51,8 @@ backgroundcolor=\color{lbcolor},
 \usepackage{enumitem}
 
 \usepackage{url}
-
+\usepackage[hyphenbreaks]{breakurl}
+% \usepackage[hyphens]{url}
 \begin{document}
 
 \input{titlepage.tex}
@@ -84,7 +85,7 @@ The chapters are as follows: \emph{Background} (chapter \ref{chapter:background}
 \label{chapter:background}
 \section{Audio basics}
 \label{sec:audiobasics}
-Before we delve into the background for Digital Synthesis and Digital Signal Processing, it behooves us first to have a brief overview of audio. Audio typically deals with the way we create a sound, the way our ears receives the sound, and the way our mind perceives the sound. While this chapter will provide a brief overview of audio basics, more detailed information can be found at \cite{beginneraudiosynthesis}.
+Before we delve into the background for Digital Synthesis and Digital Signal Processing, it behooves us first to have a brief overview of audio. Audio typically deals with the way we create a sound, the way our ears receives the sound, and the way our mind perceives the sound. While this chapter will provide a brief overview of audio basics, more detailed information can be found at \cite{beginneraudiosynthesis} and \cite{mixingengineerhandbook}.
 
 \subsection{Waveform}
 \label{subsec:waveform}
@@ -511,9 +512,16 @@ The VST standard specifies a standard for communication between Digital Audio Wo
 \label{sec:processflow}
 The central object which handles the flow of data is the \texttt{Audio\-Processor} found within the \texttt{Plugin\-Processor} header and CPP files. The \texttt{Audio\-Processor} is responsible for directing MIDI input and Audio output throughout the different objects. Additionally, the \texttt{Audio\-Processor} is responsible for handling the MIDI buffer and Audio buffers. The \texttt{Audio\-Processor} will contain instances of the other classes and assists them in interacting with each other \cite{juceclassindex}.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=36em]{class diagram shrink.png}
+    \caption{UML class diagram}
+    \label{fig:uml}
+\end{figure}
+
 The front-end of the \texttt{Audio\-Processor} that will be used by the End-User is handled by the \texttt{Audio\-Processor\-Editor}. This \texttt{Audio\-Processor\-Editor} object contains each of the individual graphical user interface objects and controls the overall appearance of the VST3 plugin. These individual graphical user interface objects are \texttt{processor} objects that each will contain the individual graphical user interface elements to assist the End-User in changing the state values of the VST3 plugin, such as sliders and rotary dials.
 
-The \texttt{Audio\-Processor} also contains an array of \texttt{Synthesiser\-Voice}. Each of these objects is a Synthesiser object that will perform the computation of values that will be handed back to the \texttt{Audio\-Processor}  for sending out to the audio buffer. The \texttt{Audio\-Processor} is responsible for handling the MIDI buffer and sending those sets of instructions to the Synthesiser objects for processing.
+The \texttt{Audio\-Processor} also contains an array of \texttt{Synthesiser\-Voice}. Each of these objects is a Synthesiser object that will perform the computation of values that will be handed back to the \texttt{Audio\-Processor}  for sending out to the audio buffer. The \texttt{Audio\-Processor} is responsible for handling the MIDI buffer and sending those sets of instructions to the Synthesiser objects for processing. These are illustrated in figure \ref{fig:uml}.
 
 \section{Development flow}
 \label{sec:devflow}
@@ -731,9 +739,16 @@ The unit tests written for the application utilize the \emph{Text Fixtures} feat
 
 Additional documentation and resources for writing GoogleTest test suites and test cases can be found on their primer \cite{googletestprimer}.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=24em]{Phase Value Testing Chart.png}
+    \caption{Phase and value testing chart}
+    \label{fig:testingchart}
+\end{figure}
+
 \subsection{Phase tests}
 \label{subsec:phasetests}
-The first set of unit tests are focused on testing the phase accumulation of each waveform function generator. The phase should be consistent and match expected outputs with the given frequency input. Additionally, the phase should never exceed 360 degrees and should return to 0 degrees after a full cycle at the given frequency. The phase values are obtained by calling the \texttt{getPhase()} function.
+The first set of unit tests are focused on testing the phase accumulation of each waveform function generator. The phase should be consistent and match expected outputs with the given frequency input. Additionally, the phase should never exceed 360 degrees and should return to 0 degrees after a full cycle at the given frequency. The phase values are obtained by calling the \texttt{getPhase()} function. Figure \ref{fig:testingchart} shows a sample subset of the expected values used for the tests.
 
 The C++ class \texttt{Oscillator\-Phase\-Test} constructs the \texttt{oscillator} required to run the tests. The phase tests are part of the \texttt{Oscillator\-Phase\-Test} test fixture which utilizes the class.
 
@@ -747,7 +762,7 @@ These tests are also made for each of the different waveform function generators
 
 \subsection{Value tests}
 \label{subsec:valuetests}
-Value unit tests are crucial to ensure that each waveform function generator will create the waveform as expected. The best way to test for this is to check the generated values at specific phase values with known output values. Additionally, the generated values should never exceed the range of $[-1.0,1.0]$.
+Value unit tests are crucial to ensure that each waveform function generator will create the waveform as expected. The best way to test for this is to check the generated values at specific phase values with known output values. Additionally, the generated values should never exceed the range of $[-1.0,1.0]$. Figure \ref{fig:testingchart} shows a sample subset of the expected values used for the tests.
 
 The C++ class \texttt{Oscillator\-Value\-Test} constructs the \texttt{oscillator} required to run the tests. The phase tests are part of the \texttt{Oscillator\-Value\-Test} test fixture which utilizes the class.
 
@@ -773,65 +788,65 @@ Additional work can be done in the future to further expand the capabilities of 
 
 \addcontentsline{toc}{chapter}{Bibliography}
 \begin{thebibliography}{9}
-
+\sloppy
 \bibitem{madewithjuce} 
 Made With JUCE | JUCE\\
-\url{https://juce.com/discover/made-with-juce}.\\
+\burl{https://juce.com/discover/made-with-juce}.\\
 Retrieved 15 December 2020.
 
 \bibitem{juceclassindex}
 JUCE: Class Index\\
-\url{https://docs.juce.com/master/index.html}.\\
+\burl{https://docs.juce.com/master/index.html}.\\
 Retrieved 15 December 2020.
 
 \bibitem{jucevstdevelopment}
 JUCE for VST Development\\
-\url{http://www.redwoodaudio.net/Tutorials/juce_for_vst_development__intro.html}.\\
+\burl{http://www.redwoodaudio.net/Tutorials/juce_for_vst_development__intro.html}.\\
 Retrieved 15 December 2020.
 
 \bibitem{github}
 Source Code on Github\\
-\url{https://github.com/ParadoxChains/C3JI5D-Evan-Sitt-BSc-Thesis}.\\
+\burl{https://github.com/ParadoxChains/C3JI5D-Evan-Sitt-BSc-Thesis}.\\
 Retrieved 15 December 2020.
 
 \bibitem{visualstudio}
 Visual Studio 2019 IDE\\
-\url{https://visualstudio.microsoft.com/vs/}.\\
+\burl{https://visualstudio.microsoft.com/vs/}.\\
 Retrieved 15 December 2020.
 
 \bibitem{vsdocs}
 Visual Studio documentation\\
-\url{https://docs.microsoft.com/en-us/visualstudio/windows/?view=vs-2019}.\\
+\burl{https://docs.microsoft.com/en-us/visualstudio/windows/?view=vs-2019}.\\
 Retrieved 15 December 2020.
 
 \bibitem{midihome}
 MIDI.Org Home\\
-\url{https://www.midi.org/}.\\
+\burl{https://www.midi.org/}.\\
 Retrieved 15 December 2020.
 
 \bibitem{midispec}
 MIDI Specifications\\
-\url{https://www.midi.org/specifications}.\\
+\burl{https://www.midi.org/specifications}.\\
 Retrieved 15 December 2020.
 
 \bibitem{floverview}
 FL Studio Overview\\
-\url{https://www.image-line.com/fl-studio/}.\\
+\burl{https://www.image-line.com/fl-studio/}.\\
 Retrieved 15 December 2020.
 
 \bibitem{fltutorials}
 FL Studio Tutorials\\
-\url{https://www.image-line.com/fl-studio-learning/}.\\
+\burl{https://www.image-line.com/fl-studio-learning/}.\\
 Retrieved 15 December 2020.
 
 \bibitem{flmanual}
 FL Studio Manual\\
-\url{https://www.image-line.com/fl-studio-learning/fl-studio-online-manual/}.\\
+\burl{https://www.image-line.com/fl-studio-learning/fl-studio-online-manual/}.\\
 Retrieved 15 December 2020.
 
 \bibitem{beginneraudiosynthesis}
 The Beginner's Guide to Audio Synthesis\\
-\url{https://www.blackghostaudio.com/blog/the-beginners-guide-to-audio-synthesis}\\
+\burl{https://www.blackghostaudio.com/blog/the-beginners-guide-to-audio-synthesis}\\
 Retrieved 15 December 2020.
 
 \bibitem{mixingengineerhandbook}
@@ -841,67 +856,67 @@ Bobby Owsinski Media Group, 2017.
 
 \bibitem{googletest}
 GoogleTest Github Repository\\
-\url{https://github.com/google/googletest}.\\
+\burl{https://github.com/google/googletest}.\\
 Retrieved 15 December 2020.
 
 \bibitem{googletestprimer}
 GoogleTest Primer\\
-\url{https://github.com/google/googletest/blob/master/googletest/docs/primer.md}.\\
+\burl{https://github.com/google/googletest/blob/master/googletest/docs/primer.md}.\\
 Retrieved 15 December 2020.
 
 \bibitem{standingwaves}
 Standing Waves\\
-\url{http://230nsc1.phy-astr.gsu.edu/hbase/Waves/standw.html}.\\
+\burl{http://230nsc1.phy-astr.gsu.edu/hbase/Waves/standw.html}.\\
 Retrieved 15 December 2020.
 
 \bibitem{noiselevel}
 Noise Level Chart: Decibel Levels of Common Sounds With Examples\\
-\url{https://boomspeaker.com/noise-level-chart-db-level-chart/}.\\
+\burl{https://boomspeaker.com/noise-level-chart-db-level-chart/}.\\
 Retrieved 15 December 2020.
 
 \bibitem{cellotone}
 Cello Tone Analysis\\
-\url{https://vobarian.com/celloanly/index.html}.\\
+\burl{https://vobarian.com/celloanly/index.html}.\\
 Retrieved 15 December 2020.
 
 \bibitem{allaboutdds}
 All About Direct Digital Synthesis\\
-\url{https://www.analog.com/en/analog-dialogue/articles/all-about-direct-digital-synthesis.html#}.\\
+\burl{https://www.analog.com/en/analog-dialogue/articles/all-about-direct-digital-synthesis.html#}.\\
 Retrieved 15 December 2020.
 
 \bibitem{addsynthbasics}
 Additive Synthesis Basics\\
-\url{https://www.youtube.com/watch?v=ZAgiC0vtc8M&ab_channel=DanHosken}.\\
+\burl{https://www.youtube.com/watch?v=ZAgiC0vtc8M&ab_channel=DanHosken}.\\
 Retrieved 15 December 2020.
 
 \bibitem{adsrenvinfo}
 ADSR Envelopes: How to Build The Perfect Sound [Infographic]\\
-\url{https://blog.landr.com/adsr-envelopes-infographic/}.\\
+\burl{https://blog.landr.com/adsr-envelopes-infographic/}.\\
 Retrieved 15 December 2020.
 
 \bibitem{planetoftunes}
 Planet of Tunes - Synthesis types\\
-\url{http://www.planetoftunes.com/synthesis/synthesis-types.htm}.\\
+\burl{http://www.planetoftunes.com/synthesis/synthesis-types.htm}.\\
 Retrieved 15 December 2020.
 
 \bibitem{stm32f4}
 STM32F4-Discovery MIDI input and basic synthesis\\
-\url{https://minddumpdotnet.wordpress.com/2013/05/23/stm32f4-discovery-midi-input-and-basic-synthesis/}.\\
+\burl{https://minddumpdotnet.wordpress.com/2013/05/23/stm32f4-discovery-midi-input-and-basic-synthesis/}.\\
 Retrieved 15 December 2020.
 
 \bibitem{linearfilter}
 Linear filter\\
-\url{https://en.wikipedia.org/wiki/Linear_filter}.\\
+\burl{https://en.wikipedia.org/wiki/Linear_filter}.\\
 Retrieved 15 December 2020.
 
 \bibitem{basicspassivercfilters}
 What Is a Low Pass Filter? A Tutorial on the Basics of Passive RC Filters\\
-\url{https://www.allaboutcircuits.com/technical-articles/low-pass-filter-tutorial-basics-passive-RC-filter/}.\\
+\burl{https://www.allaboutcircuits.com/technical-articles/low-pass-filter-tutorial-basics-passive-RC-filter/}.\\
 Retrieved 15 December 2020.
 
 \bibitem{vstwiki}
 Virtual Studio Technology\\
-\url{https://en.wikipedia.org/wiki/Virtual_Studio_Technology}.\\
+\burl{https://en.wikipedia.org/wiki/Virtual_Studio_Technology}.\\
 Retrieved 15 December 2020.
 
 \end{thebibliography}
