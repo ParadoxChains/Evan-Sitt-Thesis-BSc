@@ -521,9 +521,7 @@ The central object which handles the flow of data is the \texttt{Audio\-Processo
 
 The front-end of the \texttt{Audio\-Processor} that will be used by the End-User is handled by the \texttt{Audio\-Processor\-Editor}. This \texttt{Audio\-Processor\-Editor} object contains each of the individual graphical user interface objects and controls the overall appearance of the VST3 plugin. These individual graphical user interface objects are \texttt{processor} objects that each will contain the individual graphical user interface elements to assist the End-User in changing the state values of the VST3 plugin, such as sliders and rotary dials.
 
-The \texttt{Audio\-Processor} also contains an array of \texttt{Synthesiser\-Voice}. Each of these objects is a Synthesiser object that will perform the computation of values that will be handed back to the \texttt{Audio\-Processor}  for sending out to the audio buffer. The \texttt{Audio\-Processor} is responsible for handling the MIDI buffer and sending those sets of instructions to the Synthesiser objects for processing. These are illustrated in figure \ref{fig:uml}.
-
-This process flow is illustrated briefly in figure \ref{fig:appdataflow}.
+The \texttt{Audio\-Processor} also contains an array of \texttt{Synthesiser\-Voice}. Each of these objects is a Synthesiser object that will perform the computation of values that will be handed back to the \texttt{Audio\-Processor}  for sending out to the audio buffer. The \texttt{Audio\-Processor} is responsible for handling the MIDI buffer and sending those sets of instructions to the Synthesiser objects for processing. This process flow is illustrated briefly in figure \ref{fig:appdataflow}.
 
 \section{Development flow}
 \label{sec:devflow}
@@ -785,50 +783,41 @@ The plugin allows for flexible customization of the synthesizer sounds. The comb
 
 As a music producer myself, I was extremely satisfied with the final result. The plugin permitted me the level of control and flexibility to achieve a customized sound from my digital synthesis plugin. I was capable of creating an entire workflow built solely around instances of this digital synthesis plugin within FL Studio, my DAW of choice. From this workflow, I was able to easily produce music without any problems.
 
-Additional work can be done in the future to further expand the capabilities of the digital synthesizer. Frequency Modulation, both static envelope and low frequency oscillator controlled, could be added for a more 21st century sound and the capability to create dubstep synths. A visualizer can be added to display the output waveform to allow the user to better understand the sound being generated and how the signal post processing being applied modifies the audio.
+Additional work can be done in the future to further expand the capabilities of the digital synthesizer. Frequency Modulation, both static envelope and low frequency oscillator controlled, could be added for the capability to create dubstep synths. A waveform visualizer can be added to allow the user to better understand the sound being generated and how the signal post processing being applied modifies the audio.
 % \chapter{Appendix}
 
 \addcontentsline{toc}{chapter}{Bibliography}
 \begin{thebibliography}{9}
 \sloppy
-\bibitem{madewithjuce} 
-Made With JUCE | JUCE\\
-\burl{https://juce.com/discover/made-with-juce}.\\
+
+\bibitem{addsynthbasics}
+Additive Synthesis Basics\\
+\burl{https://www.youtube.com/watch?v=ZAgiC0vtc8M&ab_channel=DanHosken}.\\
 Retrieved 15 December 2020.
 
-\bibitem{juceclassindex}
-JUCE: Class Index\\
-\burl{https://docs.juce.com/master/index.html}.\\
+\bibitem{adsrenvinfo}
+ADSR Envelopes: How to Build The Perfect Sound [Infographic]\\
+\burl{https://blog.landr.com/adsr-envelopes-infographic/}.\\
 Retrieved 15 December 2020.
 
-\bibitem{jucevstdevelopment}
-JUCE for VST Development\\
-\burl{http://www.redwoodaudio.net/Tutorials/juce_for_vst_development__intro.html}.\\
+\bibitem{allaboutdds}
+All About Direct Digital Synthesis\\
+\burl{https://www.analog.com/en/analog-dialogue/articles/all-about-direct-digital-synthesis.html#}.\\
 Retrieved 15 December 2020.
 
-\bibitem{github}
-Source Code on Github\\
-\burl{https://github.com/ParadoxChains/C3JI5D-Evan-Sitt-BSc-Thesis}.\\
+\bibitem{beginneraudiosynthesis}
+The Beginner's Guide to Audio Synthesis\\
+\burl{https://www.blackghostaudio.com/blog/the-beginners-guide-to-audio-synthesis}\\
 Retrieved 15 December 2020.
 
-\bibitem{visualstudio}
-Visual Studio 2019 IDE\\
-\burl{https://visualstudio.microsoft.com/vs/}.\\
+\bibitem{cellotone}
+Cello Tone Analysis\\
+\burl{https://vobarian.com/celloanly/index.html}.\\
 Retrieved 15 December 2020.
 
-\bibitem{vsdocs}
-Visual Studio documentation\\
-\burl{https://docs.microsoft.com/en-us/visualstudio/windows/?view=vs-2019}.\\
-Retrieved 15 December 2020.
-
-\bibitem{midihome}
-MIDI.Org Home\\
-\burl{https://www.midi.org/}.\\
-Retrieved 15 December 2020.
-
-\bibitem{midispec}
-MIDI Specifications\\
-\burl{https://www.midi.org/specifications}.\\
+\bibitem{flmanual}
+FL Studio Manual\\
+\burl{https://www.image-line.com/fl-studio-learning/fl-studio-online-manual/}.\\
 Retrieved 15 December 2020.
 
 \bibitem{floverview}
@@ -841,21 +830,6 @@ FL Studio Tutorials\\
 \burl{https://www.image-line.com/fl-studio-learning/}.\\
 Retrieved 15 December 2020.
 
-\bibitem{flmanual}
-FL Studio Manual\\
-\burl{https://www.image-line.com/fl-studio-learning/fl-studio-online-manual/}.\\
-Retrieved 15 December 2020.
-
-\bibitem{beginneraudiosynthesis}
-The Beginner's Guide to Audio Synthesis\\
-\burl{https://www.blackghostaudio.com/blog/the-beginners-guide-to-audio-synthesis}\\
-Retrieved 15 December 2020.
-
-\bibitem{mixingengineerhandbook}
-Oswinski, B.: The Mixing Engineer's Handbook, 4th Edition
-%Retrieved 15 December 2020
-Bobby Owsinski Media Group, 2017.
-
 \bibitem{googletest}
 GoogleTest Github Repository\\
 \burl{https://github.com/google/googletest}.\\
@@ -866,44 +840,14 @@ GoogleTest Primer\\
 \burl{https://github.com/google/googletest/blob/master/googletest/docs/primer.md}.\\
 Retrieved 15 December 2020.
 
-\bibitem{standingwaves}
-Standing Waves\\
-\burl{http://230nsc1.phy-astr.gsu.edu/hbase/Waves/standw.html}.\\
+\bibitem{juceclassindex}
+JUCE: Class Index\\
+\burl{https://docs.juce.com/master/index.html}.\\
 Retrieved 15 December 2020.
 
-\bibitem{noiselevel}
-Noise Level Chart: Decibel Levels of Common Sounds With Examples\\
-\burl{https://boomspeaker.com/noise-level-chart-db-level-chart/}.\\
-Retrieved 15 December 2020.
-
-\bibitem{cellotone}
-Cello Tone Analysis\\
-\burl{https://vobarian.com/celloanly/index.html}.\\
-Retrieved 15 December 2020.
-
-\bibitem{allaboutdds}
-All About Direct Digital Synthesis\\
-\burl{https://www.analog.com/en/analog-dialogue/articles/all-about-direct-digital-synthesis.html#}.\\
-Retrieved 15 December 2020.
-
-\bibitem{addsynthbasics}
-Additive Synthesis Basics\\
-\burl{https://www.youtube.com/watch?v=ZAgiC0vtc8M&ab_channel=DanHosken}.\\
-Retrieved 15 December 2020.
-
-\bibitem{adsrenvinfo}
-ADSR Envelopes: How to Build The Perfect Sound [Infographic]\\
-\burl{https://blog.landr.com/adsr-envelopes-infographic/}.\\
-Retrieved 15 December 2020.
-
-\bibitem{planetoftunes}
-Planet of Tunes - Synthesis types\\
-\burl{http://www.planetoftunes.com/synthesis/synthesis-types.htm}.\\
-Retrieved 15 December 2020.
-
-\bibitem{stm32f4}
-STM32F4-Discovery MIDI input and basic synthesis\\
-\burl{https://minddumpdotnet.wordpress.com/2013/05/23/stm32f4-discovery-midi-input-and-basic-synthesis/}.\\
+\bibitem{jucevstdevelopment}
+JUCE for VST Development\\
+\burl{http://www.redwoodaudio.net/Tutorials/juce_for_vst_development__intro.html}.\\
 Retrieved 15 December 2020.
 
 \bibitem{linearfilter}
@@ -911,14 +855,69 @@ Linear filter\\
 \burl{https://en.wikipedia.org/wiki/Linear_filter}.\\
 Retrieved 15 December 2020.
 
-\bibitem{basicspassivercfilters}
-What Is a Low Pass Filter? A Tutorial on the Basics of Passive RC Filters\\
-\burl{https://www.allaboutcircuits.com/technical-articles/low-pass-filter-tutorial-basics-passive-RC-filter/}.\\
+\bibitem{madewithjuce} 
+Made With JUCE | JUCE\\
+\burl{https://juce.com/discover/made-with-juce}.\\
+Retrieved 15 December 2020.
+
+\bibitem{midihome}
+MIDI.Org Home\\
+\burl{https://www.midi.org/}.\\
+Retrieved 15 December 2020.
+
+\bibitem{midispec}
+MIDI Specifications\\
+\burl{https://www.midi.org/specifications}.\\
+Retrieved 15 December 2020.
+
+\bibitem{mixingengineerhandbook}
+Oswinski, B.: The Mixing Engineer's Handbook, 4th Edition
+%Retrieved 15 December 2020
+Bobby Owsinski Media Group, 2017.
+
+\bibitem{noiselevel}
+Noise Level Chart: Decibel Levels of Common Sounds With Examples\\
+\burl{https://boomspeaker.com/noise-level-chart-db-level-chart/}.\\
+Retrieved 15 December 2020.
+
+\bibitem{planetoftunes}
+Planet of Tunes - Synthesis types\\
+\burl{http://www.planetoftunes.com/synthesis/synthesis-types.htm}.\\
+Retrieved 15 December 2020.
+
+\bibitem{github}
+Source Code on Github\\
+\burl{https://github.com/ParadoxChains/C3JI5D-Evan-Sitt-BSc-Thesis}.\\
+Retrieved 15 December 2020.
+
+\bibitem{standingwaves}
+Standing Waves\\
+\burl{http://230nsc1.phy-astr.gsu.edu/hbase/Waves/standw.html}.\\
+Retrieved 15 December 2020.
+
+\bibitem{stm32f4}
+STM32F4-Discovery MIDI input and basic synthesis\\
+\burl{https://minddumpdotnet.wordpress.com/2013/05/23/stm32f4-discovery-midi-input-and-basic-synthesis/}.\\
+Retrieved 15 December 2020.
+
+\bibitem{visualstudio}
+Visual Studio 2019 IDE\\
+\burl{https://visualstudio.microsoft.com/vs/}.\\
+Retrieved 15 December 2020.
+
+\bibitem{vsdocs}
+Visual Studio documentation\\
+\burl{https://docs.microsoft.com/en-us/visualstudio/windows/?view=vs-2019}.\\
 Retrieved 15 December 2020.
 
 \bibitem{vstwiki}
 Virtual Studio Technology\\
 \burl{https://en.wikipedia.org/wiki/Virtual_Studio_Technology}.\\
+Retrieved 15 December 2020.
+
+\bibitem{basicspassivercfilters}
+What Is a Low Pass Filter? A Tutorial on the Basics of Passive RC Filters\\
+\burl{https://www.allaboutcircuits.com/technical-articles/low-pass-filter-tutorial-basics-passive-RC-filter/}.\\
 Retrieved 15 December 2020.
 
 \end{thebibliography}
