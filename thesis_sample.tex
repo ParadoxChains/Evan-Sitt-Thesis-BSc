@@ -89,7 +89,7 @@ Before we delve into the background for Digital Synthesis and Digital Signal Pro
 
 \subsection{Waveform}
 \label{subsec:waveform}
-We start with the basic building block of sound, the waveform. A Waveform is an abstract way of representing a sound. Typically a waveform is visualized on the Time Domain with Amplitude as the range containing a single cycle of a waveform. Time Domain of a waveform is typically represented in seconds. The Amplitude range, on the other hand, can be represented in many different units. The most common unit used is the decibel (dB). A sample waveform representation with correspondence to sound pressure is illustrated by figure \ref{fig:particledisplacementsoundpressure}.
+We start with the basic building block of sound, the waveform. A \emph{Waveform} is an abstract way of representing a sound. Typically a waveform is visualized on the Time Domain with Amplitude as the range containing a single cycle of a waveform. Time Domain of a waveform is typically represented in seconds. The Amplitude range, on the other hand, can be represented in many different units. The most common unit used is the decibel (dB). A sample waveform representation with correspondence to sound pressure is illustrated by figure \ref{fig:particledisplacementsoundpressure}.
 
 \begin{figure}[h][h]
     \centering
@@ -115,7 +115,7 @@ In colloquial usage, when one refers to the loudness of a jet-plane engine as +8
 
 \subsection{Decibels in digital synthesis and audio engineering}
 \label{subsec:decibelindigitalsynthesis}
-In contrast to the colloquial usage of decibels, within audio engineering, the decibel value used is called the Decibels Relative to Overload.  In this variant, 0dB is assigned to the maximal power level that can be output by a system before clipping occurs. $Clipping$ is the term to describe the type of distortion that occurs when a signal overshoots the maximal output. For example, a speaker representing a sound pressure of 0dB will be outputting the signal at its maximum power, and representing the sound pressure at half power would be -6dB. In hardware, safeguards are implemented at certain decibel levels to curb a signal before it clips.
+In contrast to the colloquial usage of decibels, within audio engineering, the decibel value used is called the Decibels Relative to Overload.  In this variant, 0dB is assigned to the maximal power level that can be output by a system before clipping occurs. \emph{Clipping} is the term to describe the type of distortion that occurs when a signal overshoots the maximal output. For example, a speaker representing a sound pressure of 0dB will be outputting the signal at its maximum power, and representing the sound pressure at half power would be -6dB. In hardware, safeguards are implemented at certain decibel levels to curb a signal before it clips.
 
 \subsection{Digital representation of decibels}
 \label{subsec:digitalrepdecibels}
@@ -131,9 +131,9 @@ Frequency refers to the rate at which a sound repeats a single cycle of its peri
 
 \subsection{Frequency spectrum}
 \label{subsec:freqspect}
-The graphical representation of the Frequency Domain of a sound is usually referred to as the $Frequency\ \-Spectrum$ or the $Spectral\ \-Graph$. These graphical representations will typically represent frequencies between 20Hz and 20kHz, with amplitudes from 0dB to -$\infty$dB. The varying values of the Frequency Spectrum of any waveform control the timbre, or sonic characteristics, of the resulting sound.
+The graphical representation of the Frequency Domain of a sound is usually referred to as the \emph{Frequency \-Spectrum} or the \emph{Spectral \-Graph}. These graphical representations will typically represent frequencies between 20Hz and 20kHz, with amplitudes from 0dB to -$\infty$dB. The varying values of the Frequency Spectrum of any waveform control the timbre, or sonic characteristics, of the resulting sound.
 
-A variation on the Frequency Spectrum that is used in digital audio synthesis is the $Harmonics\ \-Graph$. The Harmonics Graph also represents the Frequency Domain of a waveform. However, the domain represents values from 0 to $\infty$. These do not represent any specific frequencies; instead, the values in the domain represent multipliers of a base frequency. Integer multiplier values are referred to as the $harmonics$ of a sound. A Harmonics Graph represents the unique character of a specific sound-producing object, such as a person's vocals chords, regardless of the frequency of the sound being produced. Harmonics Graphs are commonly used for physical modeling of instruments, which is then later used in reconstructing that sound in Digital Synthesis with the weighted summation of primitive sine waves. An example of a harmonics graph, in this case of a cello, is shown in figure \ref{fig:CelloHarmonicsGraph}.
+A variation on the Frequency Spectrum that is used in digital audio synthesis is the \emph{Harmonics \-Graph}. The Harmonics Graph also represents the Frequency Domain of a waveform. However, the domain represents values from 0 to $\infty$. These do not represent any specific frequencies; instead, the values in the domain represent multipliers of a base frequency. Integer multiplier values are referred to as the $harmonics$ of a sound. A Harmonics Graph represents the unique character of a specific sound-producing object, such as a person's vocals chords, regardless of the frequency of the sound being produced. Harmonics Graphs are commonly used for physical modeling of instruments, which is then later used in reconstructing that sound in Digital Synthesis with the weighted summation of primitive sine waves. An example of a harmonics graph, in this case of a cello, is shown in figure \ref{fig:CelloHarmonicsGraph}.
 
 \begin{figure}[h]
     \centering
@@ -150,7 +150,7 @@ A frequency synthesizer refers to a synthesizer with circuitry capable of genera
 
 \subsection{Direct digital synthesis}
 \label{subsec:directdigitalsynth}
-When designing a digital synthesizer, there is a multitude of techniques available to the designer for generating frequencies, including Phase Locked Loop, Digital-Analog Conversion, and Direct Digital Synthesis. This project approaches the problem of digital synthesis by using Direct Digital Synthesis. Direct Digital Synthesis is a technique used by modern frequency synthesizers. Direct Digital Synthesis utilizes a singular fixed-frequency reference clock as a stable time basis for the entire system. In contrast to the alternative Phase-Locked Loop system, where the output phase is locked directly to the phase of the input signal, Direct Digital Synthesis holds significant advantages in flexibility, the most prominent being better frequency agility. Frequency agility is defined as the capacity to switch the oscillator between different frequencies without introducing a significant delay in the signal. This advantage is offered as a result of Direct Digital Synthesis using discrete sample operations. Other advantages offered by the Direct Digital Synthesis technique include access to a broader spectrum of frequencies and finer frequency resolution. Additionally, a Direct Digital Synthesis device has the potential to have low overhead and power draw.
+When designing a digital synthesizer, there is a multitude of techniques available to the designer for generating frequencies, including Phase Locked Loop, Digital-Analog Conversion, and Direct Digital Synthesis. This project approaches the problem of digital synthesis by using \emph{Direct Digital Synthesis}. Direct Digital Synthesis is a technique used by modern frequency synthesizers. Direct Digital Synthesis utilizes a singular fixed-frequency reference clock as a stable time basis for the entire system. In contrast to the alternative Phase-Locked Loop system, where the output phase is locked directly to the phase of the input signal, Direct Digital Synthesis holds significant advantages in flexibility, the most prominent being better frequency agility. Frequency agility is defined as the capacity to switch the oscillator between different frequencies without introducing a significant delay in the signal. This advantage is offered as a result of Direct Digital Synthesis using discrete sample operations. Other advantages offered by the Direct Digital Synthesis technique include access to a broader spectrum of frequencies and finer frequency resolution. Additionally, a Direct Digital Synthesis device has the potential to have low overhead and power draw.
 
 A Direct Digital Synthesis device typically consists of a few parts: a digital signal input, a phase accumulator, a phase register, a phase to amplitude converter, a digital to analog converter, and finally the reference oscillator. This signal flow is illustrated in figure \ref{fig:dds}.
 
@@ -169,15 +169,15 @@ The digital signal input acts as the Tuning Word for the system. The demanded fr
 
 \section{Phase accumulator}
 \label{sec:phaseaccu}
-The $Phase\ \-Accumulator$ holds the digital number, which represents the current phase of the Direct Digital Synthesizer. The Phase Accumulator iterates the phase with a value controlled by the Tuning Word input. The frequency and sampling rate make up the Tuning Word. Once the phase stored overflows a specified threshold value, modulus mathematics is used to reset the phase within the range specified. With a higher frequency, the Tuning Word will cause the Phase Accumulator to cycle through the phase range more rapidly, in essence accomplishing the task of converting the frequency input into a phase value. In a way, the Phase Accumulator can be thought of as a modulus counter.
+The \emph{Phase \-Accumulator} holds the digital number, which represents the current phase of the Direct Digital Synthesizer. The Phase Accumulator iterates the phase with a value controlled by the Tuning Word input. The frequency and sampling rate make up the Tuning Word. Once the phase stored overflows a specified threshold value, modulus mathematics is used to reset the phase within the range specified. With a higher frequency, the Tuning Word will cause the Phase Accumulator to cycle through the phase range more rapidly, in essence accomplishing the task of converting the frequency input into a phase value. In a way, the Phase Accumulator can be thought of as a modulus counter.
 
 \section{Phase to amplitude converter}
 \label{sec:phasetoamplitudeconverter}
-After the Phase Accumulator step, the phase value is then passed to the Phase to Amplitude Converter. The goal of the Phase to Amplitude Converter is to change the phase value to a digital amplitude value, which can then be further processed. This goal can be accomplished via two different methods: a Phase/Wavetable lookup, or a Waveform Function.
+After the Phase Accumulator step, the phase value is then passed to the \emph{Phase \-to \-Amplitude Converter}. The goal of the Phase to Amplitude Converter is to change the phase value to a digital amplitude value, which can then be further processed. This goal can be accomplished via two different methods: a Phase/Wavetable lookup, or a Waveform Function.
 
 \subsection{Phase/Wavetable lookup}
 \label{subsec:phasewavetablelookup}
-The Phase/Wavetable Lookup method was developed in the late 1970s as a more efficient method of generating waveforms on low spec hardware devices. The concept relies on the efficiency advantage of accessing values from a stored array over repeated mathematical calculations of sinusoidal functions. While the hardware constraints are no longer an issue for modern digital synthesizers, the technique is still used for its relative flexibility when compared to the use of sinusoidal functions.
+The \emph{Phase/Wavetable \-Lookup} method was developed in the late 1970s as a more efficient method of generating waveforms on low spec hardware devices. The concept relies on the efficiency advantage of accessing values from a stored array over repeated mathematical calculations of sinusoidal functions. While the hardware constraints are no longer an issue for modern digital synthesizers, the technique is still used for its relative flexibility when compared to the use of sinusoidal functions.
 
 For the Phase/Wavetable Lookup method, a wavetable is stored within the system. This wavetable is named so since it contains a predefined number of precomputed amplitude values of the desired waveform. Typically this waveform is a fundamental sine wave, as other waveforms can be achieved via Fourier series reconstruction, which relies on additive and subtractive operations rather than trigonometric functions. Additionally, the wavetable is typically stored within a direct-access data structure such as arrays for even better efficiency.
 
@@ -188,13 +188,13 @@ The Phase/Wavetable Lookup method holds significant advantages that contribute t
 
 \subsection{Waveform function}
 \label{subsec:waveformfunction}
-The other method for Phase to Amplitude Conversion is the use of a Waveform Function. Typically Waveform Functions are used whenever the waveform to be generated can be computed with simple additive and multiplicative computations. Examples of waveforms that typically fit this are the sawtooth and triangle waveform types, as they contain linear sections. Another use case for Waveform Functions is in the case of the square and noise waveform types. In both cases, the resulting amplitude values can be "computed" via without involving any mathematics.
+The other method for Phase to Amplitude Conversion is the use of a \emph{Waveform \-Function}. Typically Waveform Functions are used whenever the waveform to be generated can be computed with simple additive and multiplicative computations. Examples of waveforms that typically fit this are the sawtooth and triangle waveform types, as they contain linear sections. Another use case for Waveform Functions is in the case of the square and noise waveform types. In both cases, the resulting amplitude values can be "computed" via without involving any mathematics.
 
 An advantage of using a Waveform Function to convert the Phase to Amplitude is that there is generally no need for interpolation, which results in more accurate amplitude value results. However, as there is typically some form of calculation involved, this method is generally less efficient than the Phase/Wavetable lookup method by a small margin. Each of the waveform functions used are described in subsection \ref{subsec:waveformosc}.
 
 \section{Additive \& subtractive synthesis}
 \label{sec:addsubsynthesis}
-After the Phase to Amplitude conversion, the resulting amplitude value is passed down for Additive or Subtractive synthesis. Additive and Subtractive synthesis are exactly what their names imply; they involve the use of additive/subtractive operations between waveforms to create a new waveform. Applied in a systematic method, distinct types of waveforms can be formed,  as is shown in figure \ref{fig:additivesynthesis}.
+After the Phase to Amplitude conversion, the resulting amplitude value is passed down for \emph{Additive \-or \-Subtractive \-synthesis}. Additive and Subtractive synthesis are exactly what their names imply; they involve the use of additive/subtractive operations between waveforms to create a new waveform. Applied in a systematic method, distinct types of waveforms can be formed,  as is shown in figure \ref{fig:additivesynthesis}.
 
 \begin{figure}[h]
     \centering
@@ -216,15 +216,15 @@ Another method for creating new waveforms is to use additive and subtractive syn
 
 \section{LFO}
 \label{sec:lfo}
-After the Additive and Subtractive synthesis processes generate a signal for the desired waveform, this is then passed on to the Low-Frequency Oscillator Controlled Modulation processes. Usually referred to as LFO's, these are modulation processes where a value produced by an oscillator modifies the value being modulated. This oscillator typically generates values using a basic sine wave. However, any waveform can be used, resulting in particularly interesting sound characteristics.
+After the Additive and Subtractive synthesis processes generate a signal for the desired waveform, this is then passed on to the \emph{Low-Frequency Oscillator Controlled Modulation} processes. Usually referred to as LFO's, these are modulation processes where a value produced by an oscillator modifies the value being modulated. This oscillator typically generates values using a basic sine wave. However, any waveform can be used, resulting in particularly interesting sound characteristics.
 
 Of particular interest are the two most commonly used LFO's: the amplitude LFO and the frequency LFO. Both will modulate their respective parameters using the value from the low-frequency oscillator. An amplitude LFO will reproduce the effect of a tremolo, while the frequency LFO will, on the other hand, reproduce the effect of a vibrato. LFO's can be further controlled by processing the signal from the control oscillators in the same manner as a standard oscillator, although in general, this processing is typically limited to just an Envelope.
 
-The LFO in the digital synthesis plugin is described in the User Documentation in subsection \ref{subsec:lfo} and its implementaiton is discussed in the Developer Documentation in subsection \ref{subsec:lfcocontrolampmod}.
+The LFO in the digital synthesis plugin is described in the User Documentation in subsection \ref{subsec:lfo} and its implementation is discussed in the Developer Documentation in subsection \ref{subsec:lfcocontrolampmod}.
 
 \section{Envelope}
 \label{sec:env}
-After the LFO processes the signal, it is then sent to the envelope. An envelope is a generalized term describing a function or set of values that control the modulation value of a certain characteristic of a digital signal. Envelopes can be applied to many different types of modulation, including amplitude modulation and frequency modulation. An envelope can also be applied to the frequency and amplitude multiplier values used within additive and aubtractive synthesis for further refined sounds. An example of a waveform with an applied envelope is shown in figure \ref{fig:ADSRWaveform}.
+After the LFO processes the signal, it is then sent to the \emph{Envelope}. An envelope is a generalized term describing a function or set of values that control the modulation value of a certain characteristic of a digital signal. Envelopes can be applied to many different types of modulation, including amplitude modulation and frequency modulation. An envelope can also be applied to the frequency and amplitude multiplier values used within additive and subtractive synthesis for further refined sounds. An example of a waveform with an applied envelope is shown in figure \ref{fig:ADSRWaveform}.
 
 \begin{figure}[h]
     \centering
@@ -237,7 +237,7 @@ The use of the envelope module in the digital synthesis plugin is described in t
 
 \subsection{ADSR}
 \label{subsec:adsr}
-The majority of digital synthesizers employ an Amplitude Modulation Envelope. These types of envelopes focus on modifying the amplitude of the sound over time, producing unique characteristics in sound, which can cause a synthesizer to produce the sound of a guitar vs. a violin. The simplest and most widely used envelope type is the ADSR envelope. ADSR stands for Attack-Decay-Sustain-Release, as these are the four parameters modified by the Envelope. A descriptive diagram is shown in figure \ref{fig:ADSRExplained}.
+The majority of digital synthesizers employ an Amplitude Modulation Envelope. These types of envelopes focus on modifying the amplitude of the sound over time, producing unique characteristics in sound, which can cause a synthesizer to produce the sound of a guitar vs. a violin. The simplest and most widely used envelope type is the \emph{ADSR envelope}. ADSR stands for Attack-Decay-Sustain-Release, as these are the four parameters modified by the Envelope. A descriptive diagram is shown in figure \ref{fig:ADSRExplained}.
 
 \begin{figure}[h]
     \centering
@@ -258,7 +258,7 @@ Digital Signal Processing effects can be categorized into three primary archetyp
 
 \section{Filters}
 \label{sec:filters}
-Multiple types of Frequency Domain filters can be implemented. Each of these filters operates within the Frequency Domain, best visualized with the instantaneous point in the digital audio signal represented within the Frequency vs. Amplitude domains. In the Frequency Domain, modulation takes place to the amplitude of various frequencies along the frequency response spectrum. 
+Multiple types of \emph{Frequency Domain Filters} can be implemented. Each of these filters operates within the Frequency Domain, best visualized with the instantaneous point in the digital audio signal represented within the Frequency vs. Amplitude domains. In the Frequency Domain, modulation takes place to the amplitude of various frequencies along the frequency response spectrum. 
 
 The various Frequency Domain filter types include the Low, High, and Band Passes, the Low and High Shelves, and the Peaking filter. Each of these types has a different characteristic of how they affect the incoming audio signal. These types, in turn, changes the timbre, or characteristic quality, of the sound produced. The details will be discussed in the following parts. However, it is good to note that despite the multitude of variations that exist, these are all additive or subtractive combinations of the basic Pass filters.
 
@@ -281,7 +281,7 @@ Typically a synthesizer will be designed around whichever filter design best fit
 
 \subsection{Low pass filter}
 \label{subsec:lowpassfilter}
-A Low Pass Filter is the most commonly used variant of the Pass type filters. A Low Pass Filter will attenuate the amplitude of signals with frequencies higher a set Cutoff frequency to $-\infty$ dB and pass signals with frequencies lower than the Cutoff frequency. The resulting sound will have a "darker" or "smoother" timbre. A Low Pass filter can also be instrumental in helping remove certain high frequencies that can be too harsh for some people. A frequency response graph of a low pass filter can be seen in figure \ref{fig:FilterTypes}.
+A \emph{Low Pass } is the most commonly used variant of the Pass type filters. A Low Pass Filter will attenuate the amplitude of signals with frequencies higher a set Cutoff frequency to $-\infty$ dB and pass signals with frequencies lower than the Cutoff frequency. The resulting sound will have a "darker" or "smoother" timbre. A Low Pass filter can also be instrumental in helping remove certain high frequencies that can be too harsh for some people. A frequency response graph of a low pass filter can be seen in figure \ref{fig:FilterTypes}.
 
 \begin{figure}[h]
     \centering
@@ -294,13 +294,13 @@ An everyday use of a Low Pass filter within a music workflow is to apply it to a
 
 \subsection{High pass filter}
 \label{subsec:highpassfilter}
-The High Pass filter works in exact opposite to how the Low Pass filter operates. While a Low Pass filter will pass frequencies lower than the target cutoff frequency while filtering out those frequencies higher than the target cutoff frequency, the High Pass filter will do the opposite. A High Pass filter can help eliminate common low-frequency rumbles within recordings. A frequency response graph of a high pass filter can be seen in figure \ref{fig:FilterTypes}.
+The \emph{High Pass Filter} works in exact opposite to how the Low Pass filter operates. While a Low Pass filter will pass frequencies lower than the target cutoff frequency while filtering out those frequencies higher than the target cutoff frequency, the High Pass filter will do the opposite. A High Pass filter can help eliminate common low-frequency rumbles within recordings. A frequency response graph of a high pass filter can be seen in figure \ref{fig:FilterTypes}.
 
 High Pass filters typically are used for vocal recordings where the low-end frequencies caused by vibrations to the microphone or recording setup produce undesirable sounds. Alternatively, a High Pass filter can be used to isolate specific high-frequency instruments, a triangle, for example, so that they can be processed separately.
 
 \subsection{Band pass filter}
 \label{subsec:bandpassfilter}
-When a High Pass filter is combined with a Low Pass filter, a Band Pass filter is created. A Band Pass filter will filter out frequencies within a certain range of the "cutoff" frequency while passing all frequencies outside of this range. The Band Pass filter is desirable for its ability to filter out a specific set of frequencies, and with a small enough range, even remove close to one single frequency. A frequency response graph of a band pass filter can be seen in figure \ref{fig:FilterTypes}.
+When a High Pass filter is combined with a Low Pass filter, a \emph{Band Pass Filter} is created. A Band Pass filter will filter out frequencies within a certain range of the "cutoff" frequency while passing all frequencies outside of this range. The Band Pass filter is desirable for its ability to filter out a specific set of frequencies, and with a small enough range, even remove close to one single frequency. A frequency response graph of a band pass filter can be seen in figure \ref{fig:FilterTypes}.
 
 This functionality of the Band Pass filter is commonly used to eliminate noise and clean up synth waveforms. In recordings, it is common that a particular machine will cause noise at a specific frequency throughout the duration of the recording. By determining the frequency of this noise and filtering it with a Band Pass filter, it is possible to remove noise effectively. The Band Pass filter can help with Additive Synthesis as well, as there are many instances when two waveforms will have constructive interference at a specific frequency that may cause distortion. The Band Pass filter will help remove these distortions.
 
@@ -335,7 +335,7 @@ The application of this thesis project supports one MIDI link of sixteen channel
 More details about MIDI specification can be found at the MIDI specification website \cite{midispec}.
 
 \section{Background conclusion}
-
+The background info presented in this chapter does not comprehensively cover the entirety of digital signal processing knowledge regarding the topics discussed, however the prerequisite minimum information necessary for developing the application is presented.
 
 \chapter{User Documentation}
 \label{chapter:userdoc}
