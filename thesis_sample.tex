@@ -514,14 +514,16 @@ The central object which handles the flow of data is the \texttt{Audio\-Processo
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=36em]{class diagram shrink.png}
-    \caption{UML class diagram}
-    \label{fig:uml}
+    \includegraphics[width=36em]{Application Data Flow.jpeg}
+    \caption{Application data flow}
+    \label{fig:appdataflow}
 \end{figure}
 
 The front-end of the \texttt{Audio\-Processor} that will be used by the End-User is handled by the \texttt{Audio\-Processor\-Editor}. This \texttt{Audio\-Processor\-Editor} object contains each of the individual graphical user interface objects and controls the overall appearance of the VST3 plugin. These individual graphical user interface objects are \texttt{processor} objects that each will contain the individual graphical user interface elements to assist the End-User in changing the state values of the VST3 plugin, such as sliders and rotary dials.
 
 The \texttt{Audio\-Processor} also contains an array of \texttt{Synthesiser\-Voice}. Each of these objects is a Synthesiser object that will perform the computation of values that will be handed back to the \texttt{Audio\-Processor}  for sending out to the audio buffer. The \texttt{Audio\-Processor} is responsible for handling the MIDI buffer and sending those sets of instructions to the Synthesiser objects for processing. These are illustrated in figure \ref{fig:uml}.
+
+This process flow is illustrated briefly in figure \ref{fig:appdataflow}.
 
 \section{Development flow}
 \label{sec:devflow}
@@ -779,9 +781,9 @@ Each of the other waveform function generators also have their respective value 
 \label{chapter:results}
 The project was successful and performs not only to my original specifications, but even surpassed it as I was able to include more features than originally intended. The current application features VST3 standard compatibility, as demonstrated by its seamless integration into a digital audio workstation. Coming with this integration is the capability of accepting MIDI input from either a live MIDI controller or prescripted MIDI notation. The plugin then is able to produce synthesized sounds with low latency, and output the audio via the ASIO drivers.
 
-The plugin allows for flexible customization of the synthesizer sounds. The combinations possible with the primary oscillator, additive secondary oscillator, and subtractive tertiary oscillator allow for sophisticated waveforms, taking the sound far past the 8-bit aesthetics of single oscillator synthesizers and into the sophistication of 1980's synthesizer aesthetics. Additionally, I was able to implement the Envelope, Filters, LFO, and Delay signal post processing functionality to the synthesizer, allowing for even more customization of the resulting synthesizer sounds. The VST3 integration into the DAW allows for deep integration into the workflow, opening up the possibility for a much more professional sounding result. 
+The plugin allows for flexible customization of the synthesizer sounds. The combinations possible with the primary oscillator, additive secondary oscillator, and subtractive tertiary oscillator allow for sophisticated waveforms, taking the sound far past the 8-bit aesthetics of single oscillator synthesizers and into the sophistication of 1980's synthesizer aesthetics. Additionally, I was able to implement the Envelope, Filters, LFO, and Delay signal post processing functionality to the synthesizer, allowing for even more customization of the resulting synthesizer sounds. The VST3 integration into the DAW is conducive to deep integration into the workflow, opening up the possibility for a much more professional sounding result. 
 
-As a music producer myself, I was extremely satisfied with the final result. The plugin permitted me the level of control and flexibility to achieve a customized sound from my digital synthesis plugin, and I was capable of creating an entire workflow built solely around instances of this digital synthesis plugin within FL Studio, my DAW of choice. From this workflow, I was able to easily produce music without any problems.
+As a music producer myself, I was extremely satisfied with the final result. The plugin permitted me the level of control and flexibility to achieve a customized sound from my digital synthesis plugin. I was capable of creating an entire workflow built solely around instances of this digital synthesis plugin within FL Studio, my DAW of choice. From this workflow, I was able to easily produce music without any problems.
 
 Additional work can be done in the future to further expand the capabilities of the digital synthesizer. Frequency Modulation, both static envelope and low frequency oscillator controlled, could be added for a more 21st century sound and the capability to create dubstep synths. A visualizer can be added to display the output waveform to allow the user to better understand the sound being generated and how the signal post processing being applied modifies the audio.
 % \chapter{Appendix}
